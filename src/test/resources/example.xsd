@@ -1,0 +1,853 @@
+	<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+	  <xs:element name="HL7v2xConformanceProfile">
+	    <xs:annotation>
+	      <xs:documentation>2013-03-15 10:47:28 updated by JY, V5.0</xs:documentation>
+	    </xs:annotation>
+	    <xs:complexType>
+	      <xs:sequence>
+	        <xs:element name="MetaData">
+	          <xs:complexType>
+	            <xs:simpleContent>
+	              <xs:extension base="xs:string">
+	                <xs:attribute type="xs:string" name="Name"/>
+	                <xs:attribute type="xs:string" name="OrgName"/>
+	                <xs:attribute type="xs:string" name="Status"/>
+	                <xs:attribute type="xs:string" name="Topics"/>
+	                <xs:attribute type="xs:string" name="Version"/>
+	                <xs:attribute type="xs:string" name="Date"/>
+	              </xs:extension>
+	            </xs:simpleContent>
+	          </xs:complexType>
+	        </xs:element>
+	        <xs:element name="Encodings">
+	          <xs:complexType>
+	            <xs:sequence>
+	              <xs:element type="xs:string" name="Encoding"/>
+	            </xs:sequence>
+	          </xs:complexType>
+	        </xs:element>
+	        <xs:element name="DynamicDef">
+	          <xs:complexType>
+	            <xs:simpleContent>
+	              <xs:extension base="xs:string">
+	                <xs:attribute type="xs:string" name="AccAck"/>
+	                <xs:attribute type="xs:string" name="AppAck"/>
+	                <xs:attribute type="xs:string" name="MsgAckMode"/>
+	              </xs:extension>
+	            </xs:simpleContent>
+	          </xs:complexType>
+	        </xs:element>
+	        <xs:element name="HL7v2xStaticDef">
+	          <xs:complexType>
+	            <xs:sequence>
+	              <xs:element name="MetaData">
+	                <xs:complexType>
+	                  <xs:simpleContent>
+	                    <xs:extension base="xs:string">
+	                      <xs:attribute type="xs:string" name="Name"/>
+	                      <xs:attribute type="xs:string" name="OrgName"/>
+	                      <xs:attribute type="xs:string" name="Status"/>
+	                      <xs:attribute type="xs:string" name="Topics"/>
+	                      <xs:attribute type="xs:string" name="Version"/>
+	                    </xs:extension>
+	                  </xs:simpleContent>
+	                </xs:complexType>
+	              </xs:element>
+	              <xs:element name="Segment" maxOccurs="unbounded" minOccurs="0">
+	                <xs:complexType>
+	                  <xs:sequence>
+	                    <xs:element name="Field" maxOccurs="unbounded" minOccurs="0">
+	                      <xs:complexType mixed="true">
+	                        <xs:choice maxOccurs="unbounded" minOccurs="0">
+	                          <xs:element name="ConformanceStatement">
+	                            <xs:complexType>
+	                              <xs:sequence>
+	                                <xs:element type="xs:string" name="EnglishDescription"/>
+	                                <xs:element name="Assertion">
+	                                  <xs:complexType>
+	                                    <xs:sequence>
+	                                      <xs:element name="PlainText" minOccurs="0">
+	                                        <xs:complexType>
+	                                          <xs:simpleContent>
+	                                            <xs:extension base="xs:string">
+	                                              <xs:attribute type="xs:string" name="location" use="optional"/>
+	                                              <xs:attribute type="xs:string" name="value" use="optional"/>
+	                                            </xs:extension>
+	                                          </xs:simpleContent>
+	                                        </xs:complexType>
+	                                      </xs:element>
+	                                      <xs:element name="AND" minOccurs="0">
+	                                        <xs:complexType>
+	                                          <xs:sequence>
+	                                            <xs:element name="PlainText">
+	                                              <xs:complexType>
+	                                                <xs:simpleContent>
+	                                                  <xs:extension base="xs:string">
+	                                                    <xs:attribute type="xs:string" name="location"/>
+	                                                    <xs:attribute type="xs:string" name="value"/>
+	                                                  </xs:extension>
+	                                                </xs:simpleContent>
+	                                              </xs:complexType>
+	                                            </xs:element>
+	                                            <xs:element name="AND">
+	                                              <xs:complexType>
+	                                                <xs:sequence>
+	                                                  <xs:element name="PlainText" maxOccurs="unbounded" minOccurs="0">
+	                                                    <xs:complexType>
+	                                                      <xs:simpleContent>
+	                                                        <xs:extension base="xs:string">
+	                                                          <xs:attribute type="xs:string" name="location" use="optional"/>
+	                                                          <xs:attribute type="xs:string" name="value" use="optional"/>
+	                                                        </xs:extension>
+	                                                      </xs:simpleContent>
+	                                                    </xs:complexType>
+	                                                  </xs:element>
+	                                                </xs:sequence>
+	                                              </xs:complexType>
+	                                            </xs:element>
+	                                          </xs:sequence>
+	                                        </xs:complexType>
+	                                      </xs:element>
+	                                      <xs:element name="List" minOccurs="0">
+	                                        <xs:complexType>
+	                                          <xs:simpleContent>
+	                                            <xs:extension base="xs:string">
+	                                              <xs:attribute type="xs:string" name="csv"/>
+	                                              <xs:attribute type="xs:string" name="location"/>
+	                                            </xs:extension>
+	                                          </xs:simpleContent>
+	                                        </xs:complexType>
+	                                      </xs:element>
+	                                    </xs:sequence>
+	                                  </xs:complexType>
+	                                </xs:element>
+	                              </xs:sequence>
+	                              <xs:attribute type="xs:string" name="Profile" use="optional"/>
+	                              <xs:attribute type="xs:string" name="id" use="optional"/>
+	                            </xs:complexType>
+	                          </xs:element>
+	                          <xs:element name="Predicate">
+	                            <xs:complexType>
+	                              <xs:sequence>
+	                                <xs:element type="xs:string" name="EnglishDescription"/>
+	                                <xs:element name="Condition">
+	                                  <xs:complexType>
+	                                    <xs:sequence>
+	                                      <xs:element name="OR" minOccurs="0">
+	                                        <xs:complexType>
+	                                          <xs:sequence>
+	                                            <xs:element name="PlainText" maxOccurs="unbounded" minOccurs="0">
+	                                              <xs:complexType>
+	                                                <xs:simpleContent>
+	                                                  <xs:extension base="xs:string">
+	                                                    <xs:attribute type="xs:string" name="location" use="optional"/>
+	                                                    <xs:attribute type="xs:string" name="value" use="optional"/>
+	                                                  </xs:extension>
+	                                                </xs:simpleContent>
+	                                              </xs:complexType>
+	                                            </xs:element>
+	                                          </xs:sequence>
+	                                        </xs:complexType>
+	                                      </xs:element>
+	                                      <xs:element name="PlainText" minOccurs="0">
+	                                        <xs:complexType>
+	                                          <xs:simpleContent>
+	                                            <xs:extension base="xs:string">
+	                                              <xs:attribute type="xs:string" name="location" use="optional"/>
+	                                              <xs:attribute type="xs:string" name="value" use="optional"/>
+	                                            </xs:extension>
+	                                          </xs:simpleContent>
+	                                        </xs:complexType>
+	                                      </xs:element>
+	                                      <xs:element name="Valued" minOccurs="0">
+	                                        <xs:complexType>
+	                                          <xs:simpleContent>
+	                                            <xs:extension base="xs:string">
+	                                              <xs:attribute type="xs:string" name="location" use="optional"/>
+	                                            </xs:extension>
+	                                          </xs:simpleContent>
+	                                        </xs:complexType>
+	                                      </xs:element>
+	                                    </xs:sequence>
+	                                  </xs:complexType>
+	                                </xs:element>
+	                              </xs:sequence>
+	                            </xs:complexType>
+	                          </xs:element>
+	                          <xs:element name="Component">
+	                            <xs:complexType mixed="true">
+	                              <xs:choice maxOccurs="unbounded" minOccurs="0">
+	                                <xs:element name="Predicate">
+	                                  <xs:complexType>
+	                                    <xs:sequence>
+	                                      <xs:element type="xs:string" name="EnglishDescription"/>
+	                                      <xs:element name="Condition">
+	                                        <xs:complexType>
+	                                          <xs:choice maxOccurs="unbounded" minOccurs="0">
+	                                            <xs:element name="NOT">
+	                                              <xs:complexType>
+	                                                <xs:sequence>
+	                                                  <xs:element name="Valued" minOccurs="0">
+	                                                    <xs:complexType>
+	                                                      <xs:simpleContent>
+	                                                        <xs:extension base="xs:string">
+	                                                          <xs:attribute type="xs:string" name="location" use="optional"/>
+	                                                        </xs:extension>
+	                                                      </xs:simpleContent>
+	                                                    </xs:complexType>
+	                                                  </xs:element>
+	                                                  <xs:element name="PlainText" minOccurs="0">
+	                                                    <xs:complexType>
+	                                                      <xs:simpleContent>
+	                                                        <xs:extension base="xs:string">
+	                                                          <xs:attribute type="xs:string" name="location" use="optional"/>
+	                                                          <xs:attribute type="xs:string" name="value" use="optional"/>
+	                                                        </xs:extension>
+	                                                      </xs:simpleContent>
+	                                                    </xs:complexType>
+	                                                  </xs:element>
+	                                                </xs:sequence>
+	                                              </xs:complexType>
+	                                            </xs:element>
+	                                            <xs:element name="Valued">
+	                                              <xs:complexType>
+	                                                <xs:simpleContent>
+	                                                  <xs:extension base="xs:string">
+	                                                    <xs:attribute type="xs:string" name="location" use="optional"/>
+	                                                  </xs:extension>
+	                                                </xs:simpleContent>
+	                                              </xs:complexType>
+	                                            </xs:element>
+	                                            <xs:element name="PlainText">
+	                                              <xs:complexType>
+	                                                <xs:simpleContent>
+	                                                  <xs:extension base="xs:string">
+	                                                    <xs:attribute type="xs:string" name="location" use="optional"/>
+	                                                    <xs:attribute type="xs:string" name="value" use="optional"/>
+	                                                  </xs:extension>
+	                                                </xs:simpleContent>
+	                                              </xs:complexType>
+	                                            </xs:element>
+	                                          </xs:choice>
+	                                        </xs:complexType>
+	                                      </xs:element>
+	                                    </xs:sequence>
+	                                  </xs:complexType>
+	                                </xs:element>
+	                                <xs:element name="ConformanceStatement">
+	                                  <xs:complexType>
+	                                    <xs:sequence>
+	                                      <xs:element type="xs:string" name="EnglishDescription"/>
+	                                      <xs:element name="Assertion">
+	                                        <xs:complexType>
+	                                          <xs:sequence>
+	                                            <xs:element name="Regex" minOccurs="0">
+	                                              <xs:complexType>
+	                                                <xs:simpleContent>
+	                                                  <xs:extension base="xs:string">
+	                                                    <xs:attribute type="xs:string" name="location" use="optional"/>
+	                                                    <xs:attribute type="xs:string" name="regex" use="optional"/>
+	                                                  </xs:extension>
+	                                                </xs:simpleContent>
+	                                              </xs:complexType>
+	                                            </xs:element>
+	                                            <xs:element name="PlainText" minOccurs="0">
+	                                              <xs:complexType>
+	                                                <xs:simpleContent>
+	                                                  <xs:extension base="xs:string">
+	                                                    <xs:attribute type="xs:string" name="location" use="optional"/>
+	                                                    <xs:attribute type="xs:string" name="value" use="optional"/>
+	                                                  </xs:extension>
+	                                                </xs:simpleContent>
+	                                              </xs:complexType>
+	                                            </xs:element>
+	                                          </xs:sequence>
+	                                        </xs:complexType>
+	                                      </xs:element>
+	                                    </xs:sequence>
+	                                    <xs:attribute type="xs:string" name="id" use="optional"/>
+	                                    <xs:attribute type="xs:string" name="Profile" use="optional"/>
+	                                  </xs:complexType>
+	                                </xs:element>
+	                                <xs:element name="SubComponent">
+	                                  <xs:complexType mixed="true">
+	                                    <xs:sequence>
+	                                      <xs:element name="Predicate" minOccurs="0">
+	                                        <xs:complexType>
+	                                          <xs:sequence>
+	                                            <xs:element type="xs:string" name="EnglishDescription"/>
+	                                            <xs:element name="Condition">
+	                                              <xs:complexType>
+	                                                <xs:sequence>
+	                                                  <xs:element name="NOT" minOccurs="0">
+	                                                    <xs:complexType>
+	                                                      <xs:sequence>
+	                                                        <xs:element name="Valued">
+	                                                          <xs:complexType>
+	                                                            <xs:simpleContent>
+	                                                              <xs:extension base="xs:string">
+	                                                                <xs:attribute type="xs:string" name="location" use="optional"/>
+	                                                              </xs:extension>
+	                                                            </xs:simpleContent>
+	                                                          </xs:complexType>
+	                                                        </xs:element>
+	                                                      </xs:sequence>
+	                                                    </xs:complexType>
+	                                                  </xs:element>
+	                                                  <xs:element name="Valued" minOccurs="0">
+	                                                    <xs:complexType>
+	                                                      <xs:simpleContent>
+	                                                        <xs:extension base="xs:string">
+	                                                          <xs:attribute type="xs:string" name="location"/>
+	                                                        </xs:extension>
+	                                                      </xs:simpleContent>
+	                                                    </xs:complexType>
+	                                                  </xs:element>
+	                                                </xs:sequence>
+	                                              </xs:complexType>
+	                                            </xs:element>
+	                                          </xs:sequence>
+	                                        </xs:complexType>
+	                                      </xs:element>
+	                                      <xs:element name="ConformanceStatement" minOccurs="0">
+	                                        <xs:complexType>
+	                                          <xs:sequence>
+	                                            <xs:element type="xs:string" name="EnglishDescription"/>
+	                                            <xs:element name="Assertion">
+	                                              <xs:complexType>
+	                                                <xs:sequence>
+	                                                  <xs:element name="Regex" minOccurs="0">
+	                                                    <xs:complexType>
+	                                                      <xs:simpleContent>
+	                                                        <xs:extension base="xs:string">
+	                                                          <xs:attribute type="xs:string" name="location"/>
+	                                                          <xs:attribute type="xs:string" name="regex"/>
+	                                                        </xs:extension>
+	                                                      </xs:simpleContent>
+	                                                    </xs:complexType>
+	                                                  </xs:element>
+	                                                  <xs:element name="PlainText" minOccurs="0">
+	                                                    <xs:complexType>
+	                                                      <xs:simpleContent>
+	                                                        <xs:extension base="xs:string">
+	                                                          <xs:attribute type="xs:string" name="location"/>
+	                                                          <xs:attribute type="xs:string" name="value"/>
+	                                                        </xs:extension>
+	                                                      </xs:simpleContent>
+	                                                    </xs:complexType>
+	                                                  </xs:element>
+	                                                </xs:sequence>
+	                                              </xs:complexType>
+	                                            </xs:element>
+	                                          </xs:sequence>
+	                                          <xs:attribute type="xs:string" name="id" use="optional"/>
+	                                        </xs:complexType>
+	                                      </xs:element>
+	                                    </xs:sequence>
+	                                    <xs:attribute type="xs:string" name="Datatype" use="optional"/>
+	                                    <xs:attribute type="xs:short" name="MaxLength" use="optional"/>
+	                                    <xs:attribute type="xs:byte" name="MinLength" use="optional"/>
+	                                    <xs:attribute type="xs:string" name="Name" use="optional"/>
+	                                    <xs:attribute type="xs:string" name="Usage" use="optional"/>
+	                                    <xs:attribute type="xs:short" name="Table" use="optional"/>
+	                                    <xs:attribute type="xs:string" name="PredicateFalseUsage" use="optional"/>
+	                                    <xs:attribute type="xs:string" name="PredicateTrueUsage" use="optional"/>
+	                                  </xs:complexType>
+	                                </xs:element>
+	                              </xs:choice>
+	                              <xs:attribute type="xs:string" name="Datatype" use="optional"/>
+	                              <xs:attribute type="xs:short" name="MaxLength" use="optional"/>
+	                              <xs:attribute type="xs:byte" name="MinLength" use="optional"/>
+	                              <xs:attribute type="xs:string" name="Name" use="optional"/>
+	                              <xs:attribute type="xs:string" name="PredicateFalseUsage" use="optional"/>
+	                              <xs:attribute type="xs:string" name="PredicateTrueUsage" use="optional"/>
+	                              <xs:attribute type="xs:string" name="Table" use="optional"/>
+	                              <xs:attribute type="xs:string" name="Usage" use="optional"/>
+	                            </xs:complexType>
+	                          </xs:element>
+	                        </xs:choice>
+	                        <xs:attribute type="xs:string" name="Datatype" use="optional"/>
+	                        <xs:attribute type="xs:string" name="Max" use="optional"/>
+	                        <xs:attribute type="xs:short" name="MaxLength" use="optional"/>
+	                        <xs:attribute type="xs:byte" name="Min" use="optional"/>
+	                        <xs:attribute type="xs:byte" name="MinLength" use="optional"/>
+	                        <xs:attribute type="xs:string" name="Name" use="optional"/>
+	                        <xs:attribute type="xs:string" name="Usage" use="optional"/>
+	                        <xs:attribute type="xs:string" name="Table" use="optional"/>
+	                        <xs:attribute type="xs:string" name="PredicateFalseUsage" use="optional"/>
+	                        <xs:attribute type="xs:string" name="PredicateTrueUsage" use="optional"/>
+	                      </xs:complexType>
+	                    </xs:element>
+	                  </xs:sequence>
+	                  <xs:attribute type="xs:string" name="LongName" use="optional"/>
+	                  <xs:attribute type="xs:string" name="Max" use="optional"/>
+	                  <xs:attribute type="xs:byte" name="Min" use="optional"/>
+	                  <xs:attribute type="xs:string" name="Name" use="optional"/>
+	                  <xs:attribute type="xs:string" name="Usage" use="optional"/>
+	                </xs:complexType>
+	              </xs:element>
+	              <xs:element name="SegGroup" maxOccurs="unbounded" minOccurs="0">
+	                <xs:complexType>
+	                  <xs:sequence>
+	                    <xs:element name="Segment" maxOccurs="unbounded" minOccurs="0">
+	                      <xs:complexType>
+	                        <xs:sequence>
+	                          <xs:element name="ConformanceStatement" maxOccurs="unbounded" minOccurs="0">
+	                            <xs:complexType>
+	                              <xs:sequence>
+	                                <xs:element type="xs:string" name="EnglishDescription"/>
+	                                <xs:element name="Assertion">
+	                                  <xs:complexType>
+	                                    <xs:sequence>
+	                                      <xs:element name="Custom">
+	                                        <xs:complexType>
+	                                          <xs:simpleContent>
+	                                            <xs:extension base="xs:string">
+	                                              <xs:attribute type="xs:string" name="className" use="optional"/>
+	                                              <xs:attribute type="xs:byte" name="id" use="optional"/>
+	                                            </xs:extension>
+	                                          </xs:simpleContent>
+	                                        </xs:complexType>
+	                                      </xs:element>
+	                                    </xs:sequence>
+	                                  </xs:complexType>
+	                                </xs:element>
+	                              </xs:sequence>
+	                              <xs:attribute type="xs:string" name="Profile" use="optional"/>
+	                              <xs:attribute type="xs:string" name="id" use="optional"/>
+	                            </xs:complexType>
+	                          </xs:element>
+	                          <xs:element name="Field" maxOccurs="unbounded" minOccurs="0">
+	                            <xs:complexType mixed="true">
+	                              <xs:choice maxOccurs="unbounded" minOccurs="0">
+	                                <xs:element name="Component">
+	                                  <xs:complexType mixed="true">
+	                                    <xs:sequence>
+	                                      <xs:element name="Predicate" minOccurs="0">
+	                                        <xs:complexType>
+	                                          <xs:sequence>
+	                                            <xs:element type="xs:string" name="EnglishDescription"/>
+	                                            <xs:element name="Condition">
+	                                              <xs:complexType>
+	                                                <xs:sequence>
+	                                                  <xs:element name="NOT" minOccurs="0">
+	                                                    <xs:complexType>
+	                                                      <xs:sequence>
+	                                                        <xs:element name="Valued">
+	                                                          <xs:complexType>
+	                                                            <xs:simpleContent>
+	                                                              <xs:extension base="xs:string">
+	                                                                <xs:attribute type="xs:string" name="location" use="optional"/>
+	                                                              </xs:extension>
+	                                                            </xs:simpleContent>
+	                                                          </xs:complexType>
+	                                                        </xs:element>
+	                                                      </xs:sequence>
+	                                                    </xs:complexType>
+	                                                  </xs:element>
+	                                                  <xs:element name="AND" minOccurs="0">
+	                                                    <xs:complexType>
+	                                                      <xs:sequence>
+	                                                        <xs:element name="NOT" maxOccurs="unbounded" minOccurs="0">
+	                                                          <xs:complexType>
+	                                                            <xs:sequence>
+	                                                              <xs:element name="Valued">
+	                                                                <xs:complexType>
+	                                                                  <xs:simpleContent>
+	                                                                    <xs:extension base="xs:string">
+	                                                                      <xs:attribute type="xs:string" name="location" use="optional"/>
+	                                                                    </xs:extension>
+	                                                                  </xs:simpleContent>
+	                                                                </xs:complexType>
+	                                                              </xs:element>
+	                                                            </xs:sequence>
+	                                                          </xs:complexType>
+	                                                        </xs:element>
+	                                                      </xs:sequence>
+	                                                    </xs:complexType>
+	                                                  </xs:element>
+	                                                  <xs:element name="Valued" minOccurs="0">
+	                                                    <xs:complexType>
+	                                                      <xs:simpleContent>
+	                                                        <xs:extension base="xs:string">
+	                                                          <xs:attribute type="xs:string" name="location" use="optional"/>
+	                                                        </xs:extension>
+	                                                      </xs:simpleContent>
+	                                                    </xs:complexType>
+	                                                  </xs:element>
+	                                                </xs:sequence>
+	                                              </xs:complexType>
+	                                            </xs:element>
+	                                          </xs:sequence>
+	                                        </xs:complexType>
+	                                      </xs:element>
+	                                      <xs:element name="ConformanceStatement" minOccurs="0">
+	                                        <xs:complexType>
+	                                          <xs:sequence>
+	                                            <xs:element type="xs:string" name="EnglishDescription"/>
+	                                            <xs:element name="Assertion">
+	                                              <xs:complexType>
+	                                                <xs:sequence>
+	                                                  <xs:element name="Regex" minOccurs="0">
+	                                                    <xs:complexType>
+	                                                      <xs:simpleContent>
+	                                                        <xs:extension base="xs:string">
+	                                                          <xs:attribute type="xs:string" name="location" use="optional"/>
+	                                                          <xs:attribute type="xs:string" name="regex" use="optional"/>
+	                                                        </xs:extension>
+	                                                      </xs:simpleContent>
+	                                                    </xs:complexType>
+	                                                  </xs:element>
+	                                                  <xs:element name="PlainText" minOccurs="0">
+	                                                    <xs:complexType>
+	                                                      <xs:simpleContent>
+	                                                        <xs:extension base="xs:string">
+	                                                          <xs:attribute type="xs:string" name="location" use="optional"/>
+	                                                          <xs:attribute type="xs:string" name="value" use="optional"/>
+	                                                        </xs:extension>
+	                                                      </xs:simpleContent>
+	                                                    </xs:complexType>
+	                                                  </xs:element>
+	                                                </xs:sequence>
+	                                              </xs:complexType>
+	                                            </xs:element>
+	                                          </xs:sequence>
+	                                          <xs:attribute type="xs:string" name="id" use="optional"/>
+	                                        </xs:complexType>
+	                                      </xs:element>
+	                                      <xs:element name="SubComponent" maxOccurs="unbounded" minOccurs="0">
+	                                        <xs:complexType mixed="true">
+	                                          <xs:sequence>
+	                                            <xs:element name="Predicate" minOccurs="0">
+	                                              <xs:complexType>
+	                                                <xs:sequence>
+	                                                  <xs:element type="xs:string" name="EnglishDescription"/>
+	                                                  <xs:element name="Condition">
+	                                                    <xs:complexType>
+	                                                      <xs:sequence>
+	                                                        <xs:element name="NOT" minOccurs="0">
+	                                                          <xs:complexType>
+	                                                            <xs:sequence>
+	                                                              <xs:element name="Valued">
+	                                                                <xs:complexType>
+	                                                                  <xs:simpleContent>
+	                                                                    <xs:extension base="xs:string">
+	                                                                      <xs:attribute type="xs:string" name="location" use="optional"/>
+	                                                                    </xs:extension>
+	                                                                  </xs:simpleContent>
+	                                                                </xs:complexType>
+	                                                              </xs:element>
+	                                                            </xs:sequence>
+	                                                          </xs:complexType>
+	                                                        </xs:element>
+	                                                        <xs:element name="Valued" minOccurs="0">
+	                                                          <xs:complexType>
+	                                                            <xs:simpleContent>
+	                                                              <xs:extension base="xs:string">
+	                                                                <xs:attribute type="xs:string" name="location" use="optional"/>
+	                                                              </xs:extension>
+	                                                            </xs:simpleContent>
+	                                                          </xs:complexType>
+	                                                        </xs:element>
+	                                                      </xs:sequence>
+	                                                    </xs:complexType>
+	                                                  </xs:element>
+	                                                </xs:sequence>
+	                                              </xs:complexType>
+	                                            </xs:element>
+	                                            <xs:element name="ConformanceStatement" minOccurs="0">
+	                                              <xs:complexType>
+	                                                <xs:sequence>
+	                                                  <xs:element type="xs:string" name="EnglishDescription"/>
+	                                                  <xs:element name="Assertion">
+	                                                    <xs:complexType>
+	                                                      <xs:sequence>
+	                                                        <xs:element name="Regex" minOccurs="0">
+	                                                          <xs:complexType>
+	                                                            <xs:simpleContent>
+	                                                              <xs:extension base="xs:string">
+	                                                                <xs:attribute type="xs:string" name="location" use="optional"/>
+	                                                                <xs:attribute type="xs:string" name="regex" use="optional"/>
+	                                                              </xs:extension>
+	                                                            </xs:simpleContent>
+	                                                          </xs:complexType>
+	                                                        </xs:element>
+	                                                        <xs:element name="PlainText" minOccurs="0">
+	                                                          <xs:complexType>
+	                                                            <xs:simpleContent>
+	                                                              <xs:extension base="xs:string">
+	                                                                <xs:attribute type="xs:string" name="location" use="optional"/>
+	                                                                <xs:attribute type="xs:string" name="value" use="optional"/>
+	                                                              </xs:extension>
+	                                                            </xs:simpleContent>
+	                                                          </xs:complexType>
+	                                                        </xs:element>
+	                                                      </xs:sequence>
+	                                                    </xs:complexType>
+	                                                  </xs:element>
+	                                                </xs:sequence>
+	                                                <xs:attribute type="xs:string" name="id" use="optional"/>
+	                                              </xs:complexType>
+	                                            </xs:element>
+	                                          </xs:sequence>
+	                                          <xs:attribute type="xs:string" name="Datatype" use="optional"/>
+	                                          <xs:attribute type="xs:short" name="MaxLength" use="optional"/>
+	                                          <xs:attribute type="xs:byte" name="MinLength" use="optional"/>
+	                                          <xs:attribute type="xs:string" name="Name" use="optional"/>
+	                                          <xs:attribute type="xs:short" name="Table" use="optional"/>
+	                                          <xs:attribute type="xs:string" name="Usage" use="optional"/>
+	                                          <xs:attribute type="xs:string" name="PredicateFalseUsage" use="optional"/>
+	                                          <xs:attribute type="xs:string" name="PredicateTrueUsage" use="optional"/>
+	                                        </xs:complexType>
+	                                      </xs:element>
+	                                    </xs:sequence>
+	                                    <xs:attribute type="xs:string" name="Datatype" use="optional"/>
+	                                    <xs:attribute type="xs:short" name="MaxLength" use="optional"/>
+	                                    <xs:attribute type="xs:byte" name="MinLength" use="optional"/>
+	                                    <xs:attribute type="xs:string" name="Name" use="optional"/>
+	                                    <xs:attribute type="xs:string" name="Usage" use="optional"/>
+	                                    <xs:attribute type="xs:string" name="Table" use="optional"/>
+	                                    <xs:attribute type="xs:string" name="PredicateFalseUsage" use="optional"/>
+	                                    <xs:attribute type="xs:string" name="PredicateTrueUsage" use="optional"/>
+	                                  </xs:complexType>
+	                                </xs:element>
+	                                <xs:element name="ConformanceStatement">
+	                                  <xs:complexType>
+	                                    <xs:sequence>
+	                                      <xs:element type="xs:string" name="EnglishDescription"/>
+	                                      <xs:element name="Assertion">
+	                                        <xs:complexType>
+	                                          <xs:sequence>
+	                                            <xs:element name="SequenceID" minOccurs="0">
+	                                              <xs:complexType>
+	                                                <xs:simpleContent>
+	                                                  <xs:extension base="xs:string">
+	                                                    <xs:attribute type="xs:string" name="location"/>
+	                                                    <xs:attribute type="xs:string" name="location1"/>
+	                                                  </xs:extension>
+	                                                </xs:simpleContent>
+	                                              </xs:complexType>
+	                                            </xs:element>
+	                                            <xs:element name="List" minOccurs="0">
+	                                              <xs:complexType>
+	                                                <xs:simpleContent>
+	                                                  <xs:extension base="xs:string">
+	                                                    <xs:attribute type="xs:string" name="csv"/>
+	                                                    <xs:attribute type="xs:string" name="location"/>
+	                                                  </xs:extension>
+	                                                </xs:simpleContent>
+	                                              </xs:complexType>
+	                                            </xs:element>
+	                                            <xs:element name="Custom" minOccurs="0">
+	                                              <xs:complexType>
+	                                                <xs:simpleContent>
+	                                                  <xs:extension base="xs:string">
+	                                                    <xs:attribute type="xs:string" name="className" use="optional"/>
+	                                                    <xs:attribute type="xs:byte" name="id" use="optional"/>
+	                                                  </xs:extension>
+	                                                </xs:simpleContent>
+	                                              </xs:complexType>
+	                                            </xs:element>
+	                                            <xs:element name="PlainText" minOccurs="0">
+	                                              <xs:complexType>
+	                                                <xs:simpleContent>
+	                                                  <xs:extension base="xs:string">
+	                                                    <xs:attribute type="xs:string" name="location" use="optional"/>
+	                                                    <xs:attribute type="xs:string" name="value" use="optional"/>
+	                                                    <xs:attribute type="xs:string" name="locationContent" use="optional"/>
+	                                                  </xs:extension>
+	                                                </xs:simpleContent>
+	                                              </xs:complexType>
+	                                            </xs:element>
+	                                            <xs:element name="OR" minOccurs="0">
+	                                              <xs:complexType>
+	                                                <xs:sequence>
+	                                                  <xs:element name="NOT">
+	                                                    <xs:complexType>
+	                                                      <xs:sequence>
+	                                                        <xs:element name="OR">
+	                                                          <xs:complexType>
+	                                                            <xs:sequence>
+	                                                              <xs:element name="AND" maxOccurs="unbounded" minOccurs="0">
+	                                                                <xs:complexType>
+	                                                                  <xs:sequence>
+	                                                                    <xs:element name="PlainText" maxOccurs="unbounded" minOccurs="0">
+	                                                                      <xs:complexType>
+	                                                                        <xs:simpleContent>
+	                                                                          <xs:extension base="xs:string">
+	                                                                            <xs:attribute type="xs:string" name="location" use="optional"/>
+	                                                                            <xs:attribute type="xs:string" name="value" use="optional"/>
+	                                                                          </xs:extension>
+	                                                                        </xs:simpleContent>
+	                                                                      </xs:complexType>
+	                                                                    </xs:element>
+	                                                                  </xs:sequence>
+	                                                                </xs:complexType>
+	                                                              </xs:element>
+	                                                            </xs:sequence>
+	                                                          </xs:complexType>
+	                                                        </xs:element>
+	                                                      </xs:sequence>
+	                                                    </xs:complexType>
+	                                                  </xs:element>
+	                                                  <xs:element name="PlainText">
+	                                                    <xs:complexType>
+	                                                      <xs:simpleContent>
+	                                                        <xs:extension base="xs:string">
+	                                                          <xs:attribute type="xs:string" name="location"/>
+	                                                          <xs:attribute type="xs:string" name="value"/>
+	                                                        </xs:extension>
+	                                                      </xs:simpleContent>
+	                                                    </xs:complexType>
+	                                                  </xs:element>
+	                                                </xs:sequence>
+	                                              </xs:complexType>
+	                                            </xs:element>
+	                                          </xs:sequence>
+	                                        </xs:complexType>
+	                                      </xs:element>
+	                                    </xs:sequence>
+	                                    <xs:attribute type="xs:string" name="Profile" use="optional"/>
+	                                    <xs:attribute type="xs:string" name="id" use="optional"/>
+	                                  </xs:complexType>
+	                                </xs:element>
+	                                <xs:element name="Predicate">
+	                                  <xs:complexType>
+	                                    <xs:sequence>
+	                                      <xs:element type="xs:string" name="EnglishDescription"/>
+	                                      <xs:element name="Condition">
+	                                        <xs:complexType>
+	                                          <xs:sequence>
+	                                            <xs:element name="NOT" minOccurs="0">
+	                                              <xs:complexType>
+	                                                <xs:sequence>
+	                                                  <xs:element name="PlainText">
+	                                                    <xs:complexType>
+	                                                      <xs:simpleContent>
+	                                                        <xs:extension base="xs:string">
+	                                                          <xs:attribute type="xs:string" name="location"/>
+	                                                          <xs:attribute type="xs:short" name="value"/>
+	                                                        </xs:extension>
+	                                                      </xs:simpleContent>
+	                                                    </xs:complexType>
+	                                                  </xs:element>
+	                                                </xs:sequence>
+	                                              </xs:complexType>
+	                                            </xs:element>
+	                                            <xs:element name="OR" minOccurs="0">
+	                                              <xs:complexType>
+	                                                <xs:sequence>
+	                                                  <xs:element name="PlainText" maxOccurs="unbounded" minOccurs="0">
+	                                                    <xs:complexType>
+	                                                      <xs:simpleContent>
+	                                                        <xs:extension base="xs:string">
+	                                                          <xs:attribute type="xs:string" name="location" use="optional"/>
+	                                                          <xs:attribute type="xs:string" name="value" use="optional"/>
+	                                                        </xs:extension>
+	                                                      </xs:simpleContent>
+	                                                    </xs:complexType>
+	                                                  </xs:element>
+	                                                </xs:sequence>
+	                                              </xs:complexType>
+	                                            </xs:element>
+	                                            <xs:element name="AND" minOccurs="0">
+	                                              <xs:complexType>
+	                                                <xs:sequence>
+	                                                  <xs:element name="PlainText">
+	                                                    <xs:complexType>
+	                                                      <xs:simpleContent>
+	                                                        <xs:extension base="xs:string">
+	                                                          <xs:attribute type="xs:string" name="location" use="optional"/>
+	                                                          <xs:attribute type="xs:byte" name="value" use="optional"/>
+	                                                        </xs:extension>
+	                                                      </xs:simpleContent>
+	                                                    </xs:complexType>
+	                                                  </xs:element>
+	                                                  <xs:element name="OR">
+	                                                    <xs:complexType>
+	                                                      <xs:sequence>
+	                                                        <xs:element name="PlainText" maxOccurs="unbounded" minOccurs="0">
+	                                                          <xs:complexType>
+	                                                            <xs:simpleContent>
+	                                                              <xs:extension base="xs:string">
+	                                                                <xs:attribute type="xs:string" name="location" use="optional"/>
+	                                                                <xs:attribute type="xs:string" name="value" use="optional"/>
+	                                                              </xs:extension>
+	                                                            </xs:simpleContent>
+	                                                          </xs:complexType>
+	                                                        </xs:element>
+	                                                      </xs:sequence>
+	                                                    </xs:complexType>
+	                                                  </xs:element>
+	                                                </xs:sequence>
+	                                              </xs:complexType>
+	                                            </xs:element>
+	                                            <xs:element name="Valued" minOccurs="0">
+	                                              <xs:complexType>
+	                                                <xs:simpleContent>
+	                                                  <xs:extension base="xs:string">
+	                                                    <xs:attribute type="xs:string" name="location"/>
+	                                                  </xs:extension>
+	                                                </xs:simpleContent>
+	                                              </xs:complexType>
+	                                            </xs:element>
+	                                            <xs:element name="PlainText" minOccurs="0">
+	                                              <xs:complexType>
+	                                                <xs:simpleContent>
+	                                                  <xs:extension base="xs:string">
+	                                                    <xs:attribute type="xs:string" name="location" use="optional"/>
+	                                                    <xs:attribute type="xs:string" name="value" use="optional"/>
+	                                                  </xs:extension>
+	                                                </xs:simpleContent>
+	                                              </xs:complexType>
+	                                            </xs:element>
+	                                          </xs:sequence>
+	                                        </xs:complexType>
+	                                      </xs:element>
+	                                    </xs:sequence>
+	                                  </xs:complexType>
+	                                </xs:element>
+	                              </xs:choice>
+	                              <xs:attribute type="xs:string" name="Datatype" use="optional"/>
+	                              <xs:attribute type="xs:string" name="Max" use="optional"/>
+	                              <xs:attribute type="xs:int" name="MaxLength" use="optional"/>
+	                              <xs:attribute type="xs:byte" name="Min" use="optional"/>
+	                              <xs:attribute type="xs:byte" name="MinLength" use="optional"/>
+	                              <xs:attribute type="xs:string" name="Name" use="optional"/>
+	                              <xs:attribute type="xs:string" name="Usage" use="optional"/>
+	                              <xs:attribute type="xs:string" name="Table" use="optional"/>
+	                              <xs:attribute type="xs:string" name="PredicateFalseUsage" use="optional"/>
+	                              <xs:attribute type="xs:string" name="PredicateTrueUsage" use="optional"/>
+	                            </xs:complexType>
+	                          </xs:element>
+	                        </xs:sequence>
+	                        <xs:attribute type="xs:string" name="LongName" use="optional"/>
+	                        <xs:attribute type="xs:string" name="Max" use="optional"/>
+	                        <xs:attribute type="xs:byte" name="Min" use="optional"/>
+	                        <xs:attribute type="xs:string" name="Name" use="optional"/>
+	                        <xs:attribute type="xs:string" name="Usage" use="optional"/>
+	                      </xs:complexType>
+	                    </xs:element>
+	                  </xs:sequence>
+	                  <xs:attribute type="xs:string" name="LongName" use="optional"/>
+	                  <xs:attribute type="xs:string" name="Max" use="optional"/>
+	                  <xs:attribute type="xs:byte" name="Min" use="optional"/>
+	                  <xs:attribute type="xs:string" name="Name" use="optional"/>
+	                  <xs:attribute type="xs:string" name="Usage" use="optional"/>
+	                </xs:complexType>
+	              </xs:element>
+	            </xs:sequence>
+	            <xs:attribute type="xs:string" name="EventDesc"/>
+	            <xs:attribute type="xs:string" name="EventType"/>
+	            <xs:attribute type="xs:string" name="MsgStructID"/>
+	            <xs:attribute type="xs:string" name="MsgType"/>
+	            <xs:attribute type="xs:string" name="OrderControl"/>
+	            <xs:attribute type="xs:string" name="Role"/>
+	          </xs:complexType>
+	        </xs:element>
+	      </xs:sequence>
+	      <xs:attribute type="xs:string" name="HL7Version"/>
+	      <xs:attribute type="xs:string" name="ProfileType"/>
+	    </xs:complexType>
+	  </xs:element>
+	</xs:schema>
