@@ -1,25 +1,17 @@
 package org.immregistries.dqa.hl7util.builder;
 
-import static org.immregistries.dqa.hl7util.builder.HL7Util.ACK_ACCEPT;
-import static org.immregistries.dqa.hl7util.builder.HL7Util.ACK_ERROR;
-import static org.immregistries.dqa.hl7util.builder.HL7Util.ACK_REJECT;
-import static org.immregistries.dqa.hl7util.builder.HL7Util.getNextAckCount;
-
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import org.apache.commons.lang3.StringUtils;
 import org.immregistries.dqa.hl7util.Reportable;
 import org.immregistries.dqa.hl7util.SeverityLevel;
 
 /***
- * This is a place-holder for where the ack building code would land.
+ * This class will build an ACK from the ack data sent in. 
  */
 public enum AckBuilder {
   INSTANCE;
-  // Took this SDF out of the previous code. thought you might need it to format
-  // the dates that are in the ACK.
-  SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmssZ");
-
   public static final String PROCESSING_ID_DEBUG = "D";
 
   public String buildAckFrom(AckData ackDataIn)
@@ -86,34 +78,34 @@ public enum AckBuilder {
     return ack.toString();
   }
 
-  public static void makeERRSegment(StringBuilder ack, String severity, String hl7ErrorCode, String textMessage, Reportable reportable)
-  {
-
-    if (severity.equals("E") && hl7ErrorCode.equals(""))
-    {
-      hl7ErrorCode = "102";
-    }
-    ack.append("ERR||");
-    // 2 Error Location
-    ack.append("|");
-    // 3 HL7 Error Code
-    HL7Util.appendErrorCode(ack, reportable.getHl7ErrorCode());
-    ack.append("|");
-    // 4 Severity
-    ack.append(severity);
-    ack.append("|");
-    // 5 Application Error Code
-    HL7Util.appendAppErrorCode(ack, reportable);
-    ack.append("|");
-    // 6 Application Error Parameter
-    ack.append("|");
-    // 7 Diagnostic Information
-    ack.append("|");
-    // 8 User Message
-    ack.append(HL7Util.escapeHL7Chars(reportable.getReportedMessage()));
-    ack.append("|\r");
-
-  }
+//  public static void makeERRSegment(StringBuilder ack, String severity, String hl7ErrorCode, String textMessage, Reportable reportable)
+//  {
+//
+//    if (severity.equals("E") && StringUtils.isBlank(hl7ErrorCode))
+//    {
+//      hl7ErrorCode = "102";
+//    }
+//    ack.append("ERR||");
+//    // 2 Error Location
+//    ack.append("|" + reportable.getHl7LocationList());
+//    // 3 HL7 Error Code
+//    HL7Util.appendErrorCode(ack, reportable.getHl7ErrorCode());
+//    ack.append("|");
+//    // 4 Severity
+//    ack.append(severity);
+//    ack.append("|");
+//    // 5 Application Error Code
+//    HL7Util.appendAppErrorCode(ack, reportable);
+//    ack.append("|");
+//    // 6 Application Error Parameter
+//    ack.append("|");
+//    // 7 Diagnostic Information
+//    ack.append("|");
+//    // 8 User Message
+//    ack.append(HL7Util.escapeHL7Chars(reportable.getReportedMessage()));
+//    ack.append("|\r");
+//
+//  }
 
   private static boolean hasErrors(AckData ackDataIn)
   {

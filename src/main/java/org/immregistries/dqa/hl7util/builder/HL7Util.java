@@ -10,6 +10,7 @@ package org.immregistries.dqa.hl7util.builder;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import org.apache.commons.lang3.StringUtils;
 import org.immregistries.dqa.hl7util.Reportable;
 import org.immregistries.dqa.hl7util.SeverityLevel;
 import org.immregistries.dqa.hl7util.hl7model.CodedWithExceptions;
@@ -191,21 +192,10 @@ public class HL7Util
   public static void makeERRSegment(StringBuilder ack, Reportable reportable)
   {
     CodedWithExceptions hl7ErrorCode = reportable.getHl7ErrorCode();
-    String severity = "I";
 
-    if (reportable.getSeverity() == SeverityLevel.ERROR)
-    {
-      severity = "E";
-    } else if (reportable.getSeverity() == SeverityLevel.WARN)
-    {
-      severity = "W";
-    } else if (reportable.getSeverity() == SeverityLevel.INFO)
-    {
-      severity = "I";
-    }
     ack.append("ERR||");
+    ack.append(printErr3(reportable));
     // 2 Error Location
-    printErr3(ack, reportable);
     ack.append("|");
     // 3 HL7 Error Code
     if (hl7ErrorCode == null)
@@ -215,7 +205,9 @@ public class HL7Util
     }
     ack.append("|");
     // 4 Severity
-    ack.append(severity);
+    SeverityLevel level = reportable.getSeverity();
+    ack.append(level != null ? level.getCode() : "E");
+    
     ack.append("|");
     // 5 Application Error Code
     appendAppErrorCode(ack, reportable);
@@ -299,8 +291,9 @@ public class HL7Util
     }
   }
 
-  private static void printErr3(StringBuilder ack, Reportable reportable)
+  private static String printErr3(Reportable reportable)
   {
+	StringBuilder ack = new StringBuilder();
     boolean repeating = false;
     if (reportable.getHl7LocationList() != null)
     {
@@ -349,17 +342,19 @@ public class HL7Util
         }
       }
     }
+    return ack.toString();
   }
 
   public static void makeERRSegment(StringBuilder ack, String severity, String hl7ErrorCode, String textMessage, Reportable reportable)
   {
 
-    if (severity.equals("E") && hl7ErrorCode.equals(""))
+    if (severity.equals("E") && StringUtils.isBlank(hl7ErrorCode))
     {
       hl7ErrorCode = "102";
     }
     ack.append("ERR||");
     // 2 Error Location
+    ack.append(reportable.getHl7LocationList()!= null && reportable.getHl7LocationList().size() > 0 ? reportable.getHl7LocationList().get(0) : "");
     ack.append("|");
     // 3 HL7 Error Code
     HL7Util.appendErrorCode(ack, reportable.getHl7ErrorCode());

@@ -34,22 +34,22 @@ public enum SeverityLevel {
 	
 	public SeverityLevel findByCode(String code) {
 		for (SeverityLevel s : SeverityLevel.values()) {
-			if (s.getActionCode() == code) {
+			if (s.getCode() == code) {
 				return s;
 			}
 		}
 		return null;
 	}
 
-	public String getActionLabel() {
+	public String getLabel() {
 		return this.severityLabel;
 	}
 
-	public String getActionCode() {
+	public String getCode() {
 		return severityCode;
 	}
 
-	public String getActionDescription() {
+	public String getDescription() {
 		return this.severityDescription;
 	}
 

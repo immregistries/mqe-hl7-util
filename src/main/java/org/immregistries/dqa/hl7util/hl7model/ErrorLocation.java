@@ -1,5 +1,7 @@
 package org.immregistries.dqa.hl7util.hl7model;
 
+import org.apache.commons.lang3.StringUtils;
+
 public class ErrorLocation
 {
   private String segmentId = "";
@@ -11,7 +13,7 @@ public class ErrorLocation
 
   public boolean hasSegmentId()
   {
-    return segmentId != null && !segmentId.equals("");
+    return !StringUtils.isBlank(segmentId);
   }
 
   public boolean hasFieldPosition()
@@ -34,34 +36,31 @@ public class ErrorLocation
   }
 
   public ErrorLocation(String hl7Reference) {
-    int pos = hl7Reference.indexOf("-");
-    if (pos == -1)
-    {
-      pos = hl7Reference.length();
-    }
-    if (pos > 0 && (pos + 1) <= hl7Reference.length())
-    {
-      segmentId = hl7Reference.substring(0, pos);
-      hl7Reference = hl7Reference.substring(pos + 1);
-      if (hl7Reference.length() > 0)
-      {
-        pos = hl7Reference.indexOf("\\.");
-        try
-        {
-          if (pos == -1)
-          {
-            fieldPosition = Integer.parseInt(hl7Reference);
-          } else
-          {
-            fieldPosition = Integer.parseInt(hl7Reference.substring(0, pos));
-            componentNumber = Integer.parseInt(hl7Reference.substring(0, pos));
-          }
-        } catch (NumberFormatException nfe)
-        {
-          // ignore
-        }
-      }
-    }
+		if (!StringUtils.isBlank(hl7Reference)) {
+			int pos = hl7Reference.indexOf("-");
+			if (pos == -1) {
+				pos = hl7Reference.length();
+			}
+			if (pos > 0 && (pos + 1) <= hl7Reference.length()) {
+				segmentId = hl7Reference.substring(0, pos);
+				hl7Reference = hl7Reference.substring(pos + 1);
+				if (hl7Reference.length() > 0) {
+					pos = hl7Reference.indexOf("\\.");
+					try {
+						if (pos == -1) {
+							fieldPosition = Integer.parseInt(hl7Reference);
+						} else {
+							fieldPosition = Integer.parseInt(hl7Reference
+									.substring(0, pos));
+							componentNumber = Integer.parseInt(hl7Reference
+									.substring(0, pos));
+						}
+					} catch (NumberFormatException nfe) {
+						// ignore
+					}
+				}
+			}
+		}
   }
 
   public String getSegmentId()
