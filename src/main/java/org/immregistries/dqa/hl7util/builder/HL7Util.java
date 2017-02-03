@@ -203,6 +203,7 @@ public class HL7Util
       hl7ErrorCode = new CodedWithExceptions();
       hl7ErrorCode.setIdentifier("0");
     }
+    HL7Util.appendErrorCode(ack, reportable.getHl7ErrorCode());
     ack.append("|");
     // 4 Severity
     SeverityLevel level = reportable.getSeverity();
