@@ -38,7 +38,7 @@ public enum AckBuilder {
       }
     }
     StringBuilder ack = new StringBuilder();
-    makeHeader(ack, ackDataIn, null, null);
+    makeHeader(ack, ackDataIn, "Z23", null);
     // ack.append("SFT|" + SoftwareVersion.VENDOR + "|" +
     // SoftwareVersion.VERSION + "|" + SoftwareVersion.PRODUCT + "|" +
     // SoftwareVersion.BINARY_ID
@@ -111,7 +111,7 @@ public enum AckBuilder {
   {
     for (Reportable reportable : ackDataIn.getReportables())
     {
-      if (reportable.getSeverity() == SeverityLevel.ERROR)
+      if (reportable.getSeverity() == SeverityLevel.ERROR || reportable.getSeverity() == SeverityLevel.WARN)
       {
         return true;
       }
@@ -165,7 +165,7 @@ public enum AckBuilder {
     ack.append("|");
     if (profileId != null)
     {
-      ack.append("||NE|AL|||||" + profileId + "^CDCPHINVS|");
+      ack.append("||NE|NE|||||" + profileId + "^CDCPHINVS|");
     }
     ack.append("\r");
 

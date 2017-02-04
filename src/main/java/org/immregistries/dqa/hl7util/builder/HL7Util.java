@@ -1,9 +1,9 @@
 /*
  * Copyright 2013 by Dandelion Software & Research, Inc (DSR)
  * 
- * This application was written for immunization information system (IIS) community and has
- * been released by DSR under an Apache 2 License with the hope that this software will be used
- * to improve Public Health.  
+ * This application was written for immunization information system (IIS) community and has been
+ * released by DSR under an Apache 2 License with the hope that this software will be used to
+ * improve Public Health.
  */
 package org.immregistries.dqa.hl7util.builder;
 
@@ -16,8 +16,7 @@ import org.immregistries.dqa.hl7util.SeverityLevel;
 import org.immregistries.dqa.hl7util.hl7model.CodedWithExceptions;
 import org.immregistries.dqa.hl7util.hl7model.ErrorLocation;
 
-public class HL7Util
-{
+public class HL7Util {
   public static final String MESSAGE_TYPE_VXU = "VXU";
   public static final String MESSAGE_TYPE_QBP = "QBP";
 
@@ -47,34 +46,28 @@ public class HL7Util
 
   private static int ackCount = 1;
 
-  public static synchronized int getNextAckCount()
-  {
-    if (ackCount == Integer.MAX_VALUE)
-    {
+  public static synchronized int getNextAckCount() {
+    if (ackCount == Integer.MAX_VALUE) {
       ackCount = 1;
     }
     return ackCount++;
   }
 
-  public static boolean setupSeparators(String messageText, char[] separators)
-  {
-    if (messageText.startsWith("MSH") && messageText.length() > 10)
-    {
+  public static boolean setupSeparators(String messageText, char[] separators) {
+    if (messageText.startsWith("MSH") && messageText.length() > 10) {
       separators[BAR] = messageText.charAt(BAR + 3);
       separators[CAR] = messageText.charAt(CAR + 3);
       separators[TIL] = messageText.charAt(TIL + 3);
       separators[SLA] = messageText.charAt(SLA + 3);
       separators[AMP] = messageText.charAt(AMP + 3);
       return true;
-    } else
-    {
+    } else {
       setDefault(separators);
       return false;
     }
   }
 
-  public static void setDefault(char[] separators)
-  {
+  public static void setDefault(char[] separators) {
     separators[BAR] = '|';
     separators[CAR] = '^';
     separators[TIL] = '~';
@@ -82,16 +75,12 @@ public class HL7Util
     separators[AMP] = '&';
   }
 
-  public static boolean checkSeparatorsAreValid(char[] separators)
-  {
+  public static boolean checkSeparatorsAreValid(char[] separators) {
     boolean unique = true;
     // Make sure separators are unique for each other
-    for (int i = 0; i < separators.length; i++)
-    {
-      for (int j = i + 1; j < separators.length; j++)
-      {
-        if (separators[i] == separators[j])
-        {
+    for (int i = 0; i < separators.length; i++) {
+      for (int j = i + 1; j < separators.length; j++) {
+        if (separators[i] == separators[j]) {
           unique = false;
           break;
         }
@@ -100,8 +89,8 @@ public class HL7Util
     return unique;
   }
 
-  public static String makeAckMessage(String ackType, String severityLevel, String message, AckData ackData, Reportable reportable)
-  {
+  public static String makeAckMessage(String ackType, String severityLevel, String message,
+      AckData ackData, Reportable reportable) {
     StringBuilder ack = new StringBuilder();
 
     SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmssZ");
@@ -124,6 +113,15 @@ public class HL7Util
                                                              // Control ID
     ack.append("|P"); // MSH-11 Processing ID
     ack.append("|2.5.1"); // MSH-12 Version ID
+    ack.append("|"); // MSH-13
+    ack.append("|"); // MSH-14
+    ack.append("|"); // MSH-15
+    ack.append("|NE"); // MSH-16
+    ack.append("|NE"); // MSH-17
+    ack.append("|"); // MSH-18
+    ack.append("|"); // MSH-19
+    ack.append("|"); // MSH-20
+    ack.append("|Z23^CDCPHINVS"); // MSH-21
     ack.append("|\r");
     // ack.append("SFT|" + SoftwareVersion.VENDOR + "|" +
     // SoftwareVersion.VERSION + "|" + SoftwareVersion.PRODUCT + "|" +
@@ -137,51 +135,39 @@ public class HL7Util
 
   }
 
-  public static void appendErrorCode(StringBuilder ack, CodedWithExceptions cwe)
-  {
-    if (cwe != null)
-    {
-      if (cwe.hasIdentifier() && (cwe.getText() == null || cwe.getText().equals("")))
-      {
+  public static void appendErrorCode(StringBuilder ack, CodedWithExceptions cwe) {
+    if (cwe != null) {
+      if (!cwe.hasIdentifier()) {
+        cwe.setIdentifier("0");
+        cwe.setText("Message accepted");
         cwe.setNameOfCodingSystem("HL70357");
-        if (cwe.getIdentifier().equals("0"))
-        {
+      } else if (cwe.getText() == null || cwe.getText().equals("")) {
+        cwe.setNameOfCodingSystem("HL70357");
+        if (cwe.getIdentifier().equals("0")) {
           cwe.setText("Message accepted");
-        } else if (cwe.getIdentifier().equals("100"))
-        {
+        } else if (cwe.getIdentifier().equals("100")) {
           cwe.setText("Segment sequence error");
-        } else if (cwe.getIdentifier().equals("101"))
-        {
+        } else if (cwe.getIdentifier().equals("101")) {
           cwe.setText("Required field missing");
-        } else if (cwe.getIdentifier().equals("102"))
-        {
+        } else if (cwe.getIdentifier().equals("102")) {
           cwe.setText("Data type error");
-        } else if (cwe.getIdentifier().equals("103"))
-        {
+        } else if (cwe.getIdentifier().equals("103")) {
           cwe.setText("Table value not found");
-        } else if (cwe.getIdentifier().equals("200"))
-        {
+        } else if (cwe.getIdentifier().equals("200")) {
           cwe.setText("Unsupported message type");
-        } else if (cwe.getIdentifier().equals("201"))
-        {
+        } else if (cwe.getIdentifier().equals("201")) {
           cwe.setText("Unsupported event code");
-        } else if (cwe.getIdentifier().equals("202"))
-        {
+        } else if (cwe.getIdentifier().equals("202")) {
           cwe.setText("Unsupported processing ID");
-        } else if (cwe.getIdentifier().equals("203"))
-        {
+        } else if (cwe.getIdentifier().equals("203")) {
           cwe.setText("Unsupported version ID");
-        } else if (cwe.getIdentifier().equals("204"))
-        {
+        } else if (cwe.getIdentifier().equals("204")) {
           cwe.setText("Unknown key identifier");
-        } else if (cwe.getIdentifier().equals("205"))
-        {
+        } else if (cwe.getIdentifier().equals("205")) {
           cwe.setText("Duplicate key identifier");
-        } else if (cwe.getIdentifier().equals("206"))
-        {
+        } else if (cwe.getIdentifier().equals("206")) {
           cwe.setText("Application record locked");
-        } else if (cwe.getIdentifier().equals("207"))
-        {
+        } else if (cwe.getIdentifier().equals("207")) {
           cwe.setText("Application internal error");
         }
       }
@@ -189,8 +175,7 @@ public class HL7Util
     printCodedWithExceptions(ack, cwe);
   }
 
-  public static void makeERRSegment(StringBuilder ack, Reportable reportable)
-  {
+  public static void makeERRSegment(StringBuilder ack, Reportable reportable) {
     CodedWithExceptions hl7ErrorCode = reportable.getHl7ErrorCode();
 
     ack.append("ERR||");
@@ -198,8 +183,7 @@ public class HL7Util
     // 2 Error Location
     ack.append("|");
     // 3 HL7 Error Code
-    if (hl7ErrorCode == null)
-    {
+    if (hl7ErrorCode == null) {
       hl7ErrorCode = new CodedWithExceptions();
       hl7ErrorCode.setIdentifier("0");
     }
@@ -207,11 +191,11 @@ public class HL7Util
     ack.append("|");
     // 4 Severity
     SeverityLevel level = reportable.getSeverity();
-    ack.append(level != null ? level.getCode() : "E");
-    
+    ack.append(level != null ? (level.getCode().equals("A") ? "I" : level.getCode()) : "E");
+
     ack.append("|");
     // 5 Application Error Code
-    appendAppErrorCode(ack, reportable);
+    // appendAppErrorCode(ack, reportable);
     ack.append("|");
     // 6 Application Error Parameter
     ack.append("|");
@@ -223,40 +207,40 @@ public class HL7Util
     ack.append("|\r");
   }
 
-  public static void appendAppErrorCode(StringBuilder ack, Reportable reportable)
-  {
-    if (reportable != null)
-    {
+  public static void appendAppErrorCode(StringBuilder ack, Reportable reportable) {
+    if (reportable != null) {
       CodedWithExceptions cwe = reportable.getApplicationErrorCode();
-      if (cwe != null)
-      {
-        if (cwe.hasIdentifier() && (cwe.getText() == null || cwe.getText().equals("")))
-        {
-          cwe.setNameOfCodingSystem("HL70533");
-          if (cwe.getIdentifier().equals("1"))
-          {
-            cwe.setText("Illogical Date error");
-          } else if (cwe.getIdentifier().equals("2"))
-          {
-            cwe.setText("Invalid Date");
-          } else if (cwe.getIdentifier().equals("3"))
-          {
-            cwe.setText("Illogical Value error");
-          } else if (cwe.getIdentifier().equals("4"))
-          {
-            cwe.setText("Invalid value");
-          } else if (cwe.getIdentifier().equals("5"))
-          {
-            cwe.setText("Table value not found");
-          } else if (cwe.getIdentifier().equals("6"))
-          {
-            cwe.setText("Required observation missing");
-          } else if (cwe.getIdentifier().equals("7"))
-          {
-            cwe.setText("Required data missing");
-          } else if (cwe.getIdentifier().equals("8"))
-          {
-            cwe.setText("Data was ignored");
+      if (cwe != null) {
+        if (cwe.hasIdentifier()) {
+          if (cwe.getIdentifier().startsWith("DQA")) {
+            cwe.setAlternateIdentifier(cwe.getIdentifier());
+            cwe.setAlternateText(cwe.getText());
+            cwe.setNameOfAlternateCodingSystem("L");
+            cwe.setIdentifier("");
+            cwe.setText("");
+            cwe.setNameOfCodingSystem("");
+          }
+        }
+        if (cwe.hasIdentifier()) {
+          if (cwe.getText() == null || cwe.getText().equals("")) {
+            cwe.setNameOfCodingSystem("HL70533");
+            if (cwe.getIdentifier().equals("1")) {
+              cwe.setText("Illogical Date error");
+            } else if (cwe.getIdentifier().equals("2")) {
+              cwe.setText("Invalid Date");
+            } else if (cwe.getIdentifier().equals("3")) {
+              cwe.setText("Illogical Value error");
+            } else if (cwe.getIdentifier().equals("4")) {
+              cwe.setText("Invalid value");
+            } else if (cwe.getIdentifier().equals("5")) {
+              cwe.setText("Table value not found");
+            } else if (cwe.getIdentifier().equals("6")) {
+              cwe.setText("Required observation missing");
+            } else if (cwe.getIdentifier().equals("7")) {
+              cwe.setText("Required data missing");
+            } else if (cwe.getIdentifier().equals("8")) {
+              cwe.setText("Data was ignored");
+            }
           }
         }
       }
@@ -265,24 +249,19 @@ public class HL7Util
 
   }
 
-  private static void printCodedWithExceptions(StringBuilder ack, CodedWithExceptions cwe)
-  {
-    if (cwe != null)
-    {
-      if (cwe.hasIdentifier())
-      {
+  private static void printCodedWithExceptions(StringBuilder ack, CodedWithExceptions cwe) {
+    if (cwe != null) {
+      if (cwe.hasIdentifier()) {
         ack.append(cwe.getIdentifier());
         ack.append("^");
         ack.append(cwe.getText());
         ack.append("^");
         ack.append(cwe.getNameOfCodingSystem());
-        if (cwe.hasAlternateIdentifier())
-        {
+        if (cwe.hasAlternateIdentifier()) {
           ack.append("^");
         }
       }
-      if (cwe.hasAlternateIdentifier())
-      {
+      if (cwe.hasAlternateIdentifier()) {
         ack.append(cwe.getAlternateIdentifier());
         ack.append("^");
         ack.append(cwe.getAlternateText());
@@ -292,49 +271,37 @@ public class HL7Util
     }
   }
 
-  private static String printErr3(Reportable reportable)
-  {
-	StringBuilder ack = new StringBuilder();
+  private static String printErr3(Reportable reportable) {
+    StringBuilder ack = new StringBuilder();
     boolean repeating = false;
-    if (reportable.getHl7LocationList() != null)
-    {
-      for (ErrorLocation errorLocation : reportable.getHl7LocationList())
-      {
-        if (errorLocation.hasSegmentId())
-        {
-          if (repeating)
-          {
+    if (reportable.getHl7LocationList() != null) {
+      for (ErrorLocation errorLocation : reportable.getHl7LocationList()) {
+        if (errorLocation.hasSegmentId()) {
+          if (repeating) {
             ack.append("~");
           }
           repeating = true;
           ack.append(errorLocation.getSegmentId());
           ack.append("^");
-          if (errorLocation.getSegmentSequence() == 0)
-          {
+          if (errorLocation.getSegmentSequence() == 0) {
             ack.append(1);
-          } else
-          {
+          } else {
             ack.append(errorLocation.getSegmentSequence());
           }
 
-          if (errorLocation.hasFieldPosition())
-          {
+          if (errorLocation.hasFieldPosition()) {
             ack.append("^");
             ack.append(errorLocation.getFieldPosition());
             ack.append("^");
-            if (errorLocation.getFieldRepetition() == 0)
-            {
+            if (errorLocation.getFieldRepetition() == 0) {
               ack.append(1);
-            } else
-            {
+            } else {
               ack.append(errorLocation.getFieldRepetition());
             }
-            if (errorLocation.hasComponentNumber())
-            {
+            if (errorLocation.hasComponentNumber()) {
               ack.append("^");
               ack.append(errorLocation.getComponentNumber());
-              if (errorLocation.hasSubComponentNumber())
-              {
+              if (errorLocation.hasSubComponentNumber()) {
                 ack.append("^");
                 ack.append(errorLocation.getSubComponentNumber());
               }
@@ -346,16 +313,16 @@ public class HL7Util
     return ack.toString();
   }
 
-  public static void makeERRSegment(StringBuilder ack, String severity, String hl7ErrorCode, String textMessage, Reportable reportable)
-  {
+  public static void makeERRSegment(StringBuilder ack, String severity, String hl7ErrorCode,
+      String textMessage, Reportable reportable) {
 
-    if (severity.equals("E") && StringUtils.isBlank(hl7ErrorCode))
-    {
+    if (severity.equals("E") && StringUtils.isBlank(hl7ErrorCode)) {
       hl7ErrorCode = "102";
     }
     ack.append("ERR||");
     // 2 Error Location
-    ack.append(reportable.getHl7LocationList()!= null && reportable.getHl7LocationList().size() > 0 ? reportable.getHl7LocationList().get(0) : "");
+    ack.append(reportable.getHl7LocationList() != null && reportable.getHl7LocationList().size() > 0
+        ? reportable.getHl7LocationList().get(0) : "");
     ack.append("|");
     // 3 HL7 Error Code
     HL7Util.appendErrorCode(ack, reportable.getHl7ErrorCode());
@@ -376,35 +343,31 @@ public class HL7Util
 
   }
 
-  public static String escapeHL7Chars(String s)
-  {
-    if (s == null)
-    {
+  public static String escapeHL7Chars(String s) {
+    if (s == null) {
       return "";
     }
     StringBuilder sb = new StringBuilder();
-    for (char c : s.toCharArray())
-    {
-      if (c >= ' ')
-      {
+    for (char c : s.toCharArray()) {
+      if (c >= ' ') {
         switch (c) {
-        case '~':
-          sb.append("\\R\\");
-          break;
-        case '\\':
-          sb.append("\\E\\");
-          break;
-        case '|':
-          sb.append("\\F\\");
-          break;
-        case '^':
-          sb.append("\\S\\");
-          break;
-        case '&':
-          sb.append("\\T\\");
-          break;
-        default:
-          sb.append(c);
+          case '~':
+            sb.append("\\R\\");
+            break;
+          case '\\':
+            sb.append("\\E\\");
+            break;
+          case '|':
+            sb.append("\\F\\");
+            break;
+          case '^':
+            sb.append("\\S\\");
+            break;
+          case '&':
+            sb.append("\\T\\");
+            break;
+          default:
+            sb.append(c);
         }
       }
     }
