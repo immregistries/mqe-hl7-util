@@ -203,6 +203,7 @@ public class HL7Util {
     if (debug && reportable.getDiagnosticMessage() != null)
     {
       ack.append(escapeHL7Chars(reportable.getReportedMessage()));
+      ack.append(escapeHL7Chars(reportable.getDiagnosticMessage()));
     }
     // 8 User Message
     ack.append("|");
