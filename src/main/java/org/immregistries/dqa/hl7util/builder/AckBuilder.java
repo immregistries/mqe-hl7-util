@@ -48,21 +48,21 @@ public enum AckBuilder {
     {
       if (r.getSeverity() == SeverityLevel.ERROR)
       {
-        HL7Util.makeERRSegment(ack, r);
+        HL7Util.makeERRSegment(ack, r, processingId.equals(PROCESSING_ID_DEBUG));
       }
     }
     for (Reportable r : ackDataIn.getReportables())
     {
       if (r.getSeverity() == SeverityLevel.WARN)
       {
-        HL7Util.makeERRSegment(ack, r);
+        HL7Util.makeERRSegment(ack, r, processingId.equals(PROCESSING_ID_DEBUG));
       }
     }
     for (Reportable r : ackDataIn.getReportables())
     {
       if (r.getSeverity() == SeverityLevel.INFO)
       {
-        HL7Util.makeERRSegment(ack, r);
+        HL7Util.makeERRSegment(ack, r, processingId.equals(PROCESSING_ID_DEBUG));
       }
     }
     if (processingId.equals(PROCESSING_ID_DEBUG))
@@ -71,7 +71,7 @@ public enum AckBuilder {
       {
         if (r.getSeverity() == SeverityLevel.ACCEPT)
         {
-          HL7Util.makeERRSegment(ack, r);
+          HL7Util.makeERRSegment(ack, r, processingId.equals(PROCESSING_ID_DEBUG));
         }
       }
     }

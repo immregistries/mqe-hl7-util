@@ -175,7 +175,7 @@ public class HL7Util {
     printCodedWithExceptions(ack, cwe);
   }
 
-  public static void makeERRSegment(StringBuilder ack, Reportable reportable) {
+  public static void makeERRSegment(StringBuilder ack, Reportable reportable, boolean debug) {
     CodedWithExceptions hl7ErrorCode = reportable.getHl7ErrorCode();
 
     ack.append("ERR||");
@@ -200,7 +200,10 @@ public class HL7Util {
     // 6 Application Error Parameter
     ack.append("|");
     // 7 Diagnostic Information
-    // ack.append(escapeHL7Chars(reportable.getReportedMessage()));
+    if (debug && reportable.getDiagnosticMessage() != null)
+    {
+      ack.append(escapeHL7Chars(reportable.getReportedMessage()));
+    }
     // 8 User Message
     ack.append("|");
     ack.append(escapeHL7Chars(reportable.getReportedMessage()));
