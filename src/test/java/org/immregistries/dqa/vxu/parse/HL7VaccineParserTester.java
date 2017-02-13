@@ -10,6 +10,7 @@ import org.immregistries.dqa.hl7util.parser.MessageParserHL7;
 import org.immregistries.dqa.vxu.DqaVaccination;
 import org.immregistries.dqa.vxu.hl7.CodedEntity;
 import org.immregistries.dqa.vxu.hl7.Observation;
+import org.immregistries.dqa.vxu.parse.HL7VaccineParser;
 import org.junit.Test;
 
 public class HL7VaccineParserTester {

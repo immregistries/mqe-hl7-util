@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 
 import org.immregistries.dqa.hl7util.parser.HL7MessageMap;
 import org.immregistries.dqa.hl7util.parser.MessageParserHL7;
+import org.immregistries.dqa.vxu.parse.HL7PatientParser;
 import org.junit.Test;
 
 public class HL7PatientParserTester {

@@ -22,7 +22,7 @@ public class DateUtilityTest {
 //		System.out.println(datr.parseDate(isADate));
 		
 		isADate = "2016-01-01";
-		assertTrue("it's good, really[" + isADate + "]", datr.isDate(isADate));
+		assertFalse("it's bad, really[" + isADate + "]", datr.isDate(isADate));
 //		System.out.println(datr.parseDate(isADate));
 		
 		isADate = "19000101";

@@ -20,8 +20,6 @@ public enum DateUtility {
 	private final DateTimeFormatter dtf0 = DateTimeFormat.forPattern("yyyyMMddHHmmss");
 	private final DateTimeFormatter dtf1 = DateTimeFormat.forPattern("yyyyMMddHHmm");
 	private final DateTimeFormatter dtf2 = DateTimeFormat.forPattern("yyyyMMdd");
-//	private final DateTimeFormatter dtf3 = DateTimeFormat.forPattern("yyyy-MM-dd");
-//	private final DateTimeFormatter dtf4 = DateTimeFormat.forPattern("yyyy/MM/dd");
 	
 	private final DateTimeFormatter[] DATE_FORMATS = {tz2,tz1, dtf0, dtf1, dtf2};
 	
