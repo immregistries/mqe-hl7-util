@@ -13,8 +13,8 @@ import java.util.Date;
 import org.apache.commons.lang3.StringUtils;
 import org.immregistries.dqa.hl7util.Reportable;
 import org.immregistries.dqa.hl7util.SeverityLevel;
-import org.immregistries.dqa.hl7util.hl7model.CodedWithExceptions;
-import org.immregistries.dqa.hl7util.hl7model.ErrorLocation;
+import org.immregistries.dqa.hl7util.model.CodedWithExceptions;
+import org.immregistries.dqa.hl7util.model.ErrorLocation;
 
 public class HL7Util {
   public static final String MESSAGE_TYPE_VXU = "VXU";
@@ -202,7 +202,6 @@ public class HL7Util {
     // 7 Diagnostic Information
     if (debug && reportable.getDiagnosticMessage() != null)
     {
-      ack.append(escapeHL7Chars(reportable.getReportedMessage()));
       ack.append(escapeHL7Chars(reportable.getDiagnosticMessage()));
     }
     // 8 User Message

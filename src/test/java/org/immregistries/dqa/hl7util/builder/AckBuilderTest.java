@@ -7,8 +7,8 @@ import java.util.List;
 
 import org.immregistries.dqa.hl7util.Reportable;
 import org.immregistries.dqa.hl7util.SeverityLevel;
-import org.immregistries.dqa.hl7util.hl7model.CodedWithExceptions;
-import org.immregistries.dqa.hl7util.hl7model.ErrorLocation;
+import org.immregistries.dqa.hl7util.model.CodedWithExceptions;
+import org.immregistries.dqa.hl7util.model.ErrorLocation;
 import org.junit.Test;
 
 public class AckBuilderTest

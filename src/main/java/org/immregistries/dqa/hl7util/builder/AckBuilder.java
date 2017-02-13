@@ -3,7 +3,6 @@ package org.immregistries.dqa.hl7util.builder;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import org.apache.commons.lang3.StringUtils;
 import org.immregistries.dqa.hl7util.Reportable;
 import org.immregistries.dqa.hl7util.SeverityLevel;
 

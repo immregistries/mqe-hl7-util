@@ -32,19 +32,12 @@
 			<version>2.4</version>
 		</dependency>
 		
-		<dependency>
+	<!-- 	<dependency>
 			<groupId>commons-codec</groupId>
 			<artifactId>commons-codec</artifactId>
 			<version>1.10</version>
-		</dependency>
+		</dependency> -->
 		
-		<dependency>
-    		<groupId>javax.servlet</groupId>
-    		<artifactId>javax.servlet-api</artifactId>
-    		<version>3.1.0</version>
-    		<scope>compile</scope>
-		</dependency>
-
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>
@@ -70,6 +63,12 @@
               <artifactId>junit</artifactId>
               <version>4.12</version>
               <scope>test</scope>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.immregistries</groupId>
+			<artifactId>dqa-codebase-client</artifactId>
+			<version>2.0.1-DEVELOPMENT</version>
 		</dependency>
 
 	</dependencies>

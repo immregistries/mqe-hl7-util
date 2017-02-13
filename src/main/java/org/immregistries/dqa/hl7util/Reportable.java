@@ -2,8 +2,8 @@ package org.immregistries.dqa.hl7util;
 
 import java.util.List;
 
-import org.immregistries.dqa.hl7util.hl7model.CodedWithExceptions;
-import org.immregistries.dqa.hl7util.hl7model.ErrorLocation;
+import org.immregistries.dqa.hl7util.model.CodedWithExceptions;
+import org.immregistries.dqa.hl7util.model.ErrorLocation;
 
 /**
  * The intention is to generalize 
