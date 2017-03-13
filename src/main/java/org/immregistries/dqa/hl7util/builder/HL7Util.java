@@ -195,7 +195,7 @@ public class HL7Util {
 
     ack.append("|");
     // 5 Application Error Code
-    // appendAppErrorCode(ack, reportable);
+    appendAppErrorCode(ack, reportable);
     ack.append("|");
     // 6 Application Error Parameter
     ack.append("|");
