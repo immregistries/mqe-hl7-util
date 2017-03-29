@@ -39,21 +39,24 @@ public class ErrorLocation
 		if (!StringUtils.isBlank(hl7Reference)) {
 			int pos = hl7Reference.indexOf("-");
 			if (pos == -1) {
-				pos = hl7Reference.length();
+				segmentId = hl7Reference;
+				return;
 			}
-			if (pos > 0 && (pos + 1) <= hl7Reference.length()) {
-				segmentId = hl7Reference.substring(0, pos);
+			segmentId = hl7Reference.substring(0, pos);
+			if ((pos + 1) <= hl7Reference.length()) {
 				hl7Reference = hl7Reference.substring(pos + 1);
 				if (hl7Reference.length() > 0) {
-					pos = hl7Reference.indexOf("\\.");
+					pos = hl7Reference.indexOf(".");
 					try {
 						if (pos == -1) {
 							fieldPosition = Integer.parseInt(hl7Reference);
 						} else {
 							fieldPosition = Integer.parseInt(hl7Reference
 									.substring(0, pos));
-							componentNumber = Integer.parseInt(hl7Reference
-									.substring(0, pos));
+							if ((pos+1) < hl7Reference.length()) {
+							  componentNumber = Integer.parseInt(hl7Reference
+									.substring(pos+1));
+							}
 						}
 					} catch (NumberFormatException nfe) {
 						// ignore
