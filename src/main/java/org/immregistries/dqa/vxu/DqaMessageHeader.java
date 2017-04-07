@@ -26,6 +26,7 @@ public class DqaMessageHeader implements Serializable
   private String sendingApplication = "";
   private String sendingFacility = "";
   private String messageVersion = "";
+  private String sendingRespOrg = "";
 
 
   public int getHeaderId()
@@ -240,6 +241,14 @@ public void setMessageDateString(String sentDate) {
 
 public String getMessageDateString() {
 	return this.messageDateString;
+}
+
+public String getSendingRespOrg() {
+	return sendingRespOrg;
+}
+
+public void setSendingRespOrg(String sendingRespOrg) {
+	this.sendingRespOrg = sendingRespOrg;
 }
 
 }

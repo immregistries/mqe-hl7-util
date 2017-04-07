@@ -30,6 +30,7 @@ public enum HL7MessageHeaderParser {
 	    String charSetCode 		= map.get("MSH-18");//getMSH18CharacterSet(map);
 	    String charSetAltCode 	= map.get("MSH-20");//getMSH20CharacterSetAltCode(map);
 	    String messageProfile 	= map.get("MSH-21");//getMSH21MessageProfileIdentifier(map);
+	    String sendingRespOrg   = map.get("MSH-22");//getMSH22
 	    
 	    DqaMessageHeader h = new DqaMessageHeader();
 	    h.setSendingApplication(sendingApp);
@@ -49,6 +50,7 @@ public enum HL7MessageHeaderParser {
 	    h.setCharacterSetCode(charSetCode);
 	    h.setCharacterSetAltCode(charSetAltCode);
 	    h.setMessageProfile(messageProfile);
+	    h.setSendingRespOrg(sendingRespOrg);
 	    
 	    return h;
 	}
