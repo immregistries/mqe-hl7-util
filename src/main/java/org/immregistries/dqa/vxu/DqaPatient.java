@@ -65,7 +65,7 @@ private static final Logger LOGGER = LoggerFactory.getLogger(DqaPatient.class);
   private String sex = "";//new String(CodesetType.PATIENT_SEX);
   private boolean isUnderAged = false;
   private boolean skipped = false;
-  private List<PhoneNumber> patientPhoneList = new ArrayList<PhoneNumber>();
+//  private List<PhoneNumber> patientPhoneList = new ArrayList<PhoneNumber>();
   private List<PatientImmunity> patientImmunityList = new ArrayList<PatientImmunity>();
   private Date systemCreationDate = null;
 
@@ -86,16 +86,11 @@ private static final Logger LOGGER = LoggerFactory.getLogger(DqaPatient.class);
   {
     return patientImmunityList;
   }
-//
-//  public List<PatientIdNumber> getPatientIdNumberList()
-//  {
-//    return patientIdNumberList;
-//  }
 
-  public List<PhoneNumber> getPatientPhoneList()
-  {
-    return patientPhoneList;
-  }
+//  public List<PhoneNumber> getPatientPhoneList()
+//  {
+//    return patientPhoneList;
+//  }
 
   public List<PatientAddress> getPatientAddressList()
   {
@@ -107,8 +102,11 @@ private static final Logger LOGGER = LoggerFactory.getLogger(DqaPatient.class);
     if (patientAddressList.size() > 0)
     {
       return patientAddressList.get(0);
+    } else {
+    	PatientAddress pa = new PatientAddress();
+    	patientAddressList.add(pa);
+    	return pa;
     }
-    return null;
   }
 
   public String getAddressCity()

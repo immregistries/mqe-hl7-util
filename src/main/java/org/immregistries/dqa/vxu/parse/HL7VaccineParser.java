@@ -276,7 +276,7 @@ public enum HL7VaccineParser {
 		String rxa9Val = map.getAtIndex("RXA-9", associatedRxaSegId, 1);
 		logger.info("Administered value: " + rxa9Val + " for segment id: " + associatedRxaSegId);
 		
-		if ("00".equals(rxa9Val)) {
+		if ("00".equals(rxa9Val) && obxIdxList != null && obxIdxList.size() > 0) {
 			//That means it's administered.  You can then look at the OBX's to find 
 			//the VFC observation. 
 			int start = obxIdxList.get(0);

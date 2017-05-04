@@ -191,7 +191,11 @@ public enum DateUtility {
 	
 	public int getAge(Date birthDate) {
 		DateTime bDateTime = new DateTime(birthDate);
-		return Years.yearsBetween(bDateTime, new DateTime()).getYears();
+		return getAge(bDateTime);
+	}
+	
+	public int getAge(DateTime bd) {
+		return Years.yearsBetween(bd, new DateTime()).getYears();
 	}
 	
 	
