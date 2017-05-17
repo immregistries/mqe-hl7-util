@@ -75,13 +75,14 @@ public class DateUtilityTest {
 		DateTime today = new DateTime();
 		DateTime eighteenYearsAgo = today.minusYears(18);
 		DateTime seventeenYearsAgo = eighteenYearsAgo.plusDays(1);
+		DateTime nullDate = null;
 //		System.out.println("Age 18 string: " + eighteenYearsAgo);
 //		System.out.println("Age 17 string: " + seventeenYearsAgo);
 		
 		assertEquals("should calculate to 18", 18, datr.getAge(eighteenYearsAgo.toDate()));
 		assertEquals("Should calculate to 17", 17, datr.getAge(seventeenYearsAgo.toDate()));
 		assertEquals("should be zero if born today", 0, datr.getAge(today.toDate()));
-		assertEquals("Should be zero if it's a null input", 0, datr.getAge(null));
+		assertEquals("Should be zero if it's a null input", 0, datr.getAge(nullDate));
 		
 		int superLongYears = 18923;
 		assertEquals("Should be able to handle a very old age", superLongYears, datr.getAge(today.minusYears(superLongYears).toDate()));
