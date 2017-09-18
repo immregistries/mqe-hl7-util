@@ -4,7 +4,9 @@ package org.immregistries.dqa.vxu.hl7;
 public class Observation {
   
   private String observationIdentifier = "";//new CodedEntity(CodesetType.OBSERVATION_IDENTIFIER);
+  private String observationIdentifierDescription = "";
   private String observationValue = "";
+  private String observationValueDesc = "";
   private String observationDateString;
   private String observationSubId = "";
   private String valueType = "";//new CodedEntity(CodesetType.HL7_VALUE_TYPE);
@@ -58,6 +60,23 @@ public class Observation {
 
 	public void setObservationDateString(String observationDateString) {
 		this.observationDateString = observationDateString;
+	}
+
+	public String getObservationValueDesc() {
+		return observationValueDesc;
+	}
+
+	public void setObservationValueDesc(String observationValueDesc) {
+		this.observationValueDesc = observationValueDesc;
+	}
+
+	public String getObservationIdentifierDescription() {
+		return observationIdentifierDescription;
+	}
+
+	public void setObservationIdentifierDescription(
+			String observationIdentifierDescription) {
+		this.observationIdentifierDescription = observationIdentifierDescription;
 	}
 
    

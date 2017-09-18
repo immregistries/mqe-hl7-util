@@ -195,6 +195,9 @@ public enum DateUtility {
 	}
 	
 	public int getAge(DateTime bd) {
+		if (bd == null) {
+			return 0;
+		}
 		return Years.yearsBetween(bd, new DateTime()).getYears();
 	}
 	

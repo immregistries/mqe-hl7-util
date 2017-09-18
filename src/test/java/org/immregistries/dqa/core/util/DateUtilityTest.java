@@ -20,7 +20,6 @@ public class DateUtilityTest {
 		String isADate = "20160101";
 		assertTrue("it's good, really[" + isADate + "]", datr.isDate(isADate));
 //		System.out.println(datr.parseDate(isADate));
-		
 		isADate = "2016-01-01";
 		assertFalse("it's bad, really[" + isADate + "]", datr.isDate(isADate));
 //		System.out.println(datr.parseDate(isADate));
@@ -82,7 +81,8 @@ public class DateUtilityTest {
 		assertEquals("should calculate to 18", 18, datr.getAge(eighteenYearsAgo.toDate()));
 		assertEquals("Should calculate to 17", 17, datr.getAge(seventeenYearsAgo.toDate()));
 		assertEquals("should be zero if born today", 0, datr.getAge(today.toDate()));
-		assertEquals("Should be zero if it's a null input", 0, datr.getAge(nullDate));
+		DateTime dt = null;
+		assertEquals("Should be zero if it's a null input", 0, datr.getAge(dt));
 		
 		int superLongYears = 18923;
 		assertEquals("Should be able to handle a very old age", superLongYears, datr.getAge(today.minusYears(superLongYears).toDate()));

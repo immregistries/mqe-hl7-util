@@ -848,12 +848,17 @@ public enum HL7VaccineParser {
 		
 		String identifier = map.getAtIndex("OBX-3", idx, 1);
 		o.setIdentifierCode(identifier);
+		String identifierDesc = map.getAtIndex("OBX-3-2", idx, 1);
+		o.setObservationIdentifierDescription(identifierDesc);
+		
 		
 		String subId = map.getAtIndex("OBX-4", idx, 1);
 		o.setSubId(subId);
 		
 		String observationValue = map.getAtIndex("OBX-5", idx, 1);
 		o.setValue(observationValue);
+		String observationValueDesc = map.getAtIndex("OBX-5-2", idx, 1);
+		o.setObservationValueDesc(observationValueDesc);
 		
 		String observationDate = map.getAtIndex("OBX-14", idx, 1);
 		o.setObservationDateString(observationDate);
