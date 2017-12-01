@@ -2,20 +2,14 @@ package org.immregistries.dqa.vxu.parse;
 
 import org.immregistries.dqa.codebase.client.reference.CodesetType;
 import org.immregistries.dqa.hl7util.parser.HL7MessageMap;
-import org.immregistries.dqa.vxu.hl7.Address;
+import org.immregistries.dqa.vxu.DqaAddress;
 import org.immregistries.dqa.vxu.hl7.Id;
-import org.immregistries.dqa.vxu.hl7.PhoneNumber;
+import org.immregistries.dqa.vxu.DqaPhoneNumber;
 
-//import java.text.SimpleDateFormat;
-//import java.util.Date;
-//
-//import com.openimmunizationsoftware.dqa.validator.issues.IssueFound;
-//import com.openimmunizationsoftware.dqa.validator.issues.PotentialIssue;
-//
-public enum HL7Util {
+public enum HL7ParsingUtil {
 	INSTANCE;
 
-	public Address getAddressFromOrdinal(HL7MessageMap map, String locator,
+	public DqaAddress getAddressFromOrdinal(HL7MessageMap map, String locator,
 			int ordinal, int fieldrep) {
 		int index = map.getAbsoluteIndexForLocationOrdinal(locator, ordinal);
 		return getAddressFromIndex(map, locator, index, fieldrep);
@@ -44,7 +38,7 @@ public enum HL7Util {
 	 * TDD Telecommunications Device for the Deaf
 	 * TTY Teletypewriter
 	 */
-	public PhoneNumber getPhoneAt(HL7MessageMap map, String fieldLocator, int segIdx) {
+	public DqaPhoneNumber getPhoneAt(HL7MessageMap map, String fieldLocator, int segIdx) {
 		/*  Previously...
 		 *  protected void readNK15Phone(String[] fields, VaccinationUpdateMessage vum, NextOfKin nok, Map<Separator, Character> separators) {
 			    if (fields.length <= 5) {
@@ -55,7 +49,7 @@ public enum HL7Util {
 			  }
 		 */
 		
-		PhoneNumber ph = new PhoneNumber();
+		DqaPhoneNumber ph = new DqaPhoneNumber();
 		
 		//These aren't often set. But we should capture them if they are. 
 		String telUseCode = map.getAtIndex(fieldLocator + "-2", segIdx, 1);
@@ -218,8 +212,8 @@ public enum HL7Util {
 		return ce;
 	}
 
-	public Address getAddressFromIndex(HL7MessageMap map, String locator, int segmentIndex, int fieldRep) {
-		Address address = new Address();
+	public DqaAddress getAddressFromIndex(HL7MessageMap map, String locator, int segmentIndex, int fieldRep) {
+		DqaAddress address = new DqaAddress();
         address.setStreet(map.getAtIndex(locator+ "-1", segmentIndex, fieldRep));
         address.setStreet2(map.getAtIndex(locator+ "-2", segmentIndex, fieldRep));
         address.setCity(map.getAtIndex(locator+ "-3", segmentIndex, fieldRep));
