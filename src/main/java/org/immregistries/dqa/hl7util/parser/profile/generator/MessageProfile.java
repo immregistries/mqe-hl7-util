@@ -18,5 +18,6 @@ public interface MessageProfile {
 	 */
 	public Map<String, FieldComplexity> getDataTypeComplexityMap();
 	
+
 	public void populateProfileMap();
 }

@@ -112,4 +112,9 @@ public class Name
     }
     return sb.toString().trim();
   }
+
+    @Override public String toString() {
+        return "Name{" + "last='" + last + '\'' + ", first='" + first + '\'' + ", middle='" + middle + '\'' + ", suffix='" + suffix + '\'' + ", prefix='"
+            + prefix + '\'' + ", type='" + type + '\'' + '}';
+    }
 }

@@ -5,20 +5,20 @@
  * been released by DSR under an Apache 2 License with the hope that this software will be used
  * to improve Public Health.  
  */
-package org.immregistries.dqa.vxu.hl7;
+package org.immregistries.dqa.vxu;
 
 
-public class PatientAddress extends Address
+public class DqaPatientAddress extends DqaAddress
 {
   private long addressId = 0;
   private int positionId = 0;
   private boolean skipped = false;
 
-  public PatientAddress() {
+  public DqaPatientAddress() {
 	  //default constructor. 
   }
   
-  public PatientAddress(Address a) {
+  public DqaPatientAddress(DqaAddress a) {
 		this.setStreet(a.getStreet());
         this.setStreet2(a.getStreet2());
         this.setCity(a.getCity());

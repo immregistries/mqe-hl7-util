@@ -6,12 +6,12 @@ import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 import org.immregistries.dqa.hl7util.parser.HL7MessageMap;
 import org.immregistries.dqa.vxu.DqaNextOfKin;
-import org.immregistries.dqa.vxu.hl7.Address;
-import org.immregistries.dqa.vxu.hl7.PhoneNumber;
+import org.immregistries.dqa.vxu.DqaAddress;
+import org.immregistries.dqa.vxu.DqaPhoneNumber;
 
 public enum HL7NokParser {
 	INSTANCE;
-	private HL7Util hl7Util = HL7Util.INSTANCE;
+	private HL7ParsingUtil hl7Util = HL7ParsingUtil.INSTANCE;
 	
 	public List<DqaNextOfKin> getNk1List(HL7MessageMap map) {
 		List<DqaNextOfKin> nk1s = new ArrayList<DqaNextOfKin>();
@@ -74,7 +74,7 @@ public enum HL7NokParser {
 //		String phone = getPatientPhone(map);
 		
 //		if (phone == null) {
-			PhoneNumber phone = getNK1Phone(map, nk1Idx);
+			DqaPhoneNumber phone = getNK1Phone(map, nk1Idx);
 //		}
 		
 		//Then break it apart...  this is strange since we just put it together.
@@ -178,7 +178,7 @@ public enum HL7NokParser {
 		//Seven digits number.
 //		mother.setRespPhoneTx(respPhoneTx);
 		
-		Address a = this.getNk1Address(map, nk1Idx);
+		DqaAddress a = this.getNk1Address(map, nk1Idx);
 		nextOfKin.setAddress(a);
 		
 		String relCode = getNk1_3RelationshipCode(map, nk1Idx);
@@ -191,7 +191,7 @@ public enum HL7NokParser {
 		
 	}
 	
-	protected Address getNk1Address(HL7MessageMap map, int index) {
+	protected DqaAddress getNk1Address(HL7MessageMap map, int index) {
 		return hl7Util.getAddressFromIndex(map, "NK1-4", index, 1);
 	}
 	
@@ -294,7 +294,7 @@ public enum HL7NokParser {
 	 * @param segIdx
 	 * @return
 	 */
-	protected PhoneNumber getNK1Phone(HL7MessageMap map, int segIdx) {
+	protected DqaPhoneNumber getNK1Phone(HL7MessageMap map, int segIdx) {
 		return hl7Util.getPhoneAt(map, "NK1-5", segIdx);
 	}
 

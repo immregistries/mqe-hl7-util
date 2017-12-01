@@ -129,7 +129,7 @@ public class HL7Util {
     // + "|\r");
     ack.append("MSA|" + ackType + "|" + ackData.getProcessingControlId() + "|\r");
 
-    makeERRSegment(ack, severityLevel, "", message, reportable);
+    makeERRSegment(ack, severityLevel, message, reportable);
 
     return ack.toString();
 
@@ -137,40 +137,12 @@ public class HL7Util {
 
   public static void appendErrorCode(StringBuilder ack, CodedWithExceptions cwe) {
     if (cwe != null) {
-      if (!cwe.hasIdentifier()) {
-        cwe.setIdentifier("0");
-        cwe.setText("Message accepted");
-        cwe.setNameOfCodingSystem("HL70357");
-      } else if (cwe.getText() == null || cwe.getText().equals("")) {
-        cwe.setNameOfCodingSystem("HL70357");
-        if (cwe.getIdentifier().equals("0")) {
-          cwe.setText("Message accepted");
-        } else if (cwe.getIdentifier().equals("100")) {
-          cwe.setText("Segment sequence error");
-        } else if (cwe.getIdentifier().equals("101")) {
-          cwe.setText("Required field missing");
-        } else if (cwe.getIdentifier().equals("102")) {
-          cwe.setText("Data type error");
-        } else if (cwe.getIdentifier().equals("103")) {
-          cwe.setText("Table value not found");
-        } else if (cwe.getIdentifier().equals("200")) {
-          cwe.setText("Unsupported message type");
-        } else if (cwe.getIdentifier().equals("201")) {
-          cwe.setText("Unsupported event code");
-        } else if (cwe.getIdentifier().equals("202")) {
-          cwe.setText("Unsupported processing ID");
-        } else if (cwe.getIdentifier().equals("203")) {
-          cwe.setText("Unsupported version ID");
-        } else if (cwe.getIdentifier().equals("204")) {
-          cwe.setText("Unknown key identifier");
-        } else if (cwe.getIdentifier().equals("205")) {
-          cwe.setText("Duplicate key identifier");
-        } else if (cwe.getIdentifier().equals("206")) {
-          cwe.setText("Application record locked");
-        } else if (cwe.getIdentifier().equals("207")) {
-          cwe.setText("Application internal error");
+        AckERRCode code = AckERRCode.getFromString(cwe.getIdentifier());
+        if (code == null) {
+            code = AckERRCode.CODE_0_MESSAGE_ACCEPTED;
         }
-      }
+        cwe.setNameOfCodingSystem(AckERRCode.TABLE);
+        cwe.setText(code.text);
     }
     printCodedWithExceptions(ack, cwe);
   }
@@ -214,7 +186,7 @@ public class HL7Util {
     if (reportable != null) {
       CodedWithExceptions cwe = reportable.getApplicationErrorCode();
       if (cwe != null) {
-        if (cwe.hasIdentifier()) {
+        if (StringUtils.isNotBlank(cwe.getIdentifier())) {
           if (cwe.getIdentifier().startsWith("DQA")) {
             cwe.setAlternateIdentifier(cwe.getIdentifier());
             cwe.setAlternateText(cwe.getText());
@@ -224,7 +196,7 @@ public class HL7Util {
             cwe.setNameOfCodingSystem("");
           }
         }
-        if (cwe.hasIdentifier()) {
+        if (StringUtils.isNotBlank(cwe.getIdentifier())) {
           if (cwe.getText() == null || cwe.getText().equals("")) {
             cwe.setNameOfCodingSystem("HL70533");
             if (cwe.getIdentifier().equals("1")) {
@@ -254,17 +226,17 @@ public class HL7Util {
 
   private static void printCodedWithExceptions(StringBuilder ack, CodedWithExceptions cwe) {
     if (cwe != null) {
-      if (cwe.hasIdentifier()) {
+      if (StringUtils.isNotBlank(cwe.getIdentifier())) {
         ack.append(cwe.getIdentifier());
         ack.append("^");
         ack.append(cwe.getText());
         ack.append("^");
         ack.append(cwe.getNameOfCodingSystem());
-        if (cwe.hasAlternateIdentifier()) {
+        if (StringUtils.isNotBlank(cwe.getAlternateIdentifier())) {
           ack.append("^");
         }
       }
-      if (cwe.hasAlternateIdentifier()) {
+      if (StringUtils.isNotBlank(cwe.getAlternateIdentifier())) {
         ack.append(cwe.getAlternateIdentifier());
         ack.append("^");
         ack.append(cwe.getAlternateText());
@@ -316,12 +288,7 @@ public class HL7Util {
     return ack.toString();
   }
 
-  public static void makeERRSegment(StringBuilder ack, String severity, String hl7ErrorCode,
-      String textMessage, Reportable reportable) {
-
-    if (severity.equals("E") && StringUtils.isBlank(hl7ErrorCode)) {
-      hl7ErrorCode = "102";
-    }
+  public static void makeERRSegment(StringBuilder ack, String severity, String textMessage, Reportable reportable) {
     ack.append("ERR||");
     // 2 Error Location
     ack.append(reportable.getHl7LocationList() != null && reportable.getHl7LocationList().size() > 0
@@ -343,7 +310,6 @@ public class HL7Util {
     // 8 User Message
     ack.append(escapeHL7Chars(textMessage));
     ack.append("|\r");
-
   }
 
   public static String escapeHL7Chars(String s) {

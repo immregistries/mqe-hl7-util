@@ -1,10 +1,10 @@
-package org.immregistries.dqa.vxu.hl7;
+package org.immregistries.dqa.vxu;
 
 public class PatientImmunity {
 	
   private int immunityId = 0;
   private String immunity = "";//new CodedEntity(CodesetType.EVIDENCE_OF_IMMUNITY);
-  
+
   public String getImmunityCode()
   {
     return immunity;

@@ -10,6 +10,15 @@ package org.immregistries.dqa.hl7util.parser.profile.generated;
 
 import javax.xml.bind.annotation.XmlRegistry;
 
+import org.immregistries.dqa.hl7util.parser.profile.intf.Component;
+import org.immregistries.dqa.hl7util.parser.profile.intf.Field;
+import org.immregistries.dqa.hl7util.parser.profile.intf.HL7Component;
+import org.immregistries.dqa.hl7util.parser.profile.intf.HL7Field;
+import org.immregistries.dqa.hl7util.parser.profile.intf.HL7Segment;
+import org.immregistries.dqa.hl7util.parser.profile.intf.HL7SubComponent;
+import org.immregistries.dqa.hl7util.parser.profile.intf.Segment;
+import org.immregistries.dqa.hl7util.parser.profile.intf.SubComponent;
+
 
 /**
  * This object contains factory methods for each 
@@ -80,7 +89,7 @@ public class ObjectFactory {
      * Create an instance of {@link Field }
      * 
      */
-    public Field createField() {
+    public HL7Field createField() {
         return new Field();
     }
 
@@ -104,7 +113,7 @@ public class ObjectFactory {
      * Create an instance of {@link SubComponent }
      * 
      */
-    public SubComponent createSubComponent() {
+    public HL7SubComponent createSubComponent() {
         return new SubComponent();
     }
 
@@ -112,7 +121,7 @@ public class ObjectFactory {
      * Create an instance of {@link Component }
      * 
      */
-    public Component createComponent() {
+    public HL7Component createComponent() {
         return new Component();
     }
 
@@ -120,7 +129,7 @@ public class ObjectFactory {
      * Create an instance of {@link Segment }
      * 
      */
-    public Segment createSegment() {
+    public HL7Segment createSegment() {
         return new Segment();
     }
 

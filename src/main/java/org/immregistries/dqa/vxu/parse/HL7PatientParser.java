@@ -6,17 +6,17 @@ import java.util.List;
 import org.immregistries.dqa.codebase.client.reference.CodesetType;
 import org.immregistries.dqa.hl7util.parser.HL7MessageMap;
 import org.immregistries.dqa.vxu.DqaPatient;
-import org.immregistries.dqa.vxu.hl7.Address;
+import org.immregistries.dqa.vxu.DqaAddress;
 import org.immregistries.dqa.vxu.hl7.Id;
-import org.immregistries.dqa.vxu.hl7.PatientAddress;
+import org.immregistries.dqa.vxu.DqaPatientAddress;
 import org.immregistries.dqa.vxu.hl7.PatientIdNumber;
-import org.immregistries.dqa.vxu.hl7.PhoneNumber;
+import org.immregistries.dqa.vxu.DqaPhoneNumber;
 
 public enum HL7PatientParser {
 
 	INSTANCE;
 	
-	private HL7Util hl7Util = HL7Util.INSTANCE;
+	private HL7ParsingUtil hl7Util = HL7ParsingUtil.INSTANCE;
 	
 	public DqaPatient getPatient(HL7MessageMap map) {
 		DqaPatient patient = new DqaPatient();
@@ -42,7 +42,7 @@ public enum HL7PatientParser {
 		String raceCd 		= map.get("PID-10");//getCodedEntity(map, "PID-10", CodesetType.PATIENT_RACE);//getPID10Race(map);
 		
 		//Get the address list.  PID-11 
-		List<PatientAddress> patientAddresses = getPID_11PatientAddressList(map);
+		List<DqaPatientAddress> patientAddresses = getPID_11PatientAddressList(map);
 		patient.getPatientAddressList().addAll(patientAddresses);
 		
 		String language 	= map.get("PID-15");//getCodedEntity(map, "PID-15", CodesetType.PERSON_LANGUAGE);//getPID15PrimaryLanguage(map);
@@ -62,7 +62,7 @@ public enum HL7PatientParser {
 		String pv1VFCCode 		= map.get("PV1-20");//getPatientVaccineFundEligCd(map);
 		String pv1VFCEligDate 	= map.get("PV1-20-2");//getPatientVaccineFundEligEffDate(map);
 		
-		PhoneNumber phone = getPatientPhone(map);
+		DqaPhoneNumber phone = getPatientPhone(map);
 		
 		patient.setPhone(phone);
 		
@@ -181,7 +181,7 @@ public enum HL7PatientParser {
 //	}
 //	
 	
-	protected PhoneNumber getPatientPhone(HL7MessageMap map) {
+	protected DqaPhoneNumber getPatientPhone(HL7MessageMap map) {
 		/*HL7Converter for interpreting the phone in the PID segment
 		 *   protected String readPhone(String field, Map<Separator, Character> separators) {
 			    String phone = "";
@@ -236,8 +236,8 @@ public enum HL7PatientParser {
 		return new PatientIdNumber();
 	}
 	
-	protected List<PatientAddress> getPID_11PatientAddressList(HL7MessageMap map) {
-		List<PatientAddress> list = new ArrayList<PatientAddress>();
+	protected List<DqaPatientAddress> getPID_11PatientAddressList(HL7MessageMap map) {
+		List<DqaPatientAddress> list = new ArrayList<DqaPatientAddress>();
 		
 		int fieldReps = map.getFieldRepCountFor("PID-11");
 		
@@ -247,10 +247,10 @@ public enum HL7PatientParser {
 		return list;
 	}
 	
-	protected PatientAddress getPatientAddress(HL7MessageMap map, int fieldRep) {
+	protected DqaPatientAddress getPatientAddress(HL7MessageMap map, int fieldRep) {
 		
-		Address a = hl7Util.getAddressFromOrdinal(map, "PID-11", 1, fieldRep);
-		PatientAddress address = new PatientAddress(a);
+		DqaAddress a = hl7Util.getAddressFromOrdinal(map, "PID-11", 1, fieldRep);
+		DqaPatientAddress address = new DqaPatientAddress(a);
         
 		return address;
 	}

@@ -6,7 +6,10 @@
 //
 
 
-package org.immregistries.dqa.hl7util.parser.profile.generated;
+package org.immregistries.dqa.hl7util.parser.profile.intf;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -14,26 +17,32 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 
+import org.immregistries.dqa.hl7util.parser.profile.generated.ConformanceStatement;
+import org.immregistries.dqa.hl7util.parser.profile.generated.Predicate;
+
 
 /**
- * <p>Java class for subComponent complex type.
+ * <p>Java class for field complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="subComponent">
+ * &lt;complexType name="field">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
- *       &lt;sequence>
- *         &lt;element name="Predicate" type="{}predicate" minOccurs="0"/>
+ *       &lt;choice>
  *         &lt;element name="ConformanceStatement" type="{}conformanceStatement"/>
- *       &lt;/sequence>
+ *         &lt;element name="Predicate" type="{}predicate"/>
+ *         &lt;element name="Component" type="{}component" maxOccurs="unbounded" minOccurs="0"/>
+ *       &lt;/choice>
  *       &lt;attribute name="Datatype" type="{http://www.w3.org/2001/XMLSchema}string" />
+ *       &lt;attribute name="Max" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="MaxLength" type="{http://www.w3.org/2001/XMLSchema}short" />
+ *       &lt;attribute name="Min" type="{http://www.w3.org/2001/XMLSchema}byte" />
  *       &lt;attribute name="MinLength" type="{http://www.w3.org/2001/XMLSchema}byte" />
  *       &lt;attribute name="Name" type="{http://www.w3.org/2001/XMLSchema}string" />
- *       &lt;attribute name="Table" type="{http://www.w3.org/2001/XMLSchema}short" />
  *       &lt;attribute name="Usage" type="{http://www.w3.org/2001/XMLSchema}string" />
+ *       &lt;attribute name="Table" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="PredicateFalseUsage" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="PredicateTrueUsage" type="{http://www.w3.org/2001/XMLSchema}string" />
  *     &lt;/restriction>
@@ -44,56 +53,39 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "subComponent", propOrder = {
+@XmlType(name = "field", propOrder = {
+    "conformanceStatement",
     "predicate",
-    "conformanceStatement"
+    "component"
 })
-public class SubComponent {
+public class Field implements HL7Field {
 
+    @XmlElement(name = "ConformanceStatement")
+    protected ConformanceStatement conformanceStatement;
     @XmlElement(name = "Predicate")
     protected Predicate predicate;
-    @XmlElement(name = "ConformanceStatement", required = true)
-    protected ConformanceStatement conformanceStatement;
+    @XmlElement(name = "Component")
+    protected List<Component> component;
     @XmlAttribute(name = "Datatype")
     protected String datatype;
+    @XmlAttribute(name = "Max")
+    protected String max;
     @XmlAttribute(name = "MaxLength")
-    protected Short maxLength;
+    protected String maxLength;
+    @XmlAttribute(name = "Min")
+    protected Byte min;
     @XmlAttribute(name = "MinLength")
     protected Byte minLength;
     @XmlAttribute(name = "Name")
     protected String name;
-    @XmlAttribute(name = "Table")
-    protected Short table;
     @XmlAttribute(name = "Usage")
     protected String usage;
+    @XmlAttribute(name = "Table")
+    protected String table;
     @XmlAttribute(name = "PredicateFalseUsage")
     protected String predicateFalseUsage;
     @XmlAttribute(name = "PredicateTrueUsage")
     protected String predicateTrueUsage;
-
-    /**
-     * Gets the value of the predicate property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Predicate }
-     *     
-     */
-    public Predicate getPredicate() {
-        return predicate;
-    }
-
-    /**
-     * Sets the value of the predicate property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Predicate }
-     *     
-     */
-    public void setPredicate(Predicate value) {
-        this.predicate = value;
-    }
 
     /**
      * Gets the value of the conformanceStatement property.
@@ -120,14 +112,37 @@ public class SubComponent {
     }
 
     /**
-     * Gets the value of the datatype property.
+     * Gets the value of the predicate property.
      * 
      * @return
      *     possible object is
-     *     {@link String }
+     *     {@link Predicate }
      *     
      */
-    public String getDatatype() {
+    public Predicate getPredicate() {
+        return predicate;
+    }
+
+    /**
+     * Sets the value of the predicate property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Predicate }
+     *     
+     */
+    public void setPredicate(Predicate value) {
+        this.predicate = value;
+    }
+
+	public List<Component> getComponent() {
+        if (component == null) {
+            component = new ArrayList<Component>();
+        }
+        return this.component;
+    }
+
+	public String getDatatype() {
         return datatype;
     }
 
@@ -144,6 +159,30 @@ public class SubComponent {
     }
 
     /**
+     * Gets the value of the max property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getMax() {
+        return max;
+    }
+
+    /**
+     * Sets the value of the max property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setMax(String value) {
+        this.max = value;
+    }
+
+    /**
      * Gets the value of the maxLength property.
      * 
      * @return
@@ -151,7 +190,7 @@ public class SubComponent {
      *     {@link Short }
      *     
      */
-    public Short getMaxLength() {
+    public String getMaxLength() {
         return maxLength;
     }
 
@@ -163,8 +202,32 @@ public class SubComponent {
      *     {@link Short }
      *     
      */
-    public void setMaxLength(Short value) {
+    public void setMaxLength(String value) {
         this.maxLength = value;
+    }
+
+    /**
+     * Gets the value of the min property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link Byte }
+     *     
+     */
+    public Byte getMin() {
+        return min;
+    }
+
+    /**
+     * Sets the value of the min property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link Byte }
+     *     
+     */
+    public void setMin(Byte value) {
+        this.min = value;
     }
 
     /**
@@ -191,15 +254,7 @@ public class SubComponent {
         this.minLength = value;
     }
 
-    /**
-     * Gets the value of the name property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getName() {
+	public String getName() {
         return name;
     }
 
@@ -213,30 +268,6 @@ public class SubComponent {
      */
     public void setName(String value) {
         this.name = value;
-    }
-
-    /**
-     * Gets the value of the table property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Short }
-     *     
-     */
-    public Short getTable() {
-        return table;
-    }
-
-    /**
-     * Sets the value of the table property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Short }
-     *     
-     */
-    public void setTable(Short value) {
-        this.table = value;
     }
 
     /**
@@ -261,6 +292,30 @@ public class SubComponent {
      */
     public void setUsage(String value) {
         this.usage = value;
+    }
+
+    /**
+     * Gets the value of the table property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
+     */
+    public String getTable() {
+        return table;
+    }
+
+    /**
+     * Sets the value of the table property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
+     */
+    public void setTable(String value) {
+        this.table = value;
     }
 
     /**

@@ -10,11 +10,14 @@ package org.immregistries.dqa.hl7util.parser.profile.generated;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
+
+import org.immregistries.dqa.hl7util.parser.profile.intf.Segment;
 
 
 /**

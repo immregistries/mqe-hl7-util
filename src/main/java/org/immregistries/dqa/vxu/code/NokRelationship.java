@@ -21,13 +21,13 @@ public enum NokRelationship {
 	  , RELATIONSHIP_SPOUSE("SPO")
 	  , RELATIONSHIP_STEPCHILD("SCH")
 	  , UNKNOWN("");
-	  
-	private String code;
+
+	public String code;
 	private static final Map<String, NokRelationship> codeMap = new HashMap<String, NokRelationship>();
 
 	static {
 		for (NokRelationship rel : NokRelationship.values()) {
-			codeMap.put(rel.code, rel);
+			codeMap.put(rel.code.toUpperCase(), rel);
 		}
 	}
 
@@ -36,7 +36,10 @@ public enum NokRelationship {
 	}
 
 	public static NokRelationship get(String code) {
-		NokRelationship r = codeMap.get(code);
+		NokRelationship r = null;
+		if (code != null) {
+			r = codeMap.get(code.toUpperCase());
+		}
 		if (r == null) {
 			r = UNKNOWN;
 			r.code = code;
@@ -46,15 +49,15 @@ public enum NokRelationship {
 
 	public boolean isResponsibleRelationship() {
 		switch (this) {
-		case RELATIONSHIP_CARE_GIVER:
-		case RELATIONSHIP_FATHER:
-		case RELATIONSHIP_GRANDPARENT:
-		case RELATIONSHIP_MOTHER:
-		case RELATIONSHIP_PARENT:
-		case RELATIONSHIP_GUARDIAN:
-			return true;
-		default:
-			return false;
+        case RELATIONSHIP_CARE_GIVER:
+        case RELATIONSHIP_FATHER:
+        case RELATIONSHIP_GRANDPARENT:
+        case RELATIONSHIP_MOTHER:
+        case RELATIONSHIP_PARENT:
+        case RELATIONSHIP_GUARDIAN:
+           return true;
+        default:
+           return false;
 		}
 	}
 

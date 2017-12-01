@@ -750,6 +750,10 @@ public class HL7MessageMap {
 		
 		boolean orcCameFirst = false;
 
+		if (segList == null || segList.size() == 0) {
+			return -1;
+		}
+		
 		//See what the starting point is that was sent in. 
 	    String segAtIndex = segList.get(startingPoint);
 		LOGGER.trace("getNextImmunizationStartingIndex - segAtIndex: " + segAtIndex);

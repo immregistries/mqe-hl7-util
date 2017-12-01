@@ -8,10 +8,7 @@ import org.immregistries.dqa.codebase.client.reference.CodesetType;
 import org.immregistries.dqa.vxu.hl7.Id;
 import org.immregistries.dqa.vxu.hl7.Name;
 import org.immregistries.dqa.vxu.hl7.OrganizationName;
-import org.immregistries.dqa.vxu.hl7.PatientAddress;
 import org.immregistries.dqa.vxu.hl7.PatientIdNumber;
-import org.immregistries.dqa.vxu.hl7.PatientImmunity;
-import org.immregistries.dqa.vxu.hl7.PhoneNumber;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -19,7 +16,7 @@ public class DqaPatient {
 	
 private static final Logger LOGGER = LoggerFactory.getLogger(DqaPatient.class);
 
-  private List<PatientAddress> patientAddressList = new ArrayList<PatientAddress>();
+  private List<DqaPatientAddress> patientAddressList = new ArrayList<DqaPatientAddress>();
   
   private Name alias = new Name();
   
@@ -53,7 +50,7 @@ private static final Logger LOGGER = LoggerFactory.getLogger(DqaPatient.class);
   private String motherMaidenName = "";
   private Name name = new Name();
   private long patientId = 0;
-  private PhoneNumber phone = new PhoneNumber();
+  private DqaPhoneNumber phone = new DqaPhoneNumber();
   private Id physician = new Id(CodesetType.PHYSICIAN_NUMBER);
   private String primaryLanguage = "";//new String(CodesetType.PERSON_LANGUAGE);
   private String protection = "";//new String(CodesetType.PATIENT_PROTECTION);
@@ -69,7 +66,7 @@ private static final Logger LOGGER = LoggerFactory.getLogger(DqaPatient.class);
   private List<PatientImmunity> patientImmunityList = new ArrayList<PatientImmunity>();
   private Date systemCreationDate = null;
 
-  //This comes out of the transform setp. The kin list will be interpreted, and one will be picked as the responsible party. 
+  //This comes out of the transform step. The kin list will be interpreted, and one will be picked as the responsible party.
   private DqaNextOfKin responsibleParty = null;
   
   public Date getSystemCreationDate()
@@ -92,18 +89,18 @@ private static final Logger LOGGER = LoggerFactory.getLogger(DqaPatient.class);
 //    return patientPhoneList;
 //  }
 
-  public List<PatientAddress> getPatientAddressList()
+  public List<DqaPatientAddress> getPatientAddressList()
   {
     return patientAddressList;
   }
 
-  public PatientAddress getAddress()
+  public DqaPatientAddress getAddress()
   {
     if (patientAddressList.size() > 0)
     {
       return patientAddressList.get(0);
     } else {
-    	PatientAddress pa = new PatientAddress();
+    	DqaPatientAddress pa = new DqaPatientAddress();
     	patientAddressList.add(pa);
     	return pa;
     }
@@ -354,7 +351,7 @@ private static final Logger LOGGER = LoggerFactory.getLogger(DqaPatient.class);
     return patientId;
   }
 
-  public PhoneNumber getPhone()
+  public DqaPhoneNumber getPhone()
   {
     return phone;
   }
@@ -616,7 +613,7 @@ private static final Logger LOGGER = LoggerFactory.getLogger(DqaPatient.class);
     
   }
   
-  public void setPhone(PhoneNumber phoneIn) {
+  public void setPhone(DqaPhoneNumber phoneIn) {
 	  this.phone = phoneIn;
   }
 
@@ -750,6 +747,12 @@ public void setIdSubmitter(PatientIdNumber idSubmitter) {
  */
 public PatientIdNumber getIdWic() {
 	return idWic;
+}
+/**
+ * @return the idWic
+ */
+public String getIdWicNumber() {
+	return idWic.getNumber();
 }
 
 /**

@@ -32,8 +32,10 @@ import java.util.Map;
 public class MessageProfileGeneratorHL7 {
 	
 	public static void main(String[] args) {
-		MessageProfile mp = new MessageProfileXML();
+		MessageProfile mp = new MessageProfileSource("VXU");
+		
 		Map<String, FieldComplexity> complexityMap = mp.getDataTypeComplexityMap();
+		
 		Map<String, String> dataTypeMap = mp.getFieldDataTypeMap();
 		Map<String, String> fieldDescMap = mp.getFieldDescriptionMap();
 		

@@ -1,31 +1,36 @@
-package org.immregistries.dqa.vxu.hl7;
+package org.immregistries.dqa.vxu;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * This class represents a phone number, and includes a type
- * 
+ *
  * @author Josh
  *
  */
-public class PhoneNumber {
+public class DqaPhoneNumber {
 
 	private String number = "";
 	private String telUse = "";// new CodedEntity(CodesetType.TELECOMMUNICATION_USE);
+	//HL7-defined Table 0201 - Telecommunication use code
 	private String telEquip = "";// new CodedEntity(CodesetType.TELECOMMUNICATION_EQUIPMENT);
+	//HL7-defined Table 0202 - Telecommunication equipment type
 	private String email = "";
 	private String countryCode = "";
 	private String areaCode = "";
 	private String localNumber = "";
 	private String extension = "";
 
-	public PhoneNumber() {
+	public DqaPhoneNumber() {
 		// default
 	}
 
-	public PhoneNumber(String phoneNumberString) {
+	public DqaPhoneNumber(String phoneNumberString) {
 		setNumber(phoneNumberString);
 	}
 
-	public PhoneNumber(String areaCode, String localNumber) {
+	public DqaPhoneNumber(String areaCode, String localNumber) {
 		setAreaCode(areaCode);
 		setLocalNumber(localNumber);
 	}

@@ -4,7 +4,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.immregistries.dqa.core.util.DateUtility;
 import org.immregistries.dqa.vxu.*;
 import org.immregistries.dqa.vxu.hl7.Observation;
-import org.immregistries.dqa.vxu.hl7.PatientImmunity;
+import org.immregistries.dqa.vxu.PatientImmunity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

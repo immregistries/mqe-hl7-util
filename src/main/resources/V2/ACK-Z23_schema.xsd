@@ -1,0 +1,133 @@
+<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="ConformanceProfile">
+    <xs:annotation>
+      <xs:documentation>edited with XMLSpy v2015 rel. 3 (x64) (http://www.altova.com) by ww (NIST)</xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="MetaData">
+          <xs:complexType>
+            <xs:simpleContent>
+              <xs:extension base="xs:string">
+                <xs:attribute type="xs:string" name="Name"/>
+                <xs:attribute type="xs:string" name="OrgName"/>
+                <xs:attribute type="xs:string" name="Version"/>
+                <xs:attribute type="xs:int" name="Date"/>
+                <xs:attribute type="xs:string" name="SpecificationName"/>
+              </xs:extension>
+            </xs:simpleContent>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="Encodings">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element type="xs:string" name="Encoding" maxOccurs="unbounded" minOccurs="0"/>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="Messages">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="Message">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="Segment" maxOccurs="unbounded" minOccurs="0">
+                      <xs:complexType>
+                        <xs:simpleContent>
+                          <xs:extension base="xs:string">
+                            <xs:attribute type="xs:string" name="Ref" use="optional"/>
+                            <xs:attribute type="xs:string" name="Usage" use="optional"/>
+                            <xs:attribute type="xs:byte" name="Min" use="optional"/>
+                            <xs:attribute type="xs:string" name="Max" use="optional"/>
+                          </xs:extension>
+                        </xs:simpleContent>
+                      </xs:complexType>
+                    </xs:element>
+                  </xs:sequence>
+                  <xs:attribute type="xs:string" name="ID"/>
+                  <xs:attribute type="xs:string" name="Type"/>
+                  <xs:attribute type="xs:string" name="Event"/>
+                  <xs:attribute type="xs:string" name="StructID"/>
+                  <xs:attribute type="xs:string" name="Description"/>
+                  <xs:attribute type="xs:string" name="Identifier"/>
+                  <xs:attribute type="xs:string" name="Name"/>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="Segments">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="Segment" maxOccurs="unbounded" minOccurs="0">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="Field" maxOccurs="unbounded" minOccurs="0">
+                      <xs:complexType>
+                        <xs:simpleContent>
+                          <xs:extension base="xs:string">
+                            <xs:attribute type="xs:string" name="Name" use="optional"/>
+                            <xs:attribute type="xs:string" name="Usage" use="optional"/>
+                            <xs:attribute type="xs:byte" name="Min" use="optional"/>
+                            <xs:attribute type="xs:string" name="Max" use="optional"/>
+                            <xs:attribute type="xs:string" name="Datatype" use="optional"/>
+                            <xs:attribute type="xs:byte" name="MinLength" use="optional"/>
+                            <xs:attribute type="xs:string" name="MaxLength" use="optional"/>
+                            <xs:attribute type="xs:short" name="ItemNo" use="optional"/>
+                            <xs:attribute type="xs:string" name="Binding" use="optional"/>
+                            <xs:attribute type="xs:string" name="BindingStrength" use="optional"/>
+                            <xs:attribute type="xs:byte" name="BindingLocation" use="optional"/>
+                          </xs:extension>
+                        </xs:simpleContent>
+                      </xs:complexType>
+                    </xs:element>
+                  </xs:sequence>
+                  <xs:attribute type="xs:string" name="ID" use="optional"/>
+                  <xs:attribute type="xs:string" name="Label" use="optional"/>
+                  <xs:attribute type="xs:string" name="Name" use="optional"/>
+                  <xs:attribute type="xs:string" name="Description" use="optional"/>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="Datatypes">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="Datatype" maxOccurs="unbounded" minOccurs="0">
+                <xs:complexType mixed="true">
+                  <xs:sequence>
+                    <xs:element name="Component" maxOccurs="unbounded" minOccurs="0">
+                      <xs:complexType>
+                        <xs:simpleContent>
+                          <xs:extension base="xs:string">
+                            <xs:attribute type="xs:string" name="Name" use="optional"/>
+                            <xs:attribute type="xs:string" name="Usage" use="optional"/>
+                            <xs:attribute type="xs:string" name="Datatype" use="optional"/>
+                            <xs:attribute type="xs:byte" name="MinLength" use="optional"/>
+                            <xs:attribute type="xs:short" name="MaxLength" use="optional"/>
+                            <xs:attribute type="xs:string" name="Binding" use="optional"/>
+                            <xs:attribute type="xs:string" name="BindingStrength" use="optional"/>
+                            <xs:attribute type="xs:byte" name="BindingLocation" use="optional"/>
+                            <xs:attribute type="xs:string" name="Hide" use="optional"/>
+                          </xs:extension>
+                        </xs:simpleContent>
+                      </xs:complexType>
+                    </xs:element>
+                  </xs:sequence>
+                  <xs:attribute type="xs:string" name="ID" use="optional"/>
+                  <xs:attribute type="xs:string" name="Label" use="optional"/>
+                  <xs:attribute type="xs:string" name="Name" use="optional"/>
+                  <xs:attribute type="xs:string" name="Description" use="optional"/>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+      <xs:attribute type="xs:string" name="ID"/>
+      <xs:attribute type="xs:string" name="Type"/>
+      <xs:attribute type="xs:string" name="HL7Version"/>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

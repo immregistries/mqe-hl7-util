@@ -13,16 +13,6 @@ public class CodedWithExceptions
     // default
   }
 
-  public boolean hasIdentifier()
-  {
-    return identifier != null && !identifier.equals("");
-  }
-
-  public boolean hasAlternateIdentifier()
-  {
-    return alternateIdentifier != null && !alternateIdentifier.equals("");
-  }
-
   public String getIdentifier()
   {
     return identifier;

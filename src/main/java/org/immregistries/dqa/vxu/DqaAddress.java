@@ -1,6 +1,6 @@
-package org.immregistries.dqa.vxu.hl7;
+package org.immregistries.dqa.vxu;
 
-public class Address {
+public class DqaAddress {
     @Override
     public String toString() {
         return "Address {street=" + street + ", street2=" + street2 + ", city="
@@ -124,7 +124,7 @@ public class Address {
         // we only care about city/state/street/street2, which are shared between Address and its subclasses (e.g. PatientAddress), so this should be OK
         if (getClass() != obj.getClass() && !getClass().isAssignableFrom(obj.getClass()))
             return false;
-        Address other = (Address) obj;
+        DqaAddress other = (DqaAddress) obj;
 
         // City/State/Street/Street2
         if (city == null) {

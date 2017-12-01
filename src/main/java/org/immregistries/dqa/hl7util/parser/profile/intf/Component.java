@@ -6,15 +6,19 @@
 //
 
 
-package org.immregistries.dqa.hl7util.parser.profile.generated;
+package org.immregistries.dqa.hl7util.parser.profile.intf;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
+
+import org.immregistries.dqa.hl7util.parser.profile.generated.ConformanceStatement;
+import org.immregistries.dqa.hl7util.parser.profile.generated.Predicate;
 
 
 /**
@@ -52,7 +56,7 @@ import javax.xml.bind.annotation.XmlType;
     "conformanceStatement",
     "subComponent"
 })
-public class Component {
+public class Component implements HL7Component {
 
     @XmlElement(name = "Predicate")
     protected Predicate predicate;
@@ -63,7 +67,7 @@ public class Component {
     @XmlAttribute(name = "Datatype")
     protected String datatype;
     @XmlAttribute(name = "MaxLength")
-    protected Short maxLength;
+    protected String maxLength;
     @XmlAttribute(name = "MinLength")
     protected Byte minLength;
     @XmlAttribute(name = "Name")
@@ -154,14 +158,6 @@ public class Component {
         return this.subComponent;
     }
 
-    /**
-     * Gets the value of the datatype property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
     public String getDatatype() {
         return datatype;
     }
@@ -186,7 +182,7 @@ public class Component {
      *     {@link Short }
      *     
      */
-    public Short getMaxLength() {
+    public String getMaxLength() {
         return maxLength;
     }
 
@@ -198,7 +194,7 @@ public class Component {
      *     {@link Short }
      *     
      */
-    public void setMaxLength(Short value) {
+    public void setMaxLength(String value) {
         this.maxLength = value;
     }
 
@@ -226,14 +222,6 @@ public class Component {
         this.minLength = value;
     }
 
-    /**
-     * Gets the value of the name property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
     public String getName() {
         return name;
     }

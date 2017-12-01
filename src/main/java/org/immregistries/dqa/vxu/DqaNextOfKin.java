@@ -1,28 +1,26 @@
 package org.immregistries.dqa.vxu;
 
 import org.immregistries.dqa.vxu.code.NokRelationship;
-import org.immregistries.dqa.vxu.hl7.Address;
 import org.immregistries.dqa.vxu.hl7.Name;
-import org.immregistries.dqa.vxu.hl7.PhoneNumber;
 
 public class DqaNextOfKin {
   
-  private Address address = new Address();
+  private DqaAddress address = new DqaAddress();
   private Name name = new Name();
   private long nextOfKinId;
-  private PhoneNumber phone = new PhoneNumber();
+  private DqaPhoneNumber phone = new DqaPhoneNumber();
   private int positionId = 0;
   private String relationship = "";//new CodedEntity(CodesetType.PERSON_RELATIONSHIP);
   private boolean skipped = false;
   private String primaryLanguageCode;
   
-  public Address getAddress()
+  public DqaAddress getAddress()
   {
     return address;
   }
 
 
-  public void setAddress(Address a) {
+  public void setAddress(DqaAddress a) {
 	  this.address = a;
   }
   
@@ -66,7 +64,7 @@ public class DqaNextOfKin {
     return nextOfKinId;
   }
 
-  public PhoneNumber getPhone()
+  public DqaPhoneNumber getPhone()
   {
     return phone;
   }
@@ -136,7 +134,7 @@ public class DqaNextOfKin {
     phone.setNumber(phoneNumber);
   }
   
-  public void setPhone(PhoneNumber phoneIn) {
+  public void setPhone(DqaPhoneNumber phoneIn) {
 	  this.phone = phoneIn;
   }
 
@@ -182,4 +180,8 @@ public boolean isChildRelationship() {
 	return getNokRelationship().isChildRelationship();
 }
 
+  @Override public String toString() {
+    return "DqaNextOfKin{" + "address=" + address + ", name=" + name + ", nextOfKinId=" + nextOfKinId + ", phone=" + phone + ", positionId=" + positionId
+        + ", relationship='" + relationship + '\'' + ", skipped=" + skipped + ", primaryLanguageCode='" + primaryLanguageCode + '\'' + '}';
+  }
 }

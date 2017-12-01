@@ -6,10 +6,11 @@
 //
 
 
-package org.immregistries.dqa.hl7util.parser.profile.generated;
+package org.immregistries.dqa.hl7util.parser.profile.intf;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
@@ -45,7 +46,7 @@ import javax.xml.bind.annotation.XmlType;
 @XmlType(name = "segment", propOrder = {
     "field"
 })
-public class Segment {
+public class Segment implements HL7Segment {
 
     @XmlElement(name = "Field")
     protected List<Field> field;
@@ -60,56 +61,18 @@ public class Segment {
     @XmlAttribute(name = "Usage")
     protected String usage;
 
-    /**
-     * Gets the value of the field property.
-     * 
-     * <p>
-     * This accessor method returns a reference to the live list,
-     * not a snapshot. Therefore any modification you make to the
-     * returned list will be present inside the JAXB object.
-     * This is why there is not a <CODE>set</CODE> method for the field property.
-     * 
-     * <p>
-     * For example, to add a new item, do as follows:
-     * <pre>
-     *    getField().add(newItem);
-     * </pre>
-     * 
-     * 
-     * <p>
-     * Objects of the following type(s) are allowed in the list
-     * {@link Field }
-     * 
-     * 
-     */
-    public List<Field> getField() {
+	public List<Field> getField() {
         if (field == null) {
             field = new ArrayList<Field>();
         }
         return this.field;
     }
 
-    /**
-     * Gets the value of the longName property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getLongName() {
+	public String getLongName() {
         return longName;
     }
 
-    /**
-     * Sets the value of the longName property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setLongName(String value) {
+	public void setLongName(String value) {
         this.longName = value;
     }
 
@@ -161,26 +124,10 @@ public class Segment {
         this.min = value;
     }
 
-    /**
-     * Gets the value of the name property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getName() {
+	public String getName() {
         return name;
     }
 
-    /**
-     * Sets the value of the name property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
     public void setName(String value) {
         this.name = value;
     }

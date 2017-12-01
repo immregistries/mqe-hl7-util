@@ -23,7 +23,7 @@ public enum HL7VaccineParser {
 	
 	private static final Logger logger = LoggerFactory.getLogger(HL7VaccineParser.class);
 	
-	private HL7Util hl7Util = HL7Util.INSTANCE;
+	private HL7ParsingUtil hl7Util = HL7ParsingUtil.INSTANCE;
 	
 	//For example, the second RXA has an associated OBX, and RXR. 
 	//So I should be able to fairly simply find the indexes which are greater 
@@ -184,7 +184,7 @@ public enum HL7VaccineParser {
 		String doseVl 		= map.getAtIndex("RXA-6", rxaIdx);//getAdministeredAmount(map, rxaIdx);
 		String doseVlUnit	= map.getAtIndex("RXA-7", rxaIdx);
 		String source 		= map.getAtIndex("RXA-9", rxaIdx);//getCodedEntity(map, "RXA-9",  rxaIdx, CodesetType.VACCINATION_INFORMATION_SOURCE);
-//		String sourceId 	= map.getAtIndex("RXA-10-1", rxaIdx);//getProviderId(map, rxaIdx);
+		String adminProviderId = map.getAtIndex("RXA-10-1", rxaIdx);//getProviderId(map, rxaIdx);
 		OrganizationName org= readOrganizationName(map, "RXA-11", rxaIdx);
 		String doseLotTx 	= map.getAtIndex("RXA-15", rxaIdx);//getVaccineDoseLot(map, rxaIdx);
 		String doseExpDtStr = map.getAtIndex("RXA-16", rxaIdx);
@@ -210,6 +210,8 @@ public enum HL7VaccineParser {
 		if (StringUtils.isNumeric(subMsgRxaCnt)) {
 			shot.setPositionSubId(Integer.parseInt(subMsgRxaCnt));
 		}
+
+		shot.setGivenByNumber(adminProviderId);
 		
 		shot.setAdminDateString(shotDt);
 		shot.setAdminDateEndString(shotDtEnd);
