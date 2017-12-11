@@ -12,6 +12,7 @@ import java.util.Date;
 
 import org.apache.commons.lang3.StringUtils;
 import org.immregistries.dqa.hl7util.Reportable;
+import org.immregistries.dqa.hl7util.ReportableSource;
 import org.immregistries.dqa.hl7util.SeverityLevel;
 import org.immregistries.dqa.hl7util.model.CodedWithExceptions;
 import org.immregistries.dqa.hl7util.model.ErrorLocation;
@@ -137,12 +138,12 @@ public class HL7Util {
 
   public static void appendErrorCode(StringBuilder ack, CodedWithExceptions cwe) {
     if (cwe != null) {
-        AckERRCode code = AckERRCode.getFromString(cwe.getIdentifier());
-        if (code == null) {
-            code = AckERRCode.CODE_0_MESSAGE_ACCEPTED;
-        }
-        cwe.setNameOfCodingSystem(AckERRCode.TABLE);
-        cwe.setText(code.text);
+      AckERRCode code = AckERRCode.getFromString(cwe.getIdentifier());
+      if (code == null) {
+        code = AckERRCode.CODE_0_MESSAGE_ACCEPTED;
+      }
+      cwe.setNameOfCodingSystem(AckERRCode.TABLE);
+      cwe.setText(code.text);
     }
     printCodedWithExceptions(ack, cwe);
   }
@@ -172,13 +173,15 @@ public class HL7Util {
     // 6 Application Error Parameter
     ack.append("|");
     // 7 Diagnostic Information
-    if (debug && reportable.getDiagnosticMessage() != null)
-    {
+    if (debug && reportable.getDiagnosticMessage() != null) {
       ack.append(escapeHL7Chars(reportable.getDiagnosticMessage()));
     }
     // 8 User Message
     ack.append("|");
     ack.append(escapeHL7Chars(reportable.getReportedMessage()));
+    if (reportable.getSource() != ReportableSource.DQA) {
+      ack.append(escapeHL7Chars(" (reported by " + reportable.getSource() + ")"));
+    }
     ack.append("|\r");
   }
 
@@ -288,7 +291,8 @@ public class HL7Util {
     return ack.toString();
   }
 
-  public static void makeERRSegment(StringBuilder ack, String severity, String textMessage, Reportable reportable) {
+  public static void makeERRSegment(StringBuilder ack, String severity, String textMessage,
+      Reportable reportable) {
     ack.append("ERR||");
     // 2 Error Location
     ack.append(reportable.getHl7LocationList() != null && reportable.getHl7LocationList().size() > 0

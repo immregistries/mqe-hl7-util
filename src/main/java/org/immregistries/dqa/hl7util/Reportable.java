@@ -17,4 +17,5 @@ public interface Reportable {
 	String getReportedMessage(); // ERR-8
 	String getDiagnosticMessage(); // ERR-7
 	CodedWithExceptions getApplicationErrorCode(); // Detailed code of the issue, CDC code & DQA Code
+	ReportableSource getSource(); // The system or process that created this reportable detection
 }
