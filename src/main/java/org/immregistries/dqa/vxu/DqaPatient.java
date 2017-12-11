@@ -1,16 +1,15 @@
 package org.immregistries.dqa.vxu;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
-import org.immregistries.dqa.codebase.client.reference.CodesetType;
 import org.immregistries.dqa.vxu.hl7.Id;
 import org.immregistries.dqa.vxu.hl7.Name;
 import org.immregistries.dqa.vxu.hl7.OrganizationName;
 import org.immregistries.dqa.vxu.hl7.PatientIdNumber;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 public class DqaPatient {
 	
@@ -51,7 +50,7 @@ private static final Logger LOGGER = LoggerFactory.getLogger(DqaPatient.class);
   private Name name = new Name();
   private long patientId = 0;
   private DqaPhoneNumber phone = new DqaPhoneNumber();
-  private Id physician = new Id(CodesetType.PHYSICIAN_NUMBER);
+  private Id physician = new Id();
   private String primaryLanguage = "";//new String(CodesetType.PERSON_LANGUAGE);
   private String protection = "";//new String(CodesetType.PATIENT_PROTECTION);
   private String publicity = "";//CodesetType.PATIENT_PUBLICITY);

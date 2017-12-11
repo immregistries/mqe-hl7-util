@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import org.immregistries.dqa.codebase.client.reference.CodesetType;
 import org.immregistries.dqa.vxu.hl7.Id;
 import org.immregistries.dqa.vxu.hl7.Observation;
 import org.immregistries.dqa.vxu.hl7.OrganizationName;
@@ -46,13 +45,13 @@ public class DqaVaccination {
   private String bodySite = "";//new CodedEntity(CodesetType.BODY_SITE);
   private String completion = "";//new CodedEntity(CodesetType.VACCINATION_COMPLETION);
   private String confidentiality = "";//new CodedEntity(CodesetType.VACCINATION_CONFIDENTIALITY);
-  private Id enteredBy = new Id(CodesetType.PHYSICIAN_NUMBER);
+  private Id enteredBy = new Id();
   private Date expirationDate = null;
   private String expirationDateString;
   private OrganizationName facility = new OrganizationName();
   private String facilityType = "";//new CodedEntity(CodesetType.FACILITY_TYPE);
   private String financialEligibility = "";//new CodedEntity(CodesetType.FINANCIAL_STATUS_CODE);
-  private Id givenBy = new Id(CodesetType.PHYSICIAN_NUMBER);
+  private Id givenBy = new Id();
   private String idPlacer = "";
   private String idSubmitter = "";
   private String informationSource = "";//new CodedEntity(CodesetType.VACCINATION_INFORMATION_SOURCE);
@@ -60,7 +59,7 @@ public class DqaVaccination {
   private String manufacturer = "";//new CodedEntity(CodesetType.VACCINATION_MANUFACTURER_CODE);
   private List<Observation> observations = new ArrayList<Observation>();
   private String orderControl = "";//new CodedEntity(CodesetType.VACCINATION_ORDER_CONTROL_CODE);
-  private Id orderedBy = new Id(CodesetType.PHYSICIAN_NUMBER);
+  private Id orderedBy = new Id();
   private int positionId;
   private int positionSubId;
   private String product = "";//new CodedEntity(CodesetType.VACCINE_PRODUCT);
@@ -72,6 +71,25 @@ public class DqaVaccination {
   private VaccinationVIS vaccinationVis = null;
   private String tradeName = "";//new CodedEntity(CodesetType.VACCINATION_TRADE_NAME);
   private String vaccineValidity = "";//new CodedEntity(CodesetType.VACCINATION_VALIDITY);
+
+  private String cvxDerived = "";
+  private List<String> vaccineGroupsDerived = new ArrayList<String>();
+
+  public String getCvxDerived() {
+    return cvxDerived;
+  }
+
+  public void setCvxDerived(String cvxDerived) {
+    this.cvxDerived = cvxDerived;
+  }
+
+  public List<String> getVaccineGroupsDerived() {
+    return vaccineGroupsDerived;
+  }
+
+  public void setVaccineGroupsDerived(List<String> vaccineGroupsDerived) {
+    this.vaccineGroupsDerived = vaccineGroupsDerived;
+  }
 
   public String getFacilityType()
   {

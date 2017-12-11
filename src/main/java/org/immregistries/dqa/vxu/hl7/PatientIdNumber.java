@@ -7,15 +7,12 @@
  */
 package org.immregistries.dqa.vxu.hl7;
 
-import org.immregistries.dqa.codebase.client.reference.CodesetType;
-
 public class PatientIdNumber extends Id
 {
   public PatientIdNumber()
   {
-    super(CodesetType.PATIENT_ID);
   }
-  
+
   public PatientIdNumber(Id id, int position) {
 	  this();
 	  this.setPositionId(position);

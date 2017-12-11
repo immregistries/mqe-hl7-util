@@ -1,10 +1,9 @@
 package org.immregistries.dqa.vxu.parse;
 
-import org.immregistries.dqa.codebase.client.reference.CodesetType;
 import org.immregistries.dqa.hl7util.parser.HL7MessageMap;
 import org.immregistries.dqa.vxu.DqaAddress;
-import org.immregistries.dqa.vxu.hl7.Id;
 import org.immregistries.dqa.vxu.DqaPhoneNumber;
+import org.immregistries.dqa.vxu.hl7.Id;
 
 public enum HL7ParsingUtil {
 	INSTANCE;
@@ -202,9 +201,8 @@ public enum HL7ParsingUtil {
 		    }
 		  }	
 	
-	public Id getId(HL7MessageMap map, String field, int segIdx,
-			CodesetType type, int fieldRep) {
-		Id ce = new Id(type);
+	public Id getId(HL7MessageMap map, String field, int segIdx, int fieldRep) {
+		Id ce = new Id();
 		ce.setNumber(map.getAtIndex(field + "-1", segIdx, fieldRep));
 		ce.setAssigningAuthorityCode(map.getAtIndex(field + "-4", segIdx,
 				fieldRep));

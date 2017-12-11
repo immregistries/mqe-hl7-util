@@ -1,16 +1,15 @@
 package org.immregistries.dqa.vxu.parse;
 
+import org.immregistries.dqa.hl7util.parser.HL7MessageMap;
+import org.immregistries.dqa.vxu.DqaAddress;
+import org.immregistries.dqa.vxu.DqaPatient;
+import org.immregistries.dqa.vxu.DqaPatientAddress;
+import org.immregistries.dqa.vxu.DqaPhoneNumber;
+import org.immregistries.dqa.vxu.hl7.Id;
+import org.immregistries.dqa.vxu.hl7.PatientIdNumber;
+
 import java.util.ArrayList;
 import java.util.List;
-
-import org.immregistries.dqa.codebase.client.reference.CodesetType;
-import org.immregistries.dqa.hl7util.parser.HL7MessageMap;
-import org.immregistries.dqa.vxu.DqaPatient;
-import org.immregistries.dqa.vxu.DqaAddress;
-import org.immregistries.dqa.vxu.hl7.Id;
-import org.immregistries.dqa.vxu.DqaPatientAddress;
-import org.immregistries.dqa.vxu.hl7.PatientIdNumber;
-import org.immregistries.dqa.vxu.DqaPhoneNumber;
 
 public enum HL7PatientParser {
 
@@ -138,49 +137,6 @@ public enum HL7PatientParser {
 		String mogeCode = map.get("PD1-16");
 		return mogeCode;
 	}
-	
-
-//	protected String getPID7BirthDt(HL7MessageMap map) {
-//		String birthDt = map.get("PID-7");
-//		return trimStringToLength(birthDt, 8);
-//	}
-//
-//	protected CodedEntity getPID15PrimaryLanguage(HL7MessageMap map) {
-//		return getCodedEntity(map, "PID-15", CodesetType.PERSON_LANGUAGE);
-//	}
-//	
-//	protected CodedEntity getPID22EthnicCd(HL7MessageMap map) {
-//		String ethnicCdField ="PID-22";
-//		CodesetType type = CodesetType.PATIENT_ETHNICITY;
-//		return getCodedEntity(map, ethnicCdField, type);
-//	}
-//	
-//	protected String getPID24BirthMultiple(HL7MessageMap map) {
-//		String value = map.get("PID-24");
-//		return value;
-//	}
-//	
-//	protected String getPID23BirthHostNm(HL7MessageMap map) {
-//		String birthHospNm = map.get("PID-23");
-//		return birthHospNm;
-//	}
-//
-//	protected String getPID25BirthOrder(HL7MessageMap map) {
-//		String value = map.get("PID-25");
-//		return value;
-//	}
-//	
-//	protected String getPID29DeathDt(HL7MessageMap map) {
-//		String deathDt =  map.get("PID-29");
-//		return trimStringToLength(deathDt, 8);
-//	}
-//	
-//	protected String getPID30DeathInd(HL7MessageMap map) {
-//		String deathDt =  map.get("PID-30");
-//		return trimStringToLength(deathDt, 8);
-//	}
-//	
-	
 	protected DqaPhoneNumber getPatientPhone(HL7MessageMap map) {
 		/*HL7Converter for interpreting the phone in the PID segment
 		 *   protected String readPhone(String field, Map<Separator, Character> separators) {
@@ -226,7 +182,7 @@ public enum HL7PatientParser {
 		int i = map.findFieldRepWithValue(type, "PID-3-5", 1);
 		
 		if (i > 0) {
-			Id id = hl7Util.getId(map, "PID-3-1", 1, CodesetType.PATIENT_ID, i);
+			Id id = hl7Util.getId(map, "PID-3-1", 1, i);
 			
 			PatientIdNumber num = new PatientIdNumber(id, i);
 			

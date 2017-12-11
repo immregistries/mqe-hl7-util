@@ -7,8 +7,6 @@
  */
 package org.immregistries.dqa.vxu.hl7;
 
-import org.immregistries.dqa.codebase.client.reference.CodesetType;
-
 public class CodedEntity
 {
   private String code = "";
@@ -17,17 +15,6 @@ public class CodedEntity
   private String altCode = "";
   private String altText = "";
   private String altTable = "";
-  //This just needs to hold the code manager data???  That we get from the XML.
-  private CodesetType tableType; 
-
-  public CodedEntity(CodesetType tableType) {
-    this.tableType = tableType;
-  }
-
-  public CodesetType getTableType()
-  {
-    return tableType;
-  }
 
   public String getCode()
   {

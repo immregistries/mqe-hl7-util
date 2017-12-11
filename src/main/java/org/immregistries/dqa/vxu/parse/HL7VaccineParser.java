@@ -1,11 +1,7 @@
 package org.immregistries.dqa.vxu.parse;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
-import org.immregistries.dqa.codebase.client.reference.CodesetType;
 import org.immregistries.dqa.hl7util.parser.HL7MessageMap;
 import org.immregistries.dqa.vxu.DqaVaccination;
 import org.immregistries.dqa.vxu.hl7.CodedEntity;
@@ -13,6 +9,9 @@ import org.immregistries.dqa.vxu.hl7.Observation;
 import org.immregistries.dqa.vxu.hl7.OrganizationName;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public enum HL7VaccineParser {
 	INSTANCE;
@@ -24,8 +23,7 @@ public enum HL7VaccineParser {
 	private static final Logger logger = LoggerFactory.getLogger(HL7VaccineParser.class);
 	
 	private HL7ParsingUtil hl7Util = HL7ParsingUtil.INSTANCE;
-	
-	//For example, the second RXA has an associated OBX, and RXR. 
+	//For example, the second RXA has an associated OBX, and RXR.
 	//So I should be able to fairly simply find the indexes which are greater 
 	//than the current, and less than the next. 
 
@@ -80,30 +78,6 @@ public enum HL7VaccineParser {
 	}
 	
 	/**
-	 * this is going to the be the most complicated process.  There are dependent segments
-	 * and you need to read those into the Trasnfer_Shot object to create a whole shot record.
-	 * 
-	 * <p>Notice, a lot of the HL7 locations were represented in HL7Converter.java in this method: 
-	 * 
-	 * <code>
-	<br />private void readRXA(String[] fields, VaccinationUpdateMessage vum, Vaccination vaccination, Map<Separator, Character> separators) {
-	<br />vum.addDebugOutput("[RXA] Perscription Administration");
-	<br />readRXA3AdminDate(fields, vum, vaccination, separators);
-    <br />readRXA5Vaccination(fields, vum, vaccination, separators);
-    <br />readRXA6AdministeredAmount(fields, vum, vaccination, separators);
-    <br />readRXA9AdminNotes(fields, vum, vaccination, separators);
-    <br />readRXA10Provider(fields, vum, vaccination, separators);
-    <br />readRXA11AdministeredAtLocation(fields, vum, vaccination, separators);
-    <br />readRXA15LotNumber(fields, vum, vaccination, separators);
-    <br />readRXA16LotExpirationDate(fields, vum, vaccination, separators);
-    <br />readRXA17Manufacturer(fields, vum, vaccination, separators);
-    <br />readRXA18RefusalReason(fields, vum, vaccination, separators);
-    <br />readRXA20CompletionStatus(fields, vum, vaccination, separators);
-    <br />readRXA22EntryDateTime(fields, vum, vaccination, separators);
-    <br />readRXA21ActionCode(fields, vum, vaccination, separators);
-    <br />readRXA22EntryDateTime(fields, vum, vaccination, separators);
-  <br />}
-  </code>
 	 * @param map
 	 * @return
 	 */
@@ -174,7 +148,7 @@ public enum HL7VaccineParser {
 			      codeFound = true;
 			    }
 		}
-		
+
 //		String facilityCd   = map.get("RXA-");//getMSH4SendingFacility(map); This is a transformation...
 		
 		String messageRxaCnt= map.getAtIndex("RXA-1", rxaIdx);
@@ -193,7 +167,6 @@ public enum HL7VaccineParser {
 		String completionCode=map.getAtIndex("RXA-20", rxaIdx);
 		String actionCd 	= map.getAtIndex("RXA-21", rxaIdx);//getVaccineAction(map);
 		String systemEntryDt= map.getAtIndex("RXA-22", rxaIdx);//getVaccineAction(map);
-		
 		String routeCd 		= map.getAtIndex("RXR-1", rxrIdx);//getRouteCd(map, rxrIdx);
 		String bodySiteCd 	= map.getAtIndex("RXR-2", rxrIdx);//getBodySiteCd(map, rxrIdx);
 		
@@ -249,7 +222,7 @@ public enum HL7VaccineParser {
 
 		return shot;
 	}
-	
+
 
 	/**
 	 * Question:  Is this a transformation???
@@ -292,11 +265,8 @@ public enum HL7VaccineParser {
 			} 
 			
 		}
-		
 		return vfcStatus;
-		
 	}
-	
 
 	  private OrganizationName readOrganizationName(HL7MessageMap map, String field, int segIdx) {
 	    String id =  map.getAtIndex(field + "-1",  segIdx);
@@ -311,9 +281,7 @@ public enum HL7VaccineParser {
 	    }
 	    return on;
 	  }
-	  
 
-	
 	protected void HL7ConverterNotes() {
 		/*
 		 * the method "cleanAndReadField" essentially does the following: 
@@ -322,313 +290,12 @@ public enum HL7VaccineParser {
 		 * Replace escape characters. 
 		 */
 	}
-	
-	protected String getNonAdminCd(HL7MessageMap map, int segIdx) {
-		String nonAdminCd = map.getAtIndex("RXA-18", segIdx, 1);
-		return nonAdminCd;
-	}
-	
-	protected String getRefusalReason(HL7MessageMap map, int segIdx) {
-		/*
-		 * HL7Converter.java
-		 *  protected void readRXA18RefusalReason(String[] fields, VaccinationUpdateMessage vum, Vaccination vaccination, Map<Separator, Character> separators) {
-			    if (fields.length <= 18) {
-			      return;
-			    }
-			    vaccination.setRefusalReason(cleanAndReadField(fields[18], separators));
-			    vum.addDebugOutput(" + RXA-18 refusal reason        " + vaccination.getRefusalReason());
-			  }
-  
-  			VaccinationUpdateToExtLoader.java
-  			
-  			ext.setNonAdmCode(chop(Table.SUBSTANCE_REFUSAL.mapToMcirValue(vaccination.getRefusalReason()), 2));
-		 */
-		
-		String nonAdminCd = getNonAdminCd(map, segIdx);
-		return nonAdminCd;
-	}
-	
-	protected String getPatientVaccineFundEligCd(HL7MessageMap map) {
-		/*
-		 * From HL7Converter.java: 
-		 * PV1-20
 
-			 privatevoid readPV1(String[] fields, VaccinationUpdateMessage vum, Patient patient, Map<Separator, Character> separators) {
-			    if (fields.length <= 20) {
-			      return;
-			    }
-			    String field = cleanRepeatsOnly(fields[20], separators);
-			    String[] comps = splitComponents(separators, field);
-			    clean(comps, separators);
-			    if (comps.length > 0) {
-			      patient.getVfc().setStatus(comps[0]);
-			      vum.addDebugOutput(" + PV1-20 vfc status            " + patient.getVfc().getStatus());
-			      if (comps.length >= 2) {
-			        patient.getVfc().setEffectiveDate(comps[1]);
-			        vum.addDebugOutput(" + PV1-20 vfc effective date    " + patient.getVfc().getEffectiveDateString());
-			      }
-			    }
-			
-			  }
-  
-  From VaccineUpdateToExtLoader.java: 
-			  //ext.setVaccineFundEligCode(chop(vaccination.getVfc().getStatus(), 1)); Bug# 8612
-			ext.setVaccineFundEligCode(chop(Table.VFC_STATUS.mapToMcirValue(vaccination.getVfc().getStatus()), 1));
-		 * 
-		 * 
-		 */
-		
-		String messageValue = map.get("PV1-20");
-		return messageValue;
-	}
-	
-	protected String getPatientVaccineFundEligEffDate(HL7MessageMap map) {
-		String effDate = map.get("PV1-20-2");
-		return effDate;
-	}
-	
-	protected String getPV1Class(HL7MessageMap map) {
-		String effDate = map.get("PV1-2");
-		return effDate;
-	}
-	
-	protected String getVaccineMRN(HL7MessageMap map, int orcIdx) {
-		/*
-		 * From HL7Converter.java: 
-		 * ORC-3
-
-			vaccination.setVaccinationIdSender(cleanAndReadField(fields[3], separators));
-    		vum.addDebugOutput(" + ORC-3  vacc id sender      " + vaccination.getVaccinationIdSender());
-    
-    	From VaccineUpdateToExtLoader.java: 
-    		ext.setVaccinationMrn(chop(vaccination.getVaccinationIdSender(),199));
-		 */
-		
-		String messageVal = map.getAtIndex("ORC-3", orcIdx, 1);
-		return chop(messageVal, 199);
-		
-	}
-	
-	protected String getOrderControlId(HL7MessageMap map, int orcIdx) {
-		String controlId = map.getAtIndex("ORC-1", orcIdx, 1);
-		return controlId;
-	}
-	
-	
-	protected String getPlacerOrderNumber(HL7MessageMap map, int orcIdx) {
-		String controlId = map.getAtIndex("ORC-2", orcIdx, 1);
-		return controlId;
-	}
-	
-	
-	
-//	TODO: Make sure we really don't need this here. 
-//	protected long getSiteId() {
-/*
- * Site_id is not on the HL7 Message...  
- * It's looked up from the Transfer Interface PIN, 
- * which is gotten from the message_interface
- * 
- * Site_id is not set onto the EXT_TRANSFER_DATA record in VaccinationUpdateToExtLoader
- * 
- * In the stored procedure; 
- * 
- * 	NVL(ext_transfer_rec.site_id,l_site_id)
-
- 	SELECT     Site_id
-   	INTO       l_site_id 
-   	FROM       Transfer_Job
-   	WHERE      request_status_id = p_request_id;
-   
-    This will be added in a layer where we're augmenting/transforming data.  We can probably get the site_id from the PIN in the message. 
-    	
- */
-//		return ConvertSiteId("0");
-//	}
-	
-	protected Long ConvertSiteId(String siteId) {
-
-//		CREATE OR REPLACE FUNCTION CONVERT_SITE_ID( fi_site_id in VARCHAR2 )
-//		  RETURN NUMBER
-//		IS
-//
-//		l_site_id       VARCHAR2(12);
-//		retval NUMBER;
-//
-//		BEGIN
-
-		try {
-	//		  l_site_id := NVL(fi_site_id,'X');
-	//		  IF l_site_id = 'X' THEN
-	//		    retval := NULL;
-			if (siteId == null) {
-				return null;
-			}
-	//		  ELSIF (SUBSTR(UPPER(l_site_id),1,2)='U0') THEN
-	//		    l_site_id := 'U9' || SUBSTR(l_site_id,3);
-	//		    retval := TO_NUMBER(SUBSTR(l_site_id,2));
-			else if ("U0".equalsIgnoreCase(siteId.substring(0, 2))) {
-				return Long.valueOf("9" + siteId.substring(3));//How do you cast this to a number???
-			}
-	//		  ELSIF l_site_id = 'MCIR' THEN
-	//		    l_site_id := 'U90000000000';
-	//		    retval := TO_NUMBER(SUBSTR(l_site_id,2));
-			else if ("MCIR".equals(siteId)) {
-				return new Long(90000000000L);
-			}
-	//		  ELSIF (SUBSTR(UPPER(l_site_id),1,1)='U') THEN
-	//		    retval := TO_NUMBER(SUBSTR(l_site_id,2));
-			else if ("U".equals(siteId.substring(0, 1))) {
-				return new Long(siteId.substring(2));
-			}
-	//		  ELSE
-	//		    retval := TO_NUMBER(l_site_id);
-				return new Long(siteId);
-//			  END IF;
-			//
-//					  return retval;
-		} catch (NumberFormatException e) {
-//			EXCEPTION
-//			  WHEN OTHERS THEN
-//			     DBMS_OUTPUT.PUT_LINE(l_site_id || ':' ||SQLERRM);
-//			     RAISE;
-			throw new RuntimeException("Error Converting Site Id",  e);
-			//TODO: put some attention to this...  Need to come up with a more unified exception handling strategy...  This layer needs to have it's own exception probably...
-		}
-
-//
-//		EXCEPTION
-//		  WHEN OTHERS THEN
-//		     DBMS_OUTPUT.PUT_LINE(l_site_id || ':' ||SQLERRM);
-//		     RAISE;
-//		END CONVERT_SITE_ID;
-
-	}
-	
-	protected String getRouteCd(HL7MessageMap map, int segIdx) {
-		/*HL7Converter.java
-		 * RXR-1
-
-			privatevoid readRXR(String[] fields, VaccinationUpdateMessage vum, Vaccination vaccination, Map<Separator, Character> separators) {
-			    if (fields.length <= 1) {
-			      return;
-			    }
-			    vaccination.setBodyRoute(cleanAndReadField(fields[1], separators));
-			    if (fields.length <= 2) {
-			      return;
-			    }
-			    vaccination.setBodySite(cleanAndReadField(fields[2], separators));
-			  }
-  
-  		VaccinationUpdateToExtLoader.java
-  			chop(Table.BODY_ROUTE.mapToMcirValue(vaccination.getBodyRoute()), 1)
-		 */
-		String routeCode = map.getAtIndex("RXR-1", segIdx, 1);
-		
-		return routeCode;
-	}
-	
-	protected String getBodySiteCd(HL7MessageMap map, int segIdx) {
-		
-		/*
-		 * HL7Converter.java
-		 * RXR-2
-
-				privatevoid readRXR(String[] fields, VaccinationUpdateMessage vum, Vaccination vaccination, Map<Separator, Character> separators) {
-				    if (fields.length <= 1) {
-				      return;
-				    }
-				    vaccination.setBodyRoute(cleanAndReadField(fields[1], separators));
-				    if (fields.length <= 2) {
-				      return;
-				    }
-				    vaccination.setBodySite(cleanAndReadField(fields[2], separators));
-				  }
-  
-  		VaccinationUpdateToExtLoader.java
-    		chop(Table.BODY_SITE.mapToMcirValue(vaccination.getBodySite()), 1)
-		 */
-		
-		String siteCd = map.getAtIndex("RXR-2", segIdx, 1);
-		
-		return siteCd;
-		
-	}
-	
-	protected String getShotDt(HL7MessageMap map, int segIdx) {
-		/*
-		 * HL7Converter.java: 
-		 * RXA-3
-
-			 protected void readRXA3AdminDate(String[] fields, VaccinationUpdateMessage vum, Vaccination vaccination, Map<Separator, Character> separators) {
-			    if (fields.length <= 3) {
-			      return;
-			    }
-			    String date = cleanAndReadField(fields[3], separators);
-			    vaccination.setAdministeredDateString(date.length() > 8 ? date.substring(0, 8) : date);
-			    vum.addDebugOutput(" + RXA-3  admin date            " + vaccination.getAdministeredDateString());
-			    if (fields.length <= 4) {
-			      return;
-			    }
-			    vaccination.setAdministeredDateEndString(cleanAndReadField(fields[4], separators));
-			    vum.addDebugOutput(" + RXA-4  admin date end        " + vaccination.getAdministeredDateEndString());
-			  }
-			  
-		  VaccinationUpdateToExtLoader.java
-		  dateNormalizer(vaccination.getAdministeredDateString())
-		  
-		  
-		 * 
-		 */
-		
-		String adminsteredDateString = map.getAtIndex("RXA-3", segIdx, 1);
-		String normalizedDate = hl7Util.dateNormalizer(adminsteredDateString);
-		return normalizedDate;
-	}
-
-	
-	protected String getProviderId(HL7MessageMap map, int segIdx) {
-/*HL7Converter.java
- *   protected void readRXA10Provider(String[] fields, VaccinationUpdateMessage vum, Vaccination vaccination, Map<Separator, Character> separators) {
-    if (fields.length <= 10) {
-	      return;
-	    }
-	    readXcn(fields[10], vaccination.getPersonThatVaccinated(), separators);
-	    vum.addDebugOutput("RXA-10 person that vaccinated   " + vaccination.getPersonThatVaccinated());
-	  }
-	  
-	    protected void readXcn(String field, Person person, Map<Separator, Character> separators) {
-		    field = cleanRepeatsOnly(field, separators);
-		    String[] comps = splitComponents(separators, field);
-		    clean(comps, separators);
-		    if (comps.length > 0)
-		    {
-		      person.setId(comps[0]);
-		      if (comps.length > 1) {
-		        person.setNameLast(comps[1]);
-		        if (comps.length > 2) {
-		          person.setNameFirst(comps[2]);
-		        }
-		      }
-		    }
-		  }
-		  
-		  And from VaccinationUpdateToExtLoader.java
-		  ext.setInitials(chop(vaccination.getPersonThatVaccinated().getId(), 3));
-		  
-		  So the ID is getting set from RXA-10-1, trimmed to 3
-		  
-		  that doesn't make sense.  most of those are numbers that are around four to six digits long. 
- */
-		String providerId = map.getAtIndex("RXA-10-1", segIdx, 1);
-		return chop(providerId, 3);
-	}
-	
 	
 	/**
 	 * Expects a relative index. 
 	 * @param map
-	 * @param segIdx
+	 * @param rxaIdx
 	 * @return
 	 */
 	protected List<CodedEntity> getVaccineCodes(HL7MessageMap map, int rxaIdx) {
@@ -636,180 +303,12 @@ public enum HL7VaccineParser {
 		
 		int fieldCount = map.getFieldRepCountFor("RXA-5", rxaIdx);
 		for (int x = 1; x <= fieldCount; x++) {
-			CodedEntity vxuCode = getCodedEntity(map, "RXA-5", rxaIdx, CodesetType.VACCINATION_CVX_CODE, x);
+			CodedEntity vxuCode = getCodedEntity(map, "RXA-5", rxaIdx, x);
 			vaxList.add(vxuCode);
 		}
 		
 		return vaxList;
 	}
-//
-//	/**
-//	 * The CVX is expected in the RXA-5-1 (code type specified in RXA-5-3)
-//	 * <p>However, it may be coded as the alternative coding system if the provider sends an NDC code, or if they mixed up the CVX/CPT alternate/primary.
-//	 * <p>This was previously done in HL7Converter.java in the method readRXA5Vaccination
-//	 * @param map
-//	 * @param segIdx
-//	 * @return
-//	 */
-//	protected String getCVX(HL7MessageMap map, int segIdx) {
-//		//CVX should be the primary identifier.   
-//		int cvxRep = map.findFieldRepWithValue("CVX", "RXA-5-3", segIdx);
-//		String cvxVal = null;
-//		if (cvxRep > 0) {
-//			cvxVal = map.getAtIndex("RXA-5-1", segIdx, cvxRep);
-//		} else {
-//			//If it's in the Alternate identifier spot, get it from there...  
-//			//This isn't a good thing though.  Hopefully they just mixed CVX/CPT in the primary/alternate spots.
-//			cvxRep = map.findFieldRepWithValue("CVX", "RXA-5-6", segIdx);
-//			if (cvxRep > 0) {
-//				cvxVal = map.getAtIndex("RXA-5-4", segIdx, cvxRep);
-//			}
-//		}
-//		return cvxVal;
-//	}
-//	
-//	/**
-//	 * The CVX is expected in the RXA-5-1 (code type specified in RXA-5-3)
-//	 * <p>However, it may be coded as the alternative coding system if the provider sends an NDC code, or if they mixed up the CVX/CPT alternate/primary.
-//	 * <p>This was previously done in HL7Converter.java in the method readRXA5Vaccination
-//	 * @param map
-//	 * @param segIdx
-//	 * @return
-//	 */
-//	protected String getNDC(HL7MessageMap map, int segIdx) {
-//		//CVX should be the primary identifier.   
-//		int ndcRep = map.findFieldRepWithValue("NDC", "RXA-5-3", segIdx);
-//		String ndcVal = null;
-//		if (ndcRep > 0) {
-//			ndcVal = map.getAtIndex("RXA-5-1", segIdx, ndcRep);
-//		} else {
-//			//If it's in the Alternate identifier spot, get it from there...  
-//			//This isn't a good thing though.  Hopefully they just mixed CVX/CPT in the primary/alternate spots.
-//			ndcRep = map.findFieldRepWithValue("NDC", "RXA-5-6", segIdx);
-//			if (ndcRep > 0) {
-//				ndcVal = map.getAtIndex("RXA-5-4", segIdx, ndcRep);
-//			}
-//		}
-//		return ndcVal;
-//	}
-//	
-//	
-//	/**
-//	 * The CPT may be provided as an alternate identifier in RXA-5. 
-//	 * We allow for them to put it in the primary slot, but that is not a well formed message. 
-//	 * @param map
-//	 * @param segIdx
-//	 * @return
-//	 */
-//	protected String getCPT(HL7MessageMap map, int segIdx) {
-//		int cptRep = map.findFieldRepWithValue("CPT", "RXA-5-6", segIdx);
-//		String cptVal = null;
-//		
-//		if (cptRep > 0) {
-//			cptVal = map.getAtIndex("RXA-5-4", segIdx, cptRep);
-//		} else {
-//			//If it's in the Primary identifier spot, get it from there...  
-//			//This isn't a good thing though.  Hopefully they just mixed CVX/CPT in the primary/alternate spots.
-//			cptRep = map.findFieldRepWithValue("CPT", "RXA-5-3", segIdx);
-//			if (cptRep > 0) {
-//				cptVal = map.getAtIndex("RXA-5-1", segIdx, cptRep);
-//			}
-//		}
-//		return cptVal;
-//	}
-	
-//	/**
-//	 * This is takedn from HL7Converter.java in the method "guessAndSetVaccinationCode". 
-//	 * <p>It's basically checking the values in RXA-5-1 and RXA-5-4, and deciding if it's 
-//	 * a CPT code by whether or not it has five digits and starts with 90. 
-//	 * <p>If the value does look like a CPT, it should be taken as one. 
-//	 * <p>This is slightly different than the HL7Converter.java code, because in that case, it only called this
-//	 * if neither a CPT or a CVX was found. 
-//	 * @param map
-//	 * @param segIdx
-//	 */
-//	protected String guessCptFromRxa5(HL7MessageMap map, int segIdx) {
-//		String rxa5primary 		= map.get("RXA-5-1", segIdx, 1);
-//		
-//		if (looksLikeACptCode(rxa5primary)) {
-//			return rxa5primary;
-//		} else {
-//			String rxa5alternate 	= map.get("RXA-5-4", segIdx, 1);
-//			if (looksLikeACptCode(rxa5alternate)) {
-//				return rxa5alternate;
-//			}
-//		}
-//		
-//		return null;
-//	}
-	
-	/**
-	 * This is takedn from HL7Converter.java in the method "guessAndSetVaccinationCode". 
-	 * <p>It's basically checking the values in RXA-5-1 and RXA-5-4, and deciding if it's 
-	 * a CPT code by whether or not it has five digits and starts with 90. 
-	 * <p>If the value does look like a CPT, it's ignored for this method. We want stuff that doesn't look like a CPT code. 
-	 * <p>This is the opposite of the guessCpt method.  
-	 * <p>This is slightly different than the HL7Converter.java code, because in that case, it only called this
-	 * if neither a CPT or a CVX was found. 
-	 * @param map
-	 * @param segIdx
-	 */
-	//TODO:  Now we can just use the code type.  Don't guess anymore.  it should say if it's a CVX/NDC/CPT
-//	protected String guessCvxFromRxa5(HL7MessageMap map, int segIdx) {
-//		String rxa5primary 		= map.get("RXA-5-1", segIdx, 1);
-//		
-//		if (!looksLikeACptCode(rxa5primary)) {
-//			return rxa5primary;
-//		} else {
-//			String rxa5alternate 	= map.get("RXA-5-4", segIdx, 1);
-//			if (!looksLikeACptCode(rxa5alternate)) {
-//				return rxa5alternate;
-//			}
-//		}
-//		
-//		return null;
-//	}
-//	
-//	protected boolean looksLikeACptCode(String string) {
-//		return string != null && string.length() == 5 && string.startsWith("90");
-//	}
-	
-
-	/**
-	 * This is very simple: 
-	 * <p>vaccination.setManufacturerCode(cleanAndReadField(fields[17], separators));
-	 * <p>This means we were getting it from RXA-17-1, and ignoring the rest. 
-	 * @param map
-	 * @param segIdx
-	 * @return
-	 */
-	protected String getVaccineMfrCode(HL7MessageMap map, int segIdx) {
-		String mfrCode = map.getAtIndex("RXA-17", segIdx, 1);
-		//Should we check to make sure the coding system is specified as "MVX"?
-		return mfrCode;
-	}
-	
-//	/**
-//	 * This method finds an OBX that is tagged as an observation of immunity.  
-//	 * <p>Then it gets the value from that OBX and returns it. 
-//	 * <p>if it doesn't find an OBX with one of the immunity codes, it returns null;
-//	 * @param map
-//	 * @param obxIdxList
-//	 * @return String
-//	 */
-//	private String getImmunityObservationCode(HL7MessageMap map,
-//			List<Integer> obxIdxList) {
-//		String immunityCd = null;
-//		
-//		int immunityObsSeg = getImmunityObxSegmentIndex(map, obxIdxList);
-//		
-//		if (immunityObsSeg > 0) {
-//			immunityCd = map.getAtIndex("OBX-5", immunityObsSeg, 1);
-//		} 
-//		
-//		return immunityCd;
-//	}
-	
 	/**
 	 * Getting the observation segments for this rxa...
 	 */
@@ -825,9 +324,9 @@ public enum HL7VaccineParser {
 		
 		return list;
 	}
-	
+
 	/**
-	 *  The previous version of this: 
+	 *  The previous version of this:
 		<code>private void populateOBX(MessageReceived message)
 			  {
 			    Observation obs = new Observation();
@@ -867,164 +366,7 @@ public enum HL7VaccineParser {
 
 		return o;
 	}
-	
-	/**
-	 * THe code in this method is derived from several other methods and classes: 
-	 * <br /><br />
-	 * <code>
-	 * protected void readOBX(String[] fields, VaccinationUpdateMessage vum, Observation observation, Map<Separator, Character> separators) {
-		    vum.addDebugOutput("[OBX] Observation Segment");
-		    if (fields.length <= 3) {
-		      return;
-		    }
-		    observation.setIdentifierCode(cleanAndReadField(fields[3], separators));
-		    vum.addDebugOutput(" + OBX-3 observation identifier " + observation.getIdentifierCode());
-		    if (fields.length <= 5) {
-		      return;
-		    }
-		    observation.setValue(cleanAndReadField(fields[5], separators));
-		    vum.addDebugOutput(" + OBX-5 observation value      " + observation.getValue());
-		  }
-  
-		String obx3Code = vaccination.getObservation().getIdentifierCode();
-	    if (OBX3_DISEASE_WITH_PRESUMED_IMMUNITY.equals(obx3Code) || OBX3_DISEASE_WITH_SEROLOGICAL_EVIDENCE_OF_IMMUNITY.equals(obx3Code) ) {
-	    
-		    String obx5Code = vaccination.getObservation().getValue();
-		    ext.setHl7ImmunityCd(chop(obx5Code, 50));
-		    //Assuming if an OBX-3 indicates documented immunity, the RXA-18 refusal reason won't be filled out, so we'll hard code it here.
-		    ext.setNonAdmCode(chop(Table.SUBSTANCE_REFUSAL.mapToMcirValue("42"), 2));
-		   
-		    if ("998".equals(vaccination.getVaccinationCode().getCvx())) {
-		    	//998^No vaccine administered^CVX <- that's the CE that gets coded in RXA-5 for an evidence of immunity message.
-		    	String vaccine4code = getVaccineCdForImmunity(obx5Code);
-		    	if (vaccine4code != null) {
-		    		ext.setVaccine4Code(vaccine4code);
-		    	}
-		    }
-	    } 
-	    
-	    	static String getVaccineCdForImmunity(String immunityCd) {
-				ConverterHelper helper = ConverterHelper.getInstance();
-				ImmunityAntigen ia;
-				try {
-					ia = helper.getImmunityAntigenByImmunityCd(immunityCd, false);
-					if (ia != null) {
-						return ia.getVaccineCd();
-					}
-				} catch (MessageException | DAOSysException e) {
-		
-				}
-				return null;
-			}
-	   </code>
-	 * @param map
-	 * @param relativeObxList
-	 * @return
-	 */
-//	protected int getImmunityObxSegmentIndex(HL7MessageMap map, List<Integer> relativeObxList) {
-//		
-//		//TODO: check RXA-20 for "NA" non-administered. 
-//		
-//		
-//		//assumes the Obx list is ordered...  
-//		int first = relativeObxList.get(0);
-//		int last = relativeObxList.get(relativeObxList.size() - 1);
-//		
-//		List<Integer> immunitySegIdxs = map.findAllSegmentRepsWithValuesWithinRange(new String[]{OBX3_DISEASE_WITH_PRESUMED_IMMUNITY, OBX3_DISEASE_WITH_SEROLOGICAL_EVIDENCE_OF_IMMUNITY},
-//				"OBX-3", 
-//				first, last, 1);
-//		
-//		if (immunitySegIdxs.size() > 0) {
-//			//Should only be one...  and only the first one is meaningful. 
-//			return immunitySegIdxs.get(0);
-//		}
-//		return -1;
-//	}
-	
-//	protected String getAdministeredAmount(HL7MessageMap map, int segIdx) {
-//		/*  HL7Converter.java
-//		 *  protected void readRXA6AdministeredAmount(String[] fields, VaccinationUpdateMessage vum, Vaccination vaccination, Map<Separator, Character> separators) {
-//			    if (fields.length <= 6) {
-//			      return;
-//			    }
-//			    String amount = "";
-//			    amount = cleanAndReadField(fields[6], separators);
-//			    vum.addDebugOutput("RXA-6  amount                   " + amount);
-//			    if (fields.length > 7) {
-//			      amount = amount + cleanAndReadField(fields[7], separators);
-//			      vum.addDebugOutput("RXA-7  amount + units           " + amount);
-//			    }
-//			    vaccination.setAdministeredAmount(amount);
-//			  }
-//			  
-//		  	VaccinationUpdateToExtLoader.java
-//			  ext.setDoseVl(fixAdministeredAmount(vaccination.getAdministeredAmount()));
-//			  
-//			static String fixAdministeredAmount(String amount) {
-//			    if (!amount.equals("")) {
-//			      amount = amount.trim().toLowerCase();
-//			      if (amount.endsWith("ml") || amount.endsWith("cc")) {
-//			        amount = amount.substring(0, amount.length() - 2).trim();
-//			      }
-//			      try {
-//			        if (!amount.equals("")) {
-//			          amount = String.valueOf(Double.parseDouble(amount));
-//			        }
-//			      } catch (NumberFormatException nfe) {
-//			        amount = "";
-//			      }
-//			    }
-//			    return amount;
-//			  }
-//  
-//			And then in the Stored Procs: 
-//			
-//			common_validations.f_masked_val('DOSE_VL',ext_transfer_rec.dose_vl)
-//			
-//			But this validation should probably be done in a separate process... I think so. yes. 
-//		 */
-//		
-////		So what happens in the old process is
-////		get the amount and units, 
-////		put them together, 
-////		then get them, 
-////		take them apart, 
-////		validate that the amount is a number, 
-////		and then use that value. 
-//		
-//		String amount = map.getAtIndex("RXA-6", segIdx, 1);
-////		String units = map.get("RXA-7", segIdx, 1);
-//		try {
-//	        if (!StringUtils.isBlank(amount)) {
-//	          amount = String.valueOf(Double.parseDouble(amount));
-//	        }
-//	    } catch (NumberFormatException nfe) {
-//	        amount = "";
-//	    }
-//		return amount;
-//	}
-	
-	
-	
-//	protected String getVaccineDoseLot(HL7MessageMap map, int segIdx) {
-//		
-//		/*From HL7Converter.java
-//		  
-//		      protected void readRXA15LotNumber(String[] fields, VaccinationUpdateMessage vum, Vaccination vaccination, Map<Separator, Character> separators) {
-//			    if (fields.length <= 15) {
-//			      return;
-//			    }
-//			    vaccination.setLotNumber(cleanAndReadField(fields[15], separators));
-//			    vum.addDebugOutput(" + RXA-15 lot number            " + vaccination.getFacility());
-//			  }
-//			  
-//		   From VaccinationToExtLoader.java
-//		   		ext.setDoseLot(chop(vaccination.getLotNumber(), 20));
-//		 */
-//		String lot = map.getAtIndex("RXA-15", segIdx, 1);
-//		return chop(lot, 40);
-//	}
-	
+
 //TODO: make sure to trim everything.  go back to the VaccinationToExtLoader and make sure to trim the same way.  
 	protected static String chop(String value, int length) {
 		if (value == null) {
@@ -1037,86 +379,19 @@ public enum HL7VaccineParser {
 	}
 	
 	
-	
-	
-
-
-//	protected int getRespPartyNK1Index(HL7MessageMap map) {
-//		/*VaccinationUpdatetoEXtLoader.java - check out how they're deciding which NK1 to use.  That's what we're doing here. 
-//		  protected static NextOfKin findResponsibleParty(VaccinationUpdateMessage message, Patient patient) {
-//			    NextOfKin responsibleParty = null;
-//			    for (NextOfKin nok : message.getNextOfKins()) {
-//			      if (nok.getRelationship().equals("") || nok.isRelationshipFather() || nok.isRelationshipGuardian() || nok.isRelationshipParent() || nok.isRelationshipMother()
-//			          || (nok.isRelationshipSelf() && patient.isChild())) {
-//			        responsibleParty = nok;
-//			        break;
-//			      }
-//			    }
-//			    return responsibleParty;
-//			  }
-//		 */
-//		
-//		//Find the first responsible party that's of relationship type:
-//		// father, guardian, parent, mother
-//		// So step 1... find the first one of those things in the NK1 list...
-//		List<Integer> respParties = map.findAllIndexesForSegmentWithValues(new String[] {"MTH","FTH","PAR","GRD"},"NK1-3", 1);
-//
-//		if (respParties == null || respParties.size() < 1) {
-//			return map.findSegmentIndexWithValue("SEL", "NK1-3", 1); 
-//		}
-//		
-//		//Return the first match.  In the old code there was no order with which it was determined. 
-//		return respParties.get(0);
-//	}
-	
-//	protected boolean isChild(HL7MessageMap map) {
-//		//this was hard coded to true...  with a note to change it.  check out VaccinationUpdateToExtLoader.findAddress and Patient.isChild
-//		//TODO: check the age.  Greater than 17 = not child...
-//		return true;
-//	}
-	
-	
-//	protected String trimStringToLength(String s, int length) {
-//		if (s != null && s.length() > length) {
-//			return s.substring(0, length);
-//		}
-//		return s;
-//	}
-
-
-//	/**
-//	 * The second part of this is certainly a transform step...
-//	 * @param map
-//	 * @return
-//	 */
-//	protected String getVaccineAction(HL7MessageMap map) {
-//		String actionCode = map.get("RXA-21");
-//	    if (StringUtils.isBlank(actionCode)) {
-//	    	actionCode = VACCINATION_ACTION_ADD;
-//		} 
-//		return actionCode;
-//	}
-
-//	 protected CodedEntity getCodedEntity(HL7MessageMap map, String field, CodesetType type) {
-//		 //I'm not sure this works right...  need to check. With a unit test.   Please.  Now.  
-//		 return getCodedEntity(map, field, 1, type, 1);
-//	  }
-	 
-	  
 	 /**
 	  * Expects a segment index  
 	  * information from. 
 	  * @param map
 	  * @param field
 	  * @param rxaIdx
-	  * @param type
 	  * @param fieldRep
 	  * @return
 	  */
-	  protected CodedEntity getCodedEntity(HL7MessageMap map, String field, int rxaIdx, CodesetType type, int fieldRep)
+	  protected CodedEntity getCodedEntity(HL7MessageMap map, String field, int rxaIdx, int fieldRep)
 	  {
 		logger.info("Getting coded entity at : " + field + " seg abs idx: " + rxaIdx);
-		CodedEntity ce = new CodedEntity(type);
+		CodedEntity ce = new CodedEntity();
 		String code = map.getAtIndex(field + "-1", rxaIdx, fieldRep);
 		logger.info(field + "-1" + " = " + code);
 	    ce.setCode(code);

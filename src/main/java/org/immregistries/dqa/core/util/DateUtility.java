@@ -195,10 +195,14 @@ public enum DateUtility {
 	}
 	
 	public int getAge(DateTime bd) {
-		if (bd == null) {
-			return 0;
+		return getYearsBetween(bd, new DateTime());
+	}
+
+	public int getYearsBetween(DateTime start, DateTime end) {
+		if (start == null || end == null) {
+			return -1;
 		}
-		return Years.yearsBetween(bd, new DateTime()).getYears();
+		return Years.yearsBetween(start, end).getYears();
 	}
 	
 	
