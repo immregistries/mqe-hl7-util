@@ -82,7 +82,7 @@ public class DateUtilityTest {
 		assertEquals("Should calculate to 17", 17, datr.getAge(seventeenYearsAgo.toDate()));
 		assertEquals("should be zero if born today", 0, datr.getAge(today.toDate()));
 		DateTime dt = null;
-		assertEquals("Should be zero if it's a null input", 0, datr.getAge(dt));
+		assertEquals("Should be -1 if it's a null input", -1, datr.getAge(dt));
 		
 		int superLongYears = 18923;
 		assertEquals("Should be able to handle a very old age", superLongYears, datr.getAge(today.minusYears(superLongYears).toDate()));
