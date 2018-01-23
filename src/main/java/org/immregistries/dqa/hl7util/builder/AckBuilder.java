@@ -64,7 +64,7 @@ public enum AckBuilder {
         HL7Util.makeERRSegment(ack, r, processingId.equals(PROCESSING_ID_DEBUG));
       }
     }
-    if (processingId.equals(PROCESSING_ID_DEBUG))
+    if (PROCESSING_ID_DEBUG.equals(processingId))
     {
       for (Reportable r : ackDataIn.getReportables())
       {

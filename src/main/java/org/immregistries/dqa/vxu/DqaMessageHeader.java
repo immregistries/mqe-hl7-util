@@ -27,6 +27,15 @@ public class DqaMessageHeader implements Serializable
   private String sendingFacility = "";
   private String messageVersion = "";
 
+  @Override public String toString() {
+    return "DqaMessageHeader{" + "headerId=" + headerId + ", ackTypeAccept='" + ackTypeAccept + '\'' + ", ackTypeApplication='" + ackTypeApplication + '\''
+        + ", characterSet='" + characterSet + '\'' + ", characterSetAlt='" + characterSetAlt + '\'' + ", country='" + country + '\'' + ", messageControl='"
+        + messageControl + '\'' + ", messageDate=" + messageDate + ", messageDateString='" + messageDateString + '\'' + ", messageProfile='" + messageProfile
+        + '\'' + ", messageStructure='" + messageStructure + '\'' + ", messageTrigger='" + messageTrigger + '\'' + ", messageType='" + messageType + '\''
+        + ", processingStatus='" + processingStatus + '\'' + ", receivingApplication='" + receivingApplication + '\'' + ", receivingFacility='"
+        + receivingFacility + '\'' + ", sendingApplication='" + sendingApplication + '\'' + ", sendingFacility='" + sendingFacility + '\''
+        + ", messageVersion='" + messageVersion + '\'' + '}';
+  }
 
   public int getHeaderId()
   {

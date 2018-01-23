@@ -19,7 +19,12 @@ public class DqaMessageReceived {
 	private List<DqaNextOfKin> nextOfKins = new ArrayList<DqaNextOfKin>();
 	private List<DqaVaccination> vaccinations = new ArrayList<DqaVaccination>();
 
-	public List<DqaNextOfKin> getNextOfKins() {
+    @Override public String toString() {
+        return "DqaMessageReceived{" + "receivedDate=" + receivedDate + ", messageHeader=" + messageHeader + ", patient=" + patient + ", nextOfKins="
+            + nextOfKins + ", vaccinations=" + vaccinations + '}';
+    }
+
+    public List<DqaNextOfKin> getNextOfKins() {
 		return nextOfKins;
 	}
 
