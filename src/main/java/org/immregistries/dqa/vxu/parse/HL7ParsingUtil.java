@@ -38,16 +38,6 @@ public enum HL7ParsingUtil {
 	 * TTY Teletypewriter
 	 */
 	public DqaPhoneNumber getPhoneAt(HL7MessageMap map, String fieldLocator, int segIdx) {
-		/*  Previously...
-		 *  protected void readNK15Phone(String[] fields, VaccinationUpdateMessage vum, NextOfKin nok, Map<Separator, Character> separators) {
-			    if (fields.length <= 5) {
-			      return;
-			    }
-			    nok.setPhone(cleanAndReadField(fields[5], separators));
-			    vum.addDebugOutput(" + NK1-5  phone                 " + nok.getPhone());
-			  }
-		 */
-		
 		DqaPhoneNumber ph = new DqaPhoneNumber();
 		
 		//These aren't often set. But we should capture them if they are. 
@@ -70,7 +60,6 @@ public enum HL7ParsingUtil {
 			ph.setAreaCode(areaCode);
 			
 		} else {
-			
 			//This is what was originally happening. 
 			String phone = map.getAtIndex(fieldLocator, segIdx, 1);
 			ph.setNumber(phone);
@@ -78,128 +67,6 @@ public enum HL7ParsingUtil {
 
 		return ph;
 	}
-	
-	protected String[] splitPhoneParts(String value) {
-		//this is taken from VaccinationUpdateToExtLoader.java method called "breakPhoneApart"
-			    String[] values = new String[2];
-			    String phone = "";
-			    char[] digits = value.toCharArray();
-			    for (char c : digits) {
-			      if ((c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z')) {
-			        break;
-			      }
-			      if (c >= '0' && c <= '9') {
-			        phone += c;
-			      }
-			    }
-			    if (phone.length() <= 7) {
-			      values[0] = "";
-			      values[1] = phone;
-			    } else {
-			      if (phone.length() == 11 && phone.startsWith("1")) {
-			        // remove initial 1, it is not needed
-			        phone = phone.substring(1);
-			      }
-			      values[0] = phone.substring(0, phone.length() - 7);
-			      values[1] = phone.substring(phone.length() - 7);
-			    }
-			    return values;
-	}
-	
-	/**
-	 * Taken directly from VaccinationUpdateToExtLoader.java in oder to preserve the treatment of dates.
-	 * <br /><br />This always returns YYYYMMDD.  There are two possible incoming formats (ignoring spaces): 
-	 * <ol><li>All numeric<li>MM/DD/YYYY
-	 * </ol>
-	 * <br />
-	 * What this does: 
-	 * <li>removes spaces
-	 * <li>removes non-numbers
-	 * <li>if there aren't 8 numbers, returns ""
-	 * <li>Only uses the first 8 digits
-	 * <li>If there are "/" in the non-numeric chars, It must be of the format: {1-2}/{1-2}/{4}. Meaning 1 to 2 digits in the first and second section. four in the third.  
-	 * @param date
-	 * @return
-	 */
-		public String dateNormalizer(String date) {
-			
-			if (date == null) {
-				return "";
-			}
-			
-		    String nonNumbers = "";//date.replaceAll("\\d+", "");
-		    String numbers = "";//date.replaceAll("\\D+", "");;
-		    char[] digits = date.toCharArray();
-		    
-		    //Loop through the characters in the date string. 
-		    for (char c : digits) {
-		      //Remove spaces by no adding them to the list. 
-		      if (c == ' ') {
-		        continue;
-		      }
-		      if (c >= '0' && c <= '9') {
-		    	//Add any numbers. 
-		        numbers += c;
-		        continue;
-		      }
-		      nonNumbers += c;
-		    }
-		    
-		    if (nonNumbers.length() == 0) {
-		      // Assumed to be YYYYMMDD format
-		      if (numbers.length() < 8) {
-		        return "";
-		      }
-		      if (numbers.length() > 8) {
-		        numbers = numbers.substring(0, 8);
-		      }
-		      return numbers;//return the first 8 numbers in the character string. 
-		      
-		    } else if (nonNumbers.startsWith("//")) {
-		      //Figure out how it's formatted.  
-		      int i = date.indexOf("/");
-		      String month = date.substring(0, i).trim();
-		      if (month.length() == 1) {
-		        month = "0" + month;
-		      } else if (month.length() != 2) {
-		    	//assumes it's formatted wrong?
-		        return "";
-		      }
-		      
-		      //Get the next digits. 
-		      i++;
-		      int j = date.indexOf("/", i);
-		      String day = date.substring(i, j).trim();
-		      
-		      //second chunk has to be 1 or 2 chars long. 
-		      if (day.length() == 1) {
-		        day = "0" + day;
-		      } else if (day.length() != 2) {
-		        return "";
-		      }
-		      
-		      i = j + 1;
-		      j = i + 4;
-		      if (j > date.length()) {
-		        j = date.length();
-		      }
-		      String year = date.substring(i, j);
-		      //Year has to be 4 digits long. 
-		      if (year.length() != 4) {
-		        return "";
-		      }
-		      try {
-		        Integer.parseInt(year);
-		        Integer.parseInt(month);
-		        Integer.parseInt(day);
-		      } catch (NumberFormatException nfe) {
-		        return "";
-		      }
-		      return year + month + day;
-		    } else {
-		      return "";
-		    }
-		  }	
 	
 	public Id getId(HL7MessageMap map, String field, int segIdx, int fieldRep) {
 		Id ce = new Id();

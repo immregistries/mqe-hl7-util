@@ -15,46 +15,15 @@ import java.util.List;
 
 public enum HL7VaccineParser {
 	INSTANCE;
-	
-	protected static final String OBX3_DISEASE_WITH_PRESUMED_IMMUNITY = "59784-9";
-	protected static final String OBX3_DISEASE_WITH_SEROLOGICAL_EVIDENCE_OF_IMMUNITY = "75505-8";
-	private static final String VACCINATION_ACTION_ADD = "A";
-	
+
 	private static final Logger logger = LoggerFactory.getLogger(HL7VaccineParser.class);
 	
 	private HL7ParsingUtil hl7Util = HL7ParsingUtil.INSTANCE;
-	//For example, the second RXA has an associated OBX, and RXR.
-	//So I should be able to fairly simply find the indexes which are greater 
-	//than the current, and less than the next. 
 
-	//The goal is to find all the segments between this and the next RXA segment. 
-	//The idea is to get an arraylist of the segments...  in order... 
-	//then I could just look for the index of the next RXA, and loop through 
-	//the stuff between here and there. 
-	
-	//So the core problem is getting the segment names between here and there. 
-	//once I know the segment name, and segment index, 
-	//I can grab the relevant data from it.  
-	
-	//The rules according to the MCIR guide are that the ORC comes first
-	//Then the RXA, and RXR (recommended, but apparently optional), 
-	//And the OBX, which is required if RXA-9 = '00'.  The NTE segment is ingnored. 
-	
-	//So, The ORC should come before each RXA. 
-	
-//	So Maybe I could figure out a profile, and then grab it...  
-//	the profile would be: 
-//		check for something that preferably starts with ORC, and if not that, then RXA. 
-//			Then it contains everything until the next match of ORC or RXA
-//			Get that from the map object... it'd have to be a list of segment and index...
-//			Maybe it can be a list of segments...
-//	
-			
-	//So the algorithm goes thusly: 
-		//Loop the list.  find the first ORC or RXA.  At the next RXA or ORC, 
-		//send the last indexes into the method to build a TRANSFER_SHOT record. 
-	/* (non-Javadoc)
-	 * @see gov.mi.mdch.xfer.rewrite.TransferMessageService#getAllTransferShots(gov.mi.mdch.immunization.message.HL7MessageMap)
+	/**
+	 * This builds a list of Vaccinations from the message map.
+	 * @param map
+	 * @return
 	 */
 	public List<DqaVaccination> getVaccinationList(HL7MessageMap map) {
 		//Start a list of shots
@@ -68,9 +37,11 @@ public enum HL7VaccineParser {
 		while (startingPoint < segmentListSize) {
 			int nextStartingPoint = map.getNextImmunizationStartingIndex(startingPoint);
 			int finishPoint = nextStartingPoint - 1;
+
 			DqaVaccination ts = getVaccination(map, startingPoint, finishPoint);
 			shotList.add(ts);
 			startingPoint = nextStartingPoint;
+
 			//Theory: This will naturally finish the process to the end of the segments.
 		}
 		
@@ -114,8 +85,6 @@ public enum HL7VaccineParser {
 		//Find the vaccine code. This is kind of a big deal.
 		List<CodedEntity> vxList = getVaccineCodes(map, rxaIdx);
 		
-		boolean codeFound = false;
-		
 		for (CodedEntity code : vxList) {
 			    if ("CVX"		.equals(code.getTable()) 
 	    		||  "CVX"		.equals(code.getAltTable()) 
@@ -123,9 +92,6 @@ public enum HL7VaccineParser {
 			    ||  "HL70292"	.equals(code.getAltTable()))
 			    {
 			      shot.setAdminCvxCode(code.getCode());
-//			      shot.getAdminCvx().setText(code.getText());
-//			      shot.getAdminCvx().setTable(code.getTable());
-			      codeFound = true;
 			    }
 			    else if ("CPT"		.equals(code.getTable()) 
 	    		||  "CPT"		.equals(code.getAltTable()) 
@@ -133,9 +99,6 @@ public enum HL7VaccineParser {
 	    		||  "C4"	.equals(code.getAltTable()))
 			    {
 			      shot.setAdminCptCode(code.getCode());
-//			      shot.getAdminCpt().setText(code.getText());
-//			      shot.getAdminCpt().setTable(code.getTable());
-			      codeFound = true;
 			    }
 			    else if ("NDC"		.equals(code.getTable()) 
 	    		||  "NDC"		.equals(code.getAltTable()) 
@@ -143,14 +106,9 @@ public enum HL7VaccineParser {
 	    		||  "?"	.equals(code.getAltTable()))
 			    {
 			      shot.setAdminNdcCode(code.getCode());
-//			      shot.getAdminNdc().setText(code.getText());
-//			      shot.getAdminNdc().setTable(code.getTable());
-			      codeFound = true;
 			    }
 		}
 
-//		String facilityCd   = map.get("RXA-");//getMSH4SendingFacility(map); This is a transformation...
-		
 		String messageRxaCnt= map.getAtIndex("RXA-1", rxaIdx);
 		String subMsgRxaCnt = map.getAtIndex("RXA-2", rxaIdx);
 		String shotDt 		= map.getAtIndex("RXA-3", rxaIdx);//getShotDt(map, rxaIdx);
@@ -209,16 +167,11 @@ public enum HL7VaccineParser {
 		logger.info("Observation list: " + observations);
 		shot.setObservations(observations);
 		
-//		ts.setFacilityName(facilityName);
-//		shot.setFacilityIdNumber(facilityCd);
-//		ts.setFacilityTypeCode(facilityTypeCode);
-		
 		shot.setOrderControlCode(orderId);
 		shot.setIdPlacer(idPlacer);
 		shot.setIdSubmitter(shotMrn);
 		
 		shot.setFinancialEligibilityCode(vfcCode);
-//		ts.setTreatmentMappingCode(treatmentMappingCode);
 
 		return shot;
 	}
@@ -282,16 +235,6 @@ public enum HL7VaccineParser {
 	    return on;
 	  }
 
-	protected void HL7ConverterNotes() {
-		/*
-		 * the method "cleanAndReadField" essentially does the following: 
-		 * Remove field repetitions
-		 * Only take the first component, and sub-component. 
-		 * Replace escape characters. 
-		 */
-	}
-
-	
 	/**
 	 * Expects a relative index. 
 	 * @param map
@@ -309,6 +252,7 @@ public enum HL7VaccineParser {
 		
 		return vaxList;
 	}
+
 	/**
 	 * Getting the observation segments for this rxa...
 	 */
@@ -326,17 +270,7 @@ public enum HL7VaccineParser {
 	}
 
 	/**
-	 *  The previous version of this:
-		<code>private void populateOBX(MessageReceived message)
-			  {
-			    Observation obs = new Observation();
-			    vaccination.getObservations().add(obs);
-			    readCodeEntity(2, obs.getValueType());
-			    readCodeEntity(3, obs.getObservationIdentifier());
-			    obs.setObservationSubId(getValue(4));
-			    obs.setObservationValue(getValue(5));
-			  }
-		</code>
+	 * Gets the observation at the index specified.
 	 * @param map
 	 * @param idx this is the absolute index in the message, of the OBX segment. 
 	 * @return
@@ -344,20 +278,21 @@ public enum HL7VaccineParser {
 	protected Observation getObservation(HL7MessageMap map, Integer idx) {
 		Observation o = new Observation();
 		
-		String valueTypeCode = map.getAtIndex("OBX-2", idx, 1);
+		String valueTypeCode  = map.getAtIndex("OBX-2", idx, 1);
 		o.setValueTypeCode(valueTypeCode);
 		
-		String identifier = map.getAtIndex("OBX-3", idx, 1);
+		String identifier     = map.getAtIndex("OBX-3", idx, 1);
 		o.setIdentifierCode(identifier);
+
 		String identifierDesc = map.getAtIndex("OBX-3-2", idx, 1);
 		o.setObservationIdentifierDescription(identifierDesc);
-		
-		
-		String subId = map.getAtIndex("OBX-4", idx, 1);
+
+		String subId          = map.getAtIndex("OBX-4", idx, 1);
 		o.setSubId(subId);
 		
 		String observationValue = map.getAtIndex("OBX-5", idx, 1);
 		o.setValue(observationValue);
+
 		String observationValueDesc = map.getAtIndex("OBX-5-2", idx, 1);
 		o.setObservationValueDesc(observationValueDesc);
 		
@@ -367,18 +302,6 @@ public enum HL7VaccineParser {
 		return o;
 	}
 
-//TODO: make sure to trim everything.  go back to the VaccinationToExtLoader and make sure to trim the same way.  
-	protected static String chop(String value, int length) {
-		if (value == null) {
-			return "";
-		}
-		if (value.length() <= length) {
-			return value;
-		}
-		return value.substring(0, length);
-	}
-	
-	
 	 /**
 	  * Expects a segment index  
 	  * information from. 

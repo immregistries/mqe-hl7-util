@@ -28,6 +28,7 @@ public class DqaVaccination {
   private String adminNdc = "";//new CodedEntity(CodesetType.VACCINATION_NDC_CODE);
   private String adminCpt = "";//new CodedEntity(CodesetType.VACCINATION_CPT_CODE);
   private String adminCvx = "";//new CodedEntity(CodesetType.VACCINATION_CVX_CODE);
+  private String cvxDerived = "";//Derived in MessageTransformer.
 //  private VaccineCvx vaccineCvx = null;
 //  private VaccineCpt vaccineCpt = null;
 //  private VaccineNdc vaccineNdc = null;
@@ -72,7 +73,6 @@ public class DqaVaccination {
   private String tradeName = "";//new CodedEntity(CodesetType.VACCINATION_TRADE_NAME);
   private String vaccineValidity = "";//new CodedEntity(CodesetType.VACCINATION_VALIDITY);
 
-  private String cvxDerived = "";
   private List<String> vaccineGroupsDerived = new ArrayList<String>();
 
   public String getCvxDerived() {
@@ -439,11 +439,6 @@ public class DqaVaccination {
     return vaccinationId;
   }
 
-//  public VaccineCvx getVaccineCvx()
-//  {
-//    return vaccineCvx;
-//  }
-
   public boolean isActionAdd()
   {
     return ACTION_CODE_ADD.equals(action);
@@ -489,21 +484,6 @@ public class DqaVaccination {
     return COMPLETION_REFUSED.equals(completion);
   }
 
-  public boolean isInformationSourceAdmin()
-  {
-    return INFO_SOURCE_ADMIN.equals(informationSource);
-  }
-
-  public boolean isInformationSourceHist()
-  {
-    return INFO_SOURCE_HIST.equals(informationSource);
-  }
-
-  public boolean isSkipped()
-  {
-    return skipped;
-  }
-
   public void setActionCode(String actionCode)
   {
     this.action = actionCode;
@@ -519,6 +499,9 @@ public class DqaVaccination {
     this.adminNdc = code;
   }
 
+  public void setProduct(String product) {
+    this.product = product;
+  }
 
   public void setAdminCvxCode(String adminCvxCode)
   {

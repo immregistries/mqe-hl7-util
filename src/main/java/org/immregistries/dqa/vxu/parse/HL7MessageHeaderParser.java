@@ -5,11 +5,11 @@ import org.immregistries.dqa.vxu.DqaMessageHeader;
 
 public enum HL7MessageHeaderParser {
 	INSTANCE;
-	
+
 	/**
 	 * Reads the MSH fields and builds a Message Header object from them. 
-	 * @param map
-	 * @return
+	 * @param map map of values from the message!
+	 * @return object filled with values!
 	 */
 	public DqaMessageHeader getMessageHeader(HL7MessageMap map) {
 		

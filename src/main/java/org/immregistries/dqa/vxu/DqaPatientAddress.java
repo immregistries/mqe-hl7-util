@@ -19,14 +19,16 @@ public class DqaPatientAddress extends DqaAddress
   }
   
   public DqaPatientAddress(DqaAddress a) {
-		this.setStreet(a.getStreet());
-        this.setStreet2(a.getStreet2());
-        this.setCity(a.getCity());
-        this.setStateCode(a.getStateCode());
-        this.setZip(a.getZip());
-        this.setCountryCode(a.getCountryCode());
-        this.setTypeCode(a.getTypeCode());
-        this.setCountyParishCode(a.getCountyParishCode());
+      if (a != null) {
+          this.setStreet(a.getStreet());
+          this.setStreet2(a.getStreet2());
+          this.setCity(a.getCity());
+          this.setStateCode(a.getStateCode());
+          this.setZip(a.getZip());
+          this.setCountryCode(a.getCountryCode());
+          this.setTypeCode(a.getTypeCode());
+          this.setCountyParishCode(a.getCountyParishCode());
+      }
   }
   
   public long getAddressId()

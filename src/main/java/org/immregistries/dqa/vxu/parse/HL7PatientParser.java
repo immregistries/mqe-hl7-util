@@ -11,6 +11,9 @@ import org.immregistries.dqa.vxu.hl7.PatientIdNumber;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * This takes the map built from a VXU message, and builds a patient object from it.
+ */
 public enum HL7PatientParser {
 
 	INSTANCE;
@@ -19,8 +22,7 @@ public enum HL7PatientParser {
 	
 	public DqaPatient getPatient(HL7MessageMap map) {
 		DqaPatient patient = new DqaPatient();
-		
-		
+
 		//pull all the single value and coded fields. 
 		//Get the ID's out of PID-3-5
 		PatientIdNumber childId 	= getSRPatId(map);//PID-3
@@ -102,9 +104,6 @@ public enum HL7PatientParser {
 		
 		return patient;
 		
-		//Transformations:
-//		String messageAction = getVaccineAction(map);
-//		patient.setCntyCd(cntyCd);//PID-11-9 in first repetition of PID-11
 	}
 	
 	protected String getBirthCounty(HL7MessageMap map) {
@@ -137,25 +136,10 @@ public enum HL7PatientParser {
 		String mogeCode = map.get("PD1-16");
 		return mogeCode;
 	}
+
 	protected DqaPhoneNumber getPatientPhone(HL7MessageMap map) {
-		/*HL7Converter for interpreting the phone in the PID segment
-		 *   protected String readPhone(String field, Map<Separator, Character> separators) {
-			    String phone = "";
-			    field = cleanRepeatsOnly(field, separators);
-			    String[] comps = splitComponents(separators, field);
-			    clean(comps, separators);
-			    if (comps.length > 7 && comps[6].length() > 0) {
-			      phone = "(" + comps[5] + ")" + comps[6];
-			    } else {
-			      phone = comps.length == 0 ? "" : comps[0];
-			    }
-			    return phone;
-			  }
-		 */
-		//So.. if it has 6 and 7, use that.  otherwise, check the first ones.
 		int pidIdx = map.getAbsoluteIndexForSegment("PID",  1);
 		return hl7Util.getPhoneAt(map, "PID-13", pidIdx);
-//		The first instance shall be primary according to implementaiton guide. 
 	}
 	
 	protected PatientIdNumber getWCPatId(HL7MessageMap map) {
@@ -180,13 +164,9 @@ public enum HL7PatientParser {
 	
 	protected PatientIdNumber getPatientIdType(String type, HL7MessageMap map) {
 		int i = map.findFieldRepWithValue(type, "PID-3-5", 1);
-		
 		if (i > 0) {
 			Id id = hl7Util.getId(map, "PID-3-1", 1, i);
-			
-			PatientIdNumber num = new PatientIdNumber(id, i);
-			
-			return num;
+			return new PatientIdNumber(id, i);
 		}
 		
 		return new PatientIdNumber();
@@ -194,7 +174,6 @@ public enum HL7PatientParser {
 	
 	protected List<DqaPatientAddress> getPID_11PatientAddressList(HL7MessageMap map) {
 		List<DqaPatientAddress> list = new ArrayList<DqaPatientAddress>();
-		
 		int fieldReps = map.getFieldRepCountFor("PID-11");
 		
 		for (int x = 1 ; x <= fieldReps; x++) {
@@ -204,10 +183,7 @@ public enum HL7PatientParser {
 	}
 	
 	protected DqaPatientAddress getPatientAddress(HL7MessageMap map, int fieldRep) {
-		
 		DqaAddress a = hl7Util.getAddressFromOrdinal(map, "PID-11", 1, fieldRep);
-		DqaPatientAddress address = new DqaPatientAddress(a);
-        
-		return address;
+		return new DqaPatientAddress(a);
 	}
 }
