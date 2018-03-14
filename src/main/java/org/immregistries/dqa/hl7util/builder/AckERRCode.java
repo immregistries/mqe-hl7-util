@@ -1,5 +1,7 @@
 package org.immregistries.dqa.hl7util.builder;
 
+import org.immregistries.dqa.hl7util.model.CodedWithExceptions;
+
 public enum AckERRCode {
       CODE_0_MESSAGE_ACCEPTED (            "Success",   "0",   "Message accepted", "Success. Optional, as the AA conveys this. Used for systems that must always return a status code."),
 			CODE_100_SEGMENT_SEQUENCE_ERROR (    "Error",     "100", "Segment sequence error", "The message segments were not in the proper order or required segments are missing."),
@@ -36,4 +38,12 @@ public enum AckERRCode {
       }
       return null;
   }
+
+	public CodedWithExceptions getCWE() {
+		CodedWithExceptions cwe = new CodedWithExceptions();
+		cwe.setIdentifier(this.identifier);
+		cwe.setText(this.text);
+		cwe.setNameOfCodingSystem(AckERRCode.TABLE);
+		return cwe;
+	}
 }
