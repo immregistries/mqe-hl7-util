@@ -34,7 +34,7 @@ public enum HL7MessageParser  {
 	private HL7MessageHeaderParser mshParser = HL7MessageHeaderParser.INSTANCE;
 	private HL7PatientParser patientParser = HL7PatientParser.INSTANCE;
 	private HL7NokParser nokParser = HL7NokParser.INSTANCE;
-	private HL7VaccineParser vaccineParser = HL7VaccineParser.INSTANCE;
+	private HL7VaccinationParser vaccineParser = HL7VaccinationParser.INSTANCE;
 	
 	/**
 	 * Extracts all the values from the message into objects that can be used to 

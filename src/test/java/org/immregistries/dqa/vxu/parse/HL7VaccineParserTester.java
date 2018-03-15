@@ -11,12 +11,12 @@ import org.immregistries.dqa.hl7util.parser.MessageParserHL7;
 import org.immregistries.dqa.vxu.DqaVaccination;
 import org.immregistries.dqa.vxu.hl7.CodedEntity;
 import org.immregistries.dqa.vxu.hl7.Observation;
-import org.immregistries.dqa.vxu.parse.HL7VaccineParser;
+import org.immregistries.dqa.vxu.parse.HL7VaccinationParser;
 import org.junit.Test;
 
 public class HL7VaccineParserTester {
 	private MessageParserHL7 rootParser = new MessageParserHL7();
-	private HL7VaccineParser vParser = HL7VaccineParser.INSTANCE;
+	private HL7VaccinationParser vParser = HL7VaccinationParser.INSTANCE;
 	
 	private static final String IMMUNITY_MSG = 
 	/* 0*/		 "MSH|^~\\&|||||20160413161526-0400||VXU^V04^VXU_V04|2bK5-B.07.14.1Nx|P|2.5.1|\r"
@@ -50,6 +50,7 @@ public class HL7VaccineParserTester {
 	
 	private HL7MessageMap map = rootParser.getMessagePartMap(IMMUNITY_MSG);
 	
+
 	@Test
 	public void test4() {
 		List<DqaVaccination> vaccList = vParser.getVaccinationList(map);
