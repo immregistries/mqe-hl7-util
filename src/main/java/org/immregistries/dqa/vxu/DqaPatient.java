@@ -92,65 +92,8 @@ public class DqaPatient extends MetaFieldInfoHolder {
     return patientImmunityList;
   }
 
-  // public List<PhoneNumber> getPatientPhoneList()
-  // {
-  // return patientPhoneList;
-  // }
-
   public List<DqaPatientAddress> getPatientAddressList() {
     return patientAddressList;
-  }
-
-  public DqaPatientAddress getAddress() {
-    if (patientAddressList.size() > 0) {
-      return patientAddressList.get(0);
-    } else {
-      DqaPatientAddress pa = new DqaPatientAddress();
-      patientAddressList.add(pa);
-      return pa;
-    }
-  }
-
-  public DqaPatientAddress getAddress(int pos) {
-    pos--;
-    while (patientAddressList.size() <= pos) {
-      DqaPatientAddress pa = new DqaPatientAddress();
-      patientAddressList.add(pa);
-    }
-    return patientAddressList.get(pos);
-  }
-
-
-  public String getAddressCity() {
-    return getAddress().getCity();
-  }
-
-  public String getAddressCountryCode() {
-    return getAddress().getCountry();
-  }
-
-  public String getAddressCountyParishCode() {
-    return getAddress().getCountyParishCode();
-  }
-
-  public String getAddressStateCode() {
-    return getAddress().getStateCode();
-  }
-
-  public String getAddressStreet() {
-    return getAddress().getStreet();
-  }
-
-  public String getAddressStreet2() {
-    return getAddress().getStreet2();
-  }
-
-  public String getAddressTypeCode() {
-    return getAddress().getTypeCode();
-  }
-
-  public String getAddressZip() {
-    return getAddress().getZip();
   }
 
   public Name getAlias() {
@@ -702,8 +645,18 @@ public class DqaPatient extends MetaFieldInfoHolder {
   // this.responsibleParty = responsibleParty;
   // }
 
+
+  private DqaPatientAddress getAddress(int pos) {
+    pos--;
+    while (patientAddressList.size() <= pos) {
+      DqaPatientAddress pa = new DqaPatientAddress();
+      patientAddressList.add(pa);
+    }
+    return patientAddressList.get(pos);
+  }
+
   @Override
-  protected void readRegisteredMetaFieldInfo(MetaFieldInfo metaFieldInfo) {
+  protected void setFieldFromMetaFieldInfo(MetaFieldInfo metaFieldInfo) {
     String value = metaFieldInfo.getValue();
     int pos = metaFieldInfo.getErrorLocation().getFieldRepetition();
     switch (metaFieldInfo.getVxuField()) {
@@ -736,7 +689,7 @@ public class DqaPatient extends MetaFieldInfoHolder {
       case PATIENT_ALIAS:
         break;
       case PATIENT_BIRTH_DATE:
-        birthDateString = metaFieldInfo.getValue();
+        birthDateString = value;
         break;
       case PATIENT_BIRTH_INDICATOR:
         birthMultipleInd = value;
@@ -753,7 +706,7 @@ public class DqaPatient extends MetaFieldInfoHolder {
         patientClass = value;
         break;
       case PATIENT_DEATH_DATE:
-        deathDateString = metaFieldInfo.getValue();
+        deathDateString = value;
         break;
       case PATIENT_DEATH_INDICATOR:
         deathIndicator = value;

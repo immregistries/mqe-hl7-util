@@ -68,7 +68,7 @@ public class HL7MessageParserTester {
     assertEquals(2, patient.getPatientAddressList().size());
 
     {
-      DqaPatientAddress a1 = patient.getAddress(1);
+      DqaPatientAddress a1 = patient.getPatientAddressList().get(0);
       assertEquals("32 Prescott Street Ave", a1.getStreet());
       assertEquals("Apt 2", a1.getStreet2());
       assertEquals("Warwick", a1.getCity());
@@ -78,7 +78,7 @@ public class HL7MessageParserTester {
       assertEquals("MA0001", a1.getCountyParishCode());
     }
     {
-      DqaPatientAddress a2 = patient.getAddress(2);
+      DqaPatientAddress a2 = patient.getPatientAddressList().get(1);
       assertEquals("123 E Main Street", a2.getStreet());
       assertEquals("", a2.getStreet2());
       assertEquals("Anytown", a2.getCity());

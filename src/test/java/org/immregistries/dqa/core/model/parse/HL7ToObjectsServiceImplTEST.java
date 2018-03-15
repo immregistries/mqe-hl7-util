@@ -47,7 +47,7 @@ public class HL7ToObjectsServiceImplTEST {
 		assertFalse(pid==null);
 		assertEquals("birthDate", "20120604", pid.getBirthDateString());
 		assertEquals("race", "RACECD", pid.getRaceCode());
-		assertEquals("address street", "100 Main", pid.getAddressStreet());
+		assertEquals("address street", "100 Main", pid.getPatientAddressList().get(0).getStreet());
 		assertEquals("MR", "23456", pid.getIdSubmitterNumber());
 	}
 

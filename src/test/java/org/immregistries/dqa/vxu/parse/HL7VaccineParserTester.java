@@ -70,12 +70,12 @@ public class HL7VaccineParserTester {
 		assertEquals("Should have two", 2, vList.size());
 		//first one should not have RXR info.  
 		DqaVaccination immVac = vList.get(0);
-		assertEquals("shouldn't have rxr info - route", null, immVac.getBodyRoute());
-		assertEquals("shouldn't have rxr info - site", null, immVac.getBodySite());
+		assertEquals("1 shouldn't have rxr info - route", "", immVac.getBodyRoute());
+		assertEquals("1 shouldn't have rxr info - site", "", immVac.getBodySite());
 		//Second one should.
 		DqaVaccination hepAVac = vList.get(1);
-		assertEquals("should have rxr info - route", "IM", hepAVac.getBodyRoute());
-		assertEquals("should have rxr info - site", "RT", hepAVac.getBodySite());
+		assertEquals("2 should have rxr info - route", "IM", hepAVac.getBodyRoute());
+		assertEquals("2 should have rxr info - site", "RT", hepAVac.getBodySite());
 	}
 	
 	@Test

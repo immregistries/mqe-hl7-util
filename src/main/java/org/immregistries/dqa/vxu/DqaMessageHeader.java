@@ -217,7 +217,7 @@ public class DqaMessageHeader extends MetaFieldInfoHolder implements Serializabl
   }
 
   @Override
-  protected void readRegisteredMetaFieldInfo(MetaFieldInfo metaFieldInfo) {
+  protected void setFieldFromMetaFieldInfo(MetaFieldInfo metaFieldInfo) {
     // TODO Auto-generated method stub
 
   }

@@ -167,7 +167,7 @@ public class DqaNextOfKin extends MetaFieldInfoHolder {
 
 
   @Override
-  protected void readRegisteredMetaFieldInfo(MetaFieldInfo metaFieldInfo) {
+  protected void setFieldFromMetaFieldInfo(MetaFieldInfo metaFieldInfo) {
     String value = metaFieldInfo.getValue();
     switch (metaFieldInfo.getVxuField()) {
       case NEXT_OF_KIN_ADDRESS:
@@ -211,6 +211,7 @@ public class DqaNextOfKin extends MetaFieldInfoHolder {
         name.setMiddle(value);
         break;
       case NEXT_OF_KIN_PHONE:
+        phone.setNumber(value);
         break;
       case NEXT_OF_KIN_PHONE_LOCAL_NUMBER:
         phone.setLocalNumber(value);

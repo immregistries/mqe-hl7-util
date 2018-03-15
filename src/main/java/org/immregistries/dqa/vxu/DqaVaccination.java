@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.immregistries.dqa.hl7util.model.MetaFieldInfo;
 import org.immregistries.dqa.vxu.hl7.Id;
 import org.immregistries.dqa.vxu.hl7.Observation;
@@ -667,9 +668,10 @@ public class DqaVaccination extends MetaFieldInfoHolder {
   }
 
   @Override
-  protected void readRegisteredMetaFieldInfo(MetaFieldInfo metaFieldInfo) {
+  protected void setFieldFromMetaFieldInfo(MetaFieldInfo metaFieldInfo) {
     String value = metaFieldInfo.getValue();
-    switch (metaFieldInfo.getVxuField()) {
+    if (StringUtils.isNotEmpty(value)) {
+      switch (metaFieldInfo.getVxuField()) {
       case VACCINATION_ACTION_CODE:
         action = value;
         break;
@@ -805,7 +807,8 @@ public class DqaVaccination extends MetaFieldInfoHolder {
         break;
       default:
         break;
-      
+
+      }
     }
 
   }

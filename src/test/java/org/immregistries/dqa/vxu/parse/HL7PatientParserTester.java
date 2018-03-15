@@ -5,7 +5,10 @@ import static org.junit.Assert.assertEquals;
 import org.immregistries.dqa.hl7util.parser.HL7MessageMap;
 import org.immregistries.dqa.hl7util.parser.MessageParserHL7;
 import org.immregistries.dqa.vxu.DqaPatient;
+import org.immregistries.dqa.vxu.DqaPatientAddress;
 import org.junit.Test;
+
+import java.util.List;
 
 public class HL7PatientParserTester {
   private MessageParserHL7 rootParser = new MessageParserHL7();
@@ -13,7 +16,7 @@ public class HL7PatientParserTester {
 
   private static final String IMMUNITY_MSG =
       /* 0 */ "MSH|^~\\&|||||20160413161526-0400||VXU^V04^VXU_V04|2bK5-B.07.14.1Nx|P|2.5.1|\r"
-          /* 1 */ + "PID|||2bK5-B.07.14^^^AIRA-TEST^MR||Powell^Diarmid^T^^^^L||20030415|M||2106-3^White^HL70005|215 Armstrong Cir^^Brethren^MI^49619^USA^P~^^^^^^BDL^^123||^PRN^PH^^^231^4238012|||||||||2186-5^not Hispanic or Latino^HL70005|\r"
+          /* 1 */ + "PID|||2bK5-B.07.14^^^AIRA-TEST^MR||Powell^Diarmid^T^^^^L||20030415|M||2106-3^White^HL70005|215 Armstrong Cir^^Brethren^MI^49619^USA^P~215 Armstrong Cir^^Brethren^MI^49619^USA^P~^^^^^^BDL^^123||^PRN^PH^^^231^4238012|||||||||2186-5^not Hispanic or Latino^HL70005|\r"
           /* 2 */ + "ORC|RE||N54R81.2^AIRA|\r"
           /* 3 */ + "RXA|0|1|20140420||998^No vaccine administered^CVX|999|||||||||||||||A|\r"
           /* 4 */ + "OBX|1|CE|59784-9^Disease with presumed immunity^LN|1|23511006^Meningococcal infectious disease (disorder)^SCT||||||F|\r"
@@ -32,8 +35,16 @@ public class HL7PatientParserTester {
 
     // This just validates that the message is correct for this test.
     int i = map.findFieldRepWithValue("BDL", "PID-11-7", 1);
-    assertEquals("should be in second field rep", 2, i);
+    assertEquals("should be in second field rep", 3, i);
 
+  }
+
+  @Test
+  public void testAddressParse() {
+    DqaPatient patient = HL7PatientParser.INSTANCE.getPatient(map);
+    List<DqaPatientAddress> pa = patient.getPatientAddressList();
+
+    assertEquals(pa.size(), 3);
   }
 
   @Test
