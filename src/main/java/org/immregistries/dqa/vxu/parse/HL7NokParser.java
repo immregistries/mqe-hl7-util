@@ -11,7 +11,6 @@ import org.immregistries.dqa.vxu.VxuField;
 public enum HL7NokParser {
   INSTANCE;
   private HL7ParsingUtil hl7Util = HL7ParsingUtil.INSTANCE;
-  private MetaParser mp = MetaParser.INSTANCE;
   /**
    * This will take a map of HL7 values, and build a List of Next Of Kin objects out of it.
    * <p>
@@ -53,28 +52,29 @@ public enum HL7NokParser {
   protected DqaNextOfKin getNextOfKin(HL7MessageMap map, int ordinal) {
 
     DqaNextOfKin nextOfKin = new DqaNextOfKin();
+    MetaParser mp = new MetaParser(map);
     nextOfKin.setPositionId(ordinal);
     int nk1Idx = map.getAbsoluteIndexForSegment("NK1", ordinal);
 
-    nextOfKin.setField(mp.mapValue(nk1Idx, VxuField.NEXT_OF_KIN_PHONE, map));
-    nextOfKin.setField(mp.mapValue(nk1Idx, VxuField.NEXT_OF_KIN_PHONE_AREA_CODE, map));
-    nextOfKin.setField(mp.mapValue(nk1Idx, VxuField.NEXT_OF_KIN_PHONE_LOCAL_NUMBER, map));
-    nextOfKin.setField(mp.mapValue(nk1Idx, VxuField.NEXT_OF_KIN_PHONE_TEL_EQUIP_CODE, map));
-    nextOfKin.setField(mp.mapValue(nk1Idx, VxuField.NEXT_OF_KIN_PHONE_TEL_USE_CODE, map));
-    nextOfKin.setField(mp.mapValue(nk1Idx, VxuField.NEXT_OF_KIN_NAME_FIRST, map));
-    nextOfKin.setField(mp.mapValue(nk1Idx, VxuField.NEXT_OF_KIN_NAME_LAST, map));
-    nextOfKin.setField(mp.mapValue(nk1Idx, VxuField.NEXT_OF_KIN_NAME_MIDDLE, map));
-    nextOfKin.setField(mp.mapValue(nk1Idx, VxuField.NEXT_OF_KIN_NAME_SUFFIX, map));
-    nextOfKin.setField(mp.mapValue(nk1Idx, VxuField.NEXT_OF_KIN_ADDRESS_CITY, map));
-    nextOfKin.setField(mp.mapValue(nk1Idx, VxuField.NEXT_OF_KIN_ADDRESS_COUNTY, map));
-    nextOfKin.setField(mp.mapValue(nk1Idx, VxuField.NEXT_OF_KIN_ADDRESS_COUNTRY, map));
-    nextOfKin.setField(mp.mapValue(nk1Idx, VxuField.NEXT_OF_KIN_ADDRESS_STATE, map));
-    nextOfKin.setField(mp.mapValue(nk1Idx, VxuField.NEXT_OF_KIN_ADDRESS_STREET, map));
-    nextOfKin.setField(mp.mapValue(nk1Idx, VxuField.NEXT_OF_KIN_ADDRESS_STREET2, map));
-    nextOfKin.setField(mp.mapValue(nk1Idx, VxuField.NEXT_OF_KIN_ADDRESS_TYPE, map));
-    nextOfKin.setField(mp.mapValue(nk1Idx, VxuField.NEXT_OF_KIN_ADDRESS_ZIP, map));
-    nextOfKin.setField(mp.mapValue(nk1Idx, VxuField.NEXT_OF_KIN_RELATIONSHIP, map));
-    nextOfKin.setField(mp.mapValue(nk1Idx, VxuField.NEXT_OF_KIN_PRIMARY_LANGUAGE, map));
+    nextOfKin.setField(mp.mapValue(nk1Idx, VxuField.NEXT_OF_KIN_PHONE));
+    nextOfKin.setField(mp.mapValue(nk1Idx, VxuField.NEXT_OF_KIN_PHONE_AREA_CODE));
+    nextOfKin.setField(mp.mapValue(nk1Idx, VxuField.NEXT_OF_KIN_PHONE_LOCAL_NUMBER));
+    nextOfKin.setField(mp.mapValue(nk1Idx, VxuField.NEXT_OF_KIN_PHONE_TEL_EQUIP_CODE));
+    nextOfKin.setField(mp.mapValue(nk1Idx, VxuField.NEXT_OF_KIN_PHONE_TEL_USE_CODE));
+    nextOfKin.setField(mp.mapValue(nk1Idx, VxuField.NEXT_OF_KIN_NAME_FIRST));
+    nextOfKin.setField(mp.mapValue(nk1Idx, VxuField.NEXT_OF_KIN_NAME_LAST));
+    nextOfKin.setField(mp.mapValue(nk1Idx, VxuField.NEXT_OF_KIN_NAME_MIDDLE));
+    nextOfKin.setField(mp.mapValue(nk1Idx, VxuField.NEXT_OF_KIN_NAME_SUFFIX));
+    nextOfKin.setField(mp.mapValue(nk1Idx, VxuField.NEXT_OF_KIN_ADDRESS_CITY));
+    nextOfKin.setField(mp.mapValue(nk1Idx, VxuField.NEXT_OF_KIN_ADDRESS_COUNTY));
+    nextOfKin.setField(mp.mapValue(nk1Idx, VxuField.NEXT_OF_KIN_ADDRESS_COUNTRY));
+    nextOfKin.setField(mp.mapValue(nk1Idx, VxuField.NEXT_OF_KIN_ADDRESS_STATE));
+    nextOfKin.setField(mp.mapValue(nk1Idx, VxuField.NEXT_OF_KIN_ADDRESS_STREET));
+    nextOfKin.setField(mp.mapValue(nk1Idx, VxuField.NEXT_OF_KIN_ADDRESS_STREET2));
+    nextOfKin.setField(mp.mapValue(nk1Idx, VxuField.NEXT_OF_KIN_ADDRESS_TYPE));
+    nextOfKin.setField(mp.mapValue(nk1Idx, VxuField.NEXT_OF_KIN_ADDRESS_ZIP));
+    nextOfKin.setField(mp.mapValue(nk1Idx, VxuField.NEXT_OF_KIN_RELATIONSHIP));
+    nextOfKin.setField(mp.mapValue(nk1Idx, VxuField.NEXT_OF_KIN_PRIMARY_LANGUAGE));
     return nextOfKin;
   }
 

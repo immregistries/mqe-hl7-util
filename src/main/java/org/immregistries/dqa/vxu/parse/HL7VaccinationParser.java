@@ -18,7 +18,6 @@ import org.slf4j.LoggerFactory;
 public enum HL7VaccinationParser {
   INSTANCE;
 
-  private final MetaParser mp = MetaParser.INSTANCE;
   private static final Logger logger = LoggerFactory.getLogger(HL7VaccinationParser.class);
 
 
@@ -60,6 +59,7 @@ public enum HL7VaccinationParser {
   public DqaVaccination getVaccination(HL7MessageMap map, int vaccinationStartSegment,
       int vaccinationFinishSegment, int positionId) {
 
+    MetaParser mp = new MetaParser(map);
     DqaVaccination shot = new DqaVaccination();
     shot.setPositionId(positionId);
 
@@ -96,33 +96,33 @@ public enum HL7VaccinationParser {
     }
 
     if (orcIdx != -1) {
-      shot.setField(mp.mapValue(orcIdx, VxuField.VACCINATION_ORDER_CONTROL_CODE, map));
-      shot.setField(mp.mapValue(orcIdx, VxuField.VACCINATION_PLACER_ORDER_NUMBER, map));
-      shot.setField(mp.mapValue(orcIdx, VxuField.VACCINATION_FILLER_ORDER_NUMBER, map));
+      shot.setField(mp.mapValue(orcIdx, VxuField.VACCINATION_ORDER_CONTROL_CODE));
+      shot.setField(mp.mapValue(orcIdx, VxuField.VACCINATION_PLACER_ORDER_NUMBER));
+      shot.setField(mp.mapValue(orcIdx, VxuField.VACCINATION_FILLER_ORDER_NUMBER));
     }
 
-    shot.setField(mp.mapCodedValue(rxaIdx, VxuField.VACCINATION_CVX_CODE, map, "CVX", "HL70292"));
-    shot.setField(mp.mapCodedValue(rxaIdx,VxuField.VACCINATION_CPT_CODE, map, "CPT", "C4"));
-    shot.setField(mp.mapCodedValue(rxaIdx,VxuField.VACCINATION_NDC_CODE, map, "NDC", "?"));
-    shot.setField(mp.mapValue(rxaIdx,VxuField.VACCINATION_ADMIN_DATE, map));
-    shot.setField(mp.mapValue(rxaIdx,VxuField.VACCINATION_ADMIN_DATE_END, map));
-    shot.setField(mp.mapValue(rxaIdx,VxuField.VACCINATION_ADMINISTERED_AMOUNT, map));
-    shot.setField(mp.mapValue(rxaIdx, VxuField.VACCINATION_ADMINISTERED_UNIT, map));
-    shot.setField(mp.mapValue(rxaIdx, VxuField.VACCINATION_INFORMATION_SOURCE, map));
-    shot.setField(mp.mapValue(rxaIdx, VxuField.VACCINATION_GIVEN_BY, map));
-    shot.setField(mp.mapValue(rxaIdx, VxuField.VACCINATION_FACILITY_ID, map));
-    shot.setField(mp.mapValue(rxaIdx, VxuField.VACCINATION_FACILITY_NAME, map));
-    shot.setField(mp.mapValue(rxaIdx, VxuField.VACCINATION_LOT_NUMBER, map));
-    shot.setField(mp.mapValue(rxaIdx, VxuField.VACCINATION_LOT_EXPIRATION_DATE, map));
-    shot.setField(mp.mapValue(rxaIdx, VxuField.VACCINATION_MANUFACTURER_CODE, map));
-    shot.setField(mp.mapValue(rxaIdx, VxuField.VACCINATION_REFUSAL_REASON, map));
-    shot.setField(mp.mapValue(rxaIdx, VxuField.VACCINATION_COMPLETION_STATUS, map));
-    shot.setField(mp.mapValue(rxaIdx, VxuField.VACCINATION_ACTION_CODE, map));
-    shot.setField(mp.mapValue(rxaIdx, VxuField.VACCINATION_SYSTEM_ENTRY_TIME, map));
+    shot.setField(mp.mapCodedValue(rxaIdx, VxuField.VACCINATION_CVX_CODE, "CVX", "HL70292"));
+    shot.setField(mp.mapCodedValue(rxaIdx,VxuField.VACCINATION_CPT_CODE, "CPT", "C4"));
+    shot.setField(mp.mapCodedValue(rxaIdx,VxuField.VACCINATION_NDC_CODE, "NDC", "?"));
+    shot.setField(mp.mapValue(rxaIdx,VxuField.VACCINATION_ADMIN_DATE));
+    shot.setField(mp.mapValue(rxaIdx,VxuField.VACCINATION_ADMIN_DATE_END));
+    shot.setField(mp.mapValue(rxaIdx,VxuField.VACCINATION_ADMINISTERED_AMOUNT));
+    shot.setField(mp.mapValue(rxaIdx, VxuField.VACCINATION_ADMINISTERED_UNIT));
+    shot.setField(mp.mapValue(rxaIdx, VxuField.VACCINATION_INFORMATION_SOURCE));
+    shot.setField(mp.mapValue(rxaIdx, VxuField.VACCINATION_GIVEN_BY));
+    shot.setField(mp.mapValue(rxaIdx, VxuField.VACCINATION_FACILITY_ID));
+    shot.setField(mp.mapValue(rxaIdx, VxuField.VACCINATION_FACILITY_NAME));
+    shot.setField(mp.mapValue(rxaIdx, VxuField.VACCINATION_LOT_NUMBER));
+    shot.setField(mp.mapValue(rxaIdx, VxuField.VACCINATION_LOT_EXPIRATION_DATE));
+    shot.setField(mp.mapValue(rxaIdx, VxuField.VACCINATION_MANUFACTURER_CODE));
+    shot.setField(mp.mapValue(rxaIdx, VxuField.VACCINATION_REFUSAL_REASON));
+    shot.setField(mp.mapValue(rxaIdx, VxuField.VACCINATION_COMPLETION_STATUS));
+    shot.setField(mp.mapValue(rxaIdx, VxuField.VACCINATION_ACTION_CODE));
+    shot.setField(mp.mapValue(rxaIdx, VxuField.VACCINATION_SYSTEM_ENTRY_TIME));
 
     if (rxrIdx != -1) {
-      shot.setField(mp.mapValue(rxrIdx, VxuField.VACCINATION_BODY_ROUTE, map));
-      shot.setField(mp.mapValue(rxrIdx, VxuField.VACCINATION_BODY_SITE, map));
+      shot.setField(mp.mapValue(rxrIdx, VxuField.VACCINATION_BODY_ROUTE));
+      shot.setField(mp.mapValue(rxrIdx, VxuField.VACCINATION_BODY_SITE));
     }
 
     logger.info("Segment ID's being used for this shot: ORC[" + orcIdx + "] RXA[" + rxaIdx
@@ -132,9 +132,9 @@ public enum HL7VaccinationParser {
 
     for (Integer i : obxIdxList) {
       Hl7Location hl7Location = new Hl7Location("OBX-3");
-      String value = mp.getValue(i, map, hl7Location);
+      String value = mp.getValue(i, hl7Location);
       if (value.equals("64994-7")) {
-        shot.setField(mp.mapValue(i, VxuField.VACCINATION_FINANCIAL_ELIGIBILITY_CODE, map));
+        shot.setField(mp.mapValue(i, VxuField.VACCINATION_FINANCIAL_ELIGIBILITY_CODE));
       }
     }
 
@@ -147,7 +147,7 @@ public enum HL7VaccinationParser {
     return shot;
   }
 
-
+//TODO:  I think most of the rest of this can be deleted.  but we need to modify the tests to make sure.
   /**
    * Question: Is this a transformation??? Should we be doing this in the transform layer? Picking
    * the financial eligibility out of the OBX segments?
