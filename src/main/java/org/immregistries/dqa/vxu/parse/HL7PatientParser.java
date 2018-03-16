@@ -1,6 +1,6 @@
 package org.immregistries.dqa.vxu.parse;
 
-import org.immregistries.dqa.hl7util.model.Hl7Location;
+import org.immregistries.dqa.hl7util.model.MetaFieldInfo;
 import org.immregistries.dqa.hl7util.parser.HL7MessageMap;
 import org.immregistries.dqa.vxu.DqaPatient;
 import org.immregistries.dqa.vxu.VxuField;
@@ -11,7 +11,6 @@ import org.immregistries.dqa.vxu.VxuField;
 public enum HL7PatientParser{
 
   INSTANCE;
-  
   private MetaParser mp = MetaParser.INSTANCE;
   
   public DqaPatient getPatient(HL7MessageMap map) {
@@ -38,23 +37,17 @@ public enum HL7PatientParser{
     patient.setField(mp.mapValue(VxuField.PATIENT_NAME_SUFFIX, map));
     patient.setField(mp.mapValue(VxuField.PATIENT_REGISTRY_ID, map, "PID-3.5", "SR"));
     patient.setField(mp.mapValue(VxuField.PATIENT_MEDICAID_NUMBER, map, "PID-3.5", "MA"));
-    String submitterIdType = "MR";
-    {
-      Hl7Location hl7Location = new Hl7Location("PID-3.5");
-      String location = hl7Location.getMessageMapLocator();
-      int fieldRep = map.findFieldRepWithValue("MR", location, 1);
-      if (fieldRep == 0) {
-        submitterIdType = "PI";
-        fieldRep = map.findFieldRepWithValue("MR", location, 1);
-        if (fieldRep == 0)
-        {
-          submitterIdType = "";
-        }
-      }
+
+    MetaFieldInfo mfi = mp.mapValue(VxuField.PATIENT_SUBMITTER_ID, map, "PID-3.5", "MR");
+    if (mfi != null) {//This means it found MR!
+      patient.setField(mfi);
+      patient.setField(mp.mapValue(VxuField.PATIENT_SUBMITTER_ID_AUTHORITY, map, "PID-3.5", "MR"));
+      patient.setField(mp.mapValue(VxuField.PATIENT_SUBMITTER_ID_TYPE_CODE, map, "PID-3.5", "MR"));
+    } else {
+      patient.setField(mp.mapValue(VxuField.PATIENT_SUBMITTER_ID, map, "PID-3.5", "PI"));
+      patient.setField(mp.mapValue(VxuField.PATIENT_SUBMITTER_ID_AUTHORITY, map, "PID-3.5", "PI"));
+      patient.setField(mp.mapValue(VxuField.PATIENT_SUBMITTER_ID_TYPE_CODE, map, "PID-3.5", "PI"));
     }
-    patient.setField(mp.mapValue(VxuField.PATIENT_SUBMITTER_ID, map, "PID-3.5", submitterIdType));
-    patient.setField(mp.mapValue(VxuField.PATIENT_SUBMITTER_ID_AUTHORITY, map, "PID-3.5", submitterIdType));
-    patient.setField(mp.mapValue(VxuField.PATIENT_SUBMITTER_ID_TYPE_CODE, map, "PID-3.5", submitterIdType));
     patient.setField(mp.mapValue(VxuField.PATIENT_SSN, map, "PID-3.5", "SS"));
     patient.setField(mp.mapValue(VxuField.PATIENT_WIC_ID, map, "PID-3.5", "WC"));
     patient.setField(mp.mapValue(VxuField.PATIENT_BIRTH_DATE, map));
