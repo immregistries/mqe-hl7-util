@@ -261,19 +261,24 @@ public class DqaMessageHeader extends MetaFieldInfoHolder implements Serializabl
         sendingApplication = value;
         break;
       case MESSAGE_SENDING_FACILITY:
+        sendingFacility = value;
         break;
       case MESSAGE_SENDING_RESPONSIBLE_ORGANIZATION:
         break;
       case MESSAGE_TRIGGER:
+        messageTrigger = value;
+        break;
+      case MESSAGE_STRUCTURE:
+        messageStructure = value;
         break;
       case MESSAGE_TYPE:
+        messageType = value;
         break;
       case MESSAGE_VERSION:
+        messageVersion = value;
         break;
-     
       default:
         break;
-    
     }
 
   }

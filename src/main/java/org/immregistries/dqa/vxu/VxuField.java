@@ -28,6 +28,7 @@ public enum VxuField {
 			, MESSAGE_DATE("message date", null, "MSH-7")
 			, MESSAGE_PROFILE_ID("message profile id", null, "MSH-21")
 			, MESSAGE_TRIGGER("message trigger", null, "MSH-9.2")
+            , MESSAGE_STRUCTURE("message trigger", null, "MSH-9.3")
 			, MESSAGE_TYPE("message type", null, "MSH-9.1")
 			, MESSAGE_PROCESSING_ID("processing id", null, "MSH-11")
 			, MESSAGE_RECEIVING_APPLICATION("receiving application", null, "MSH-5")
