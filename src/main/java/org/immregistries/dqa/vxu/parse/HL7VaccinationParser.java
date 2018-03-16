@@ -5,7 +5,7 @@ import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
-import org.immregistries.dqa.hl7util.model.ErrorLocation;
+import org.immregistries.dqa.hl7util.model.Hl7Location;
 import org.immregistries.dqa.hl7util.parser.HL7MessageMap;
 import org.immregistries.dqa.vxu.DqaVaccination;
 import org.immregistries.dqa.vxu.VxuField;
@@ -131,8 +131,8 @@ public enum HL7VaccinationParser {
 
 
     for (Integer i : obxIdxList) {
-      ErrorLocation errorLocation = new ErrorLocation("OBX-3");
-      String value = mp.mapValue(i, map, errorLocation);
+      Hl7Location hl7Location = new Hl7Location("OBX-3");
+      String value = mp.getValue(i, map, hl7Location);
       if (value.equals("64994-7")) {
         shot.setField(mp.mapValue(i, VxuField.VACCINATION_FINANCIAL_ELIGIBILITY_CODE, map));
       }

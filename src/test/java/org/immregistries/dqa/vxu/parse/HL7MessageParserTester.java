@@ -54,10 +54,10 @@ public class HL7MessageParserTester {
 
     assertEquals("Snow", patient.getMetaFieldInfo(VxuField.PATIENT_NAME_LAST).getValue());
     assertEquals("PID",
-        patient.getMetaFieldInfo(VxuField.PATIENT_NAME_LAST).getErrorLocation().getSegmentId());
+        patient.getMetaFieldInfo(VxuField.PATIENT_NAME_LAST).getHl7Location().getSegmentId());
     assertEquals(5,
-        patient.getMetaFieldInfo(VxuField.PATIENT_NAME_LAST).getErrorLocation().getFieldPosition());
-    assertEquals(1, patient.getMetaFieldInfo(VxuField.PATIENT_NAME_LAST).getErrorLocation()
+        patient.getMetaFieldInfo(VxuField.PATIENT_NAME_LAST).getHl7Location().getFieldPosition());
+    assertEquals(1, patient.getMetaFieldInfo(VxuField.PATIENT_NAME_LAST).getHl7Location()
         .getComponentNumber());
   }
 

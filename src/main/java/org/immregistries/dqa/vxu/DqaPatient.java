@@ -658,7 +658,7 @@ public class DqaPatient extends MetaFieldInfoHolder {
   @Override
   protected void setFieldFromMetaFieldInfo(MetaFieldInfo metaFieldInfo) {
     String value = metaFieldInfo.getValue();
-    int pos = metaFieldInfo.getErrorLocation().getFieldRepetition();
+    int pos = metaFieldInfo.getHl7Location().getFieldRepetition();
     switch (metaFieldInfo.getVxuField()) {
       case PATIENT_ADDRESS:
         break;

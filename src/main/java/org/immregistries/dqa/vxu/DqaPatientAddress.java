@@ -12,7 +12,6 @@ public class DqaPatientAddress extends DqaAddress
 {
   private long addressId = 0;
   private int positionId = 0;
-  private boolean skipped = false;
 
   public DqaPatientAddress() {
 	  //default constructor. 

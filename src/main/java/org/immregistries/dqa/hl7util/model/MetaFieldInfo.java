@@ -4,7 +4,7 @@ import org.immregistries.dqa.vxu.VxuField;
 
 public class MetaFieldInfo {
   private String value;
-  private ErrorLocation errorLocation = null;
+  private Hl7Location hl7Location = null;
   private VxuField vxuField = null;
 
   public VxuField getVxuField() {
@@ -19,17 +19,17 @@ public class MetaFieldInfo {
     // default
   }
 
-  public MetaFieldInfo(String value, ErrorLocation errorLocation) {
+  public MetaFieldInfo(String value, Hl7Location hl7Location) {
     this.value = value;
-    this.errorLocation = errorLocation;
+    this.hl7Location = hl7Location;
   }
 
-  public ErrorLocation getErrorLocation() {
-    return errorLocation;
+  public Hl7Location getHl7Location() {
+    return hl7Location;
   }
 
-  public void setErrorLocation(ErrorLocation errorLocation) {
-    this.errorLocation = errorLocation;
+  public void setHl7Location(Hl7Location hl7Location) {
+    this.hl7Location = hl7Location;
   }
 
   public String getValue() {

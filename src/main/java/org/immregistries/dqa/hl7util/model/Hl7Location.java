@@ -2,7 +2,7 @@ package org.immregistries.dqa.hl7util.model;
 
 import org.apache.commons.lang3.StringUtils;
 
-public class ErrorLocation {
+public class Hl7Location {
   private String segmentId = "";
   private int segmentSequence = 0;
   private int fieldPosition = 0;
@@ -58,11 +58,11 @@ public class ErrorLocation {
     return subComponentNumber > 0;
   }
 
-  public ErrorLocation() {
+  public Hl7Location() {
     // default
   }
 
-  public ErrorLocation(String hl7Reference) {
+  public Hl7Location(String hl7Reference) {
     if (!StringUtils.isBlank(hl7Reference)) {
       int pos = hl7Reference.indexOf("-");
       if (pos == -1) {

@@ -26,7 +26,7 @@ public abstract class MetaFieldInfoHolder {
     return this.metaFieldInfoMap.get(vxuField);
   }
 
-  public void setField(List<MetaFieldInfo> metaFieldInfoList) {
+  public void setFields(List<MetaFieldInfo> metaFieldInfoList) {
     for (MetaFieldInfo meta : metaFieldInfoList) {
       this.setField(meta);
     }

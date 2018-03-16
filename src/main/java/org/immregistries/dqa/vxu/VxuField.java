@@ -207,7 +207,7 @@ public enum VxuField {
 			return valueType;
 		}
 
-		public String getHl7Field() {
+		public String getHl7Locator() {
 			return hl7Field;
 		}
 

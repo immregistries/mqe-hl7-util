@@ -1,6 +1,6 @@
 package org.immregistries.dqa.vxu.parse;
 
-import org.immregistries.dqa.hl7util.model.ErrorLocation;
+import org.immregistries.dqa.hl7util.model.Hl7Location;
 import org.immregistries.dqa.hl7util.parser.HL7MessageMap;
 import org.immregistries.dqa.vxu.DqaPatient;
 import org.immregistries.dqa.vxu.VxuField;
@@ -18,14 +18,14 @@ public enum HL7PatientParser{
     
     DqaPatient patient = new DqaPatient();
     
-    patient.setField(mp.mapAndSetAll(VxuField.PATIENT_ADDRESS_STREET, map));
-    patient.setField(mp.mapAndSetAll(VxuField.PATIENT_ADDRESS_STREET2, map));
-    patient.setField(mp.mapAndSetAll(VxuField.PATIENT_ADDRESS_CITY, map));
-    patient.setField(mp.mapAndSetAll(VxuField.PATIENT_ADDRESS_STATE, map));
-    patient.setField(mp.mapAndSetAll(VxuField.PATIENT_ADDRESS_ZIP, map));
-    patient.setField(mp.mapAndSetAll(VxuField.PATIENT_ADDRESS_TYPE, map));
-    patient.setField(mp.mapAndSetAll(VxuField.PATIENT_ADDRESS_COUNTRY, map));
-    patient.setField(mp.mapAndSetAll(VxuField.PATIENT_ADDRESS_COUNTY, map));
+    patient.setFields(mp.mapAllRepetitions(VxuField.PATIENT_ADDRESS_STREET, map));
+    patient.setFields(mp.mapAllRepetitions(VxuField.PATIENT_ADDRESS_STREET2, map));
+    patient.setFields(mp.mapAllRepetitions(VxuField.PATIENT_ADDRESS_CITY, map));
+    patient.setFields(mp.mapAllRepetitions(VxuField.PATIENT_ADDRESS_STATE, map));
+    patient.setFields(mp.mapAllRepetitions(VxuField.PATIENT_ADDRESS_ZIP, map));
+    patient.setFields(mp.mapAllRepetitions(VxuField.PATIENT_ADDRESS_TYPE, map));
+    patient.setFields(mp.mapAllRepetitions(VxuField.PATIENT_ADDRESS_COUNTRY, map));
+    patient.setFields(mp.mapAllRepetitions(VxuField.PATIENT_ADDRESS_COUNTY, map));
     patient.setField(mp.mapValue(VxuField.PATIENT_PHONE, map));
     patient.setField(mp.mapValue(VxuField.PATIENT_PHONE_AREA_CODE, map));
     patient.setField(mp.mapValue(VxuField.PATIENT_PHONE_LOCAL_NUMBER, map));
@@ -40,8 +40,8 @@ public enum HL7PatientParser{
     patient.setField(mp.mapValue(VxuField.PATIENT_MEDICAID_NUMBER, map, "PID-3.5", "MA"));
     String submitterIdType = "MR";
     {
-      ErrorLocation errorLocation = new ErrorLocation("PID-3.5");
-      String location = errorLocation.getMessageMapLocator();
+      Hl7Location hl7Location = new Hl7Location("PID-3.5");
+      String location = hl7Location.getMessageMapLocator();
       int fieldRep = map.findFieldRepWithValue("MR", location, 1);
       if (fieldRep == 0) {
         submitterIdType = "PI";

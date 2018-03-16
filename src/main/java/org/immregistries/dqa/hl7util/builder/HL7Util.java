@@ -15,7 +15,7 @@ import org.immregistries.dqa.hl7util.Reportable;
 import org.immregistries.dqa.hl7util.ReportableSource;
 import org.immregistries.dqa.hl7util.SeverityLevel;
 import org.immregistries.dqa.hl7util.model.CodedWithExceptions;
-import org.immregistries.dqa.hl7util.model.ErrorLocation;
+import org.immregistries.dqa.hl7util.model.Hl7Location;
 
 public class HL7Util {
   public static final String MESSAGE_TYPE_VXU = "VXU";
@@ -253,35 +253,35 @@ public class HL7Util {
     StringBuilder ack = new StringBuilder();
     boolean repeating = false;
     if (reportable.getHl7LocationList() != null) {
-      for (ErrorLocation errorLocation : reportable.getHl7LocationList()) {
-        if (errorLocation.hasSegmentId()) {
+      for (Hl7Location hl7Location : reportable.getHl7LocationList()) {
+        if (hl7Location.hasSegmentId()) {
           if (repeating) {
             ack.append("~");
           }
           repeating = true;
-          ack.append(errorLocation.getSegmentId());
+          ack.append(hl7Location.getSegmentId());
           ack.append("^");
-          if (errorLocation.getSegmentSequence() == 0) {
+          if (hl7Location.getSegmentSequence() == 0) {
             ack.append(1);
           } else {
-            ack.append(errorLocation.getSegmentSequence());
+            ack.append(hl7Location.getSegmentSequence());
           }
 
-          if (errorLocation.hasFieldPosition()) {
+          if (hl7Location.hasFieldPosition()) {
             ack.append("^");
-            ack.append(errorLocation.getFieldPosition());
+            ack.append(hl7Location.getFieldPosition());
             ack.append("^");
-            if (errorLocation.getFieldRepetition() == 0) {
+            if (hl7Location.getFieldRepetition() == 0) {
               ack.append(1);
             } else {
-              ack.append(errorLocation.getFieldRepetition());
+              ack.append(hl7Location.getFieldRepetition());
             }
-            if (errorLocation.hasComponentNumber()) {
+            if (hl7Location.hasComponentNumber()) {
               ack.append("^");
-              ack.append(errorLocation.getComponentNumber());
-              if (errorLocation.hasSubComponentNumber()) {
+              ack.append(hl7Location.getComponentNumber());
+              if (hl7Location.hasSubComponentNumber()) {
                 ack.append("^");
-                ack.append(errorLocation.getSubComponentNumber());
+                ack.append(hl7Location.getSubComponentNumber());
               }
             }
           }

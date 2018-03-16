@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.collections4.list.TreeList;
-import org.immregistries.dqa.hl7util.model.ErrorLocation;
+import org.immregistries.dqa.hl7util.model.Hl7Location;
 import org.immregistries.dqa.hl7util.model.MetaFieldInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -107,10 +107,10 @@ public class HL7MessageMap {
     MetaFieldInfo meta = new MetaFieldInfo();
     String value = getAtIndex(locationCd, segmentIndex, fieldRepetition);
     meta.setValue(value);
-    ErrorLocation errorLocation = new ErrorLocation();
-    meta.setErrorLocation(errorLocation);
-    errorLocation.setFieldRepetition(fieldRepetition);
-    errorLocation.setSegmentSequence(segmentIndex);
+    Hl7Location hl7Location = new Hl7Location();
+    meta.setHl7Location(hl7Location);
+    hl7Location.setFieldRepetition(fieldRepetition);
+    hl7Location.setSegmentSequence(segmentIndex);
     return meta;
   }
 
@@ -132,8 +132,8 @@ public class HL7MessageMap {
     return this.get(locator);
   }
   
-  public String getAtIndex(ErrorLocation errorLocation) {
-    String locator = getLocatorString(errorLocation);
+  public String getAtIndex(Hl7Location hl7Location) {
+    String locator = getLocatorString(hl7Location);
     return this.get(locator);
   }
 
@@ -148,7 +148,6 @@ public class HL7MessageMap {
    * 
    * @param locationCd
    * @param absoluteSegmentIndex
-   * @param fieldRepetition
    * @return
    */
   public String getAtIndex(String locationCd, int absoluteSegmentIndex) {
@@ -167,7 +166,7 @@ public class HL7MessageMap {
    * In the previous example sending in a 7 or 11 would be incorrect.
    * 
    * @param locationCd
-   * @param absoluteSegmentIndex
+   * @param ordinal
    * @param fieldRepetition
    * @return
    */
@@ -511,30 +510,30 @@ public class HL7MessageMap {
         + subComponent;
   }
   
-  public String get(ErrorLocation errorLocation)
+  public String get(Hl7Location hl7Location)
   {
-    return this.get(getLocatorString(errorLocation));
+    return this.get(getLocatorString(hl7Location));
   }
 
-  public String getLocatorString(ErrorLocation errorLocation) {
-    String segmentName = errorLocation.getSegmentId();
-    int segIndex = errorLocation.getSegmentSequence();
+  public String getLocatorString(Hl7Location hl7Location) {
+    String segmentName = hl7Location.getSegmentId();
+    int segIndex = hl7Location.getSegmentSequence();
     if (segIndex <= 0) {
       segIndex = 1;
     }
-    int fieldNum = errorLocation.getFieldPosition();
+    int fieldNum = hl7Location.getFieldPosition();
     if (fieldNum <= 0) {
       fieldNum = 1;
     }
-    int fieldRep = errorLocation.getFieldRepetition();
+    int fieldRep = hl7Location.getFieldRepetition();
     if (fieldRep <= 0) {
       fieldRep = 1;
     }
-    int component = errorLocation.getComponentNumber();
+    int component = hl7Location.getComponentNumber();
     if (component <= 0) {
       component = 1;
     }
-    int subComponent = errorLocation.getSubComponentNumber();
+    int subComponent = hl7Location.getSubComponentNumber();
     if (subComponent <= 0) {
       subComponent = 1;
     }

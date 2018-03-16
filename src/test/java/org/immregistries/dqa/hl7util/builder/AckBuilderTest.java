@@ -9,7 +9,7 @@ import org.immregistries.dqa.hl7util.Reportable;
 import org.immregistries.dqa.hl7util.ReportableSource;
 import org.immregistries.dqa.hl7util.SeverityLevel;
 import org.immregistries.dqa.hl7util.model.CodedWithExceptions;
-import org.immregistries.dqa.hl7util.model.ErrorLocation;
+import org.immregistries.dqa.hl7util.model.Hl7Location;
 import org.junit.Test;
 
 public class AckBuilderTest {
@@ -17,7 +17,7 @@ public class AckBuilderTest {
   private class ReportableInstance implements Reportable {
     private SeverityLevel severity = null;
     private CodedWithExceptions hl7ErrorCode = null;
-    private List<ErrorLocation> hl7LocationList = new ArrayList<>();
+    private List<Hl7Location> hl7LocationList = new ArrayList<>();
     private String reportedMessage = "";
     private String diagnosticMessage = "";
     private CodedWithExceptions applicationErrorCode = null;
@@ -72,7 +72,7 @@ public class AckBuilderTest {
     }
 
     @Override
-    public List<ErrorLocation> getHl7LocationList() {
+    public List<Hl7Location> getHl7LocationList() {
       return hl7LocationList;
     }
 
