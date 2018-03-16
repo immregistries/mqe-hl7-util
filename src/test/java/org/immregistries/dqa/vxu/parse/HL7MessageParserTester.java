@@ -17,9 +17,10 @@ public class HL7MessageParserTester {
 
   private static final String IMMUNITY_MSG =
       "MSH|^~\\&|Test EHR Application|X68||NIST Test Iz Reg|20120701082240-0500||VXU^V04^VXU_V04|NIST-IZ-001.00|P|2.5.1|||ER|AL|||||Z22^CDCPHINVS\r"
-          + "PID|1||D26376273^^^NIST MPI^MR||Snow^Madelynn^Ainsley^^^^L~S^M^A^^^^A|Lam^Morgan^^^^^M|20070706|F||2076-8^Native Hawaiian or Other Pacific Islander^CDCREC|"
-          + "32 Prescott Street Ave^Apt 2^Warwick^MA^02452^USA^L^^MA0001~123 E Main Street^^Anytown^AZ^85203^MEX^M||^PRN^PH^^^657^5558563|||||||||2186-5^non Hispanic or Latino^CDCREC\r"
-          + "PD1|||||||||||02^Reminder/Recall - any method^HL70215|||||A|20120701|20120701\r"
+          + "PID|1||D26376273^^^NIST MPI^MR||Snow^Madelynn^Ainsley^Jr^^^L~S^M^A^^^^A|Lam^Morgan^^^^^M|20070706|F||2076-8^Native Hawaiian or Other Pacific Islander^CDCREC|"
+          + "32 Prescott Street Ave^Apt 2^Warwick^MA^02452^USA^L^^MA0001~123 E Main Street^^Anytown^AZ^85203^MEX^M~^^^^^^BDL^^TY8888||^PRN^PH^^^657^5558563||||||||"
+          + "|2186-5^non Hispanic or Latino^CDCREC|Hospital|Y|2||||20161010|Y\r"
+          + "PD1|||Primary Facility^^^^^PF^^^^567||||||||02^Reminder/Recall - any method^HL70215|||||A|20120701|20120701\r"
           + "NK1|1|Lam^Morgan^^^^^L|MTH^Mother^HL70063|32 Prescott Street Ave^^Warwick^MA^02452^USA^L|^PRN^PH^^^657^5558563\r"
           + "ORC|RE||IZ-783274^NDA|||||||I-23432^Burden^Donna^A^^^^^NIST-AA-1^^^^PRN||57422^RADON^NICHOLAS^^^^^^NIST-AA-1^L^^^MD\r"
           + "RXA|0|1|20120814|20120815|33332-0010-01^Influenza, seasonal, injectable, preservative free^NDC|0.5|mL^MilliLiter [SI Volume Units]^UCUM||00^New immunization record^NIP001|7832-1^Lemon^Mike^A^^^^^NIST-AA-1^^^^PRN|^^^X68||||Z0860BB|20121104|CSL^CSL Behring^MVX|||CP|A\r"
@@ -65,7 +66,7 @@ public class HL7MessageParserTester {
   public void testPatient() {
     DqaMessageReceived mr = mParser.extractFromMessage(map);
     DqaPatient patient = mr.getPatient();
-    assertEquals(2, patient.getPatientAddressList().size());
+    assertEquals(3, patient.getPatientAddressList().size());
 
     {
       DqaPatientAddress a1 = patient.getPatientAddress();
@@ -91,56 +92,38 @@ public class HL7MessageParserTester {
 //    assertEquals("S", patient.getAlias().getLast());
 //    assertEquals("M", patient.getAlias().getFirst());
 //    assertEquals("A", patient.getAlias().getMiddle());
-    //
-    // private Name alias = new Name();
-    //
-    // private Date birthDate = null;
-    // private String birthDateString = "";
-    //
-    // private String birthMultipleInd = "";
-    // private String birthOrderNumber = "";// new String(CodesetType.BIRTH_ORDER);
-    // private String birthPlace = "";
-    // private String birthCounty = "";
-    //
-    // private Date deathDate = null;
-    // private String deathDateString;
-    //
-    // private String deathIndicator = "";
-    //
-    // private String ethnicity = "";// new String(CodesetType.PATIENT_ETHNICITY);
+    assertEquals("20070706", patient.getBirthDateString());
+    assertEquals("Y", patient.getBirthMultipleInd());
+    assertEquals("2", patient.getBirthOrderNumber());
+    assertEquals("Hospital", patient.getBirthPlace());
+    assertEquals("TY8888", patient.getBirthCounty());
+    assertEquals("20161010", patient.getDeathDateString());
+    assertEquals("Y", patient.getDeathIndicator());
+    assertEquals("2186-5", patient.getEthnicity());
     // private OrganizationName facility = new OrganizationName();
-    //
+//    assertEquals("567", patient.getFacility().getId());
+//    assertEquals("Primary Facility", patient.getFacility().getName());
     // private String financialEligibility = "";// new String(CodesetType.FINANCIAL_STATUS_CODE);
-    // private Date financialEligibilityDate = null;
-    // private String financialEligibilityDateString;
-    //
-    // private PatientIdNumber idMedicaid = new PatientIdNumber();
-    // private PatientIdNumber idRegistry = new PatientIdNumber();
-    // private PatientIdNumber idSsn = new PatientIdNumber();
-    // private PatientIdNumber idSubmitter = new PatientIdNumber();
-    // private PatientIdNumber idWic = new PatientIdNumber();
-    //
-    //
-    // private String motherMaidenName = "";
-    // private Name name = new Name();
+//    assertEquals("", patient.getFinancialEligibility());
+//    assertEquals("", patient.getIdMedicaid().getNumber());
+//    assertEquals("", patient.getIdRegistry().getNumber());
+//    assertEquals("", patient.getIdSsn().getNumber());
+    assertEquals("D26376273", patient.getIdSubmitter().getNumber());
+//    assertEquals("", patient.getIdWic().getNumber());
+    assertEquals("Lam", patient.getMotherMaidenName());
     assertEquals("Snow", patient.getNameLast());
     assertEquals("Madelynn", patient.getNameFirst());
-    // private long patientId = 0;
-    // private DqaPhoneNumber phone = new DqaPhoneNumber();
-    // private Id physician = new Id();
-    // private String primaryLanguage = "";// new String(CodesetType.PERSON_LANGUAGE);
-    // private String protection = "";// new String(CodesetType.PATIENT_PROTECTION);
-    // private String publicity = "";// CodesetType.PATIENT_PUBLICITY);
-    // private String race = "";// new String(CodesetType.PATIENT_RACE);
-    // private String registryStatus = "";// new String(CodesetType.REGISTRY_STATUS);
-    // private String patientClass = "";// new String(CodesetType.PATIENT_CLASS);
-    //
-    // private String sex = "";// new String(CodesetType.PATIENT_SEX);
-    // private boolean isUnderAged = false;
-    // private boolean skipped = false;
-    // // private List<PhoneNumber> patientPhoneList = new ArrayList<PhoneNumber>();
-    // private List<PatientImmunity> patientImmunityList = new ArrayList<PatientImmunity>();
-    // private Date systemCreationDate = null;
+    assertEquals("Ainsley", patient.getNameMiddle());
+    assertEquals("5558563", patient.getPhone().getLocalNumber());
+    assertEquals("657", patient.getPhone().getAreaCode());
+    assertEquals("", patient.getPrimaryLanguage());
+    assertEquals("", patient.getProtection());
+    assertEquals("", patient.getPublicity());
+    assertEquals("2076-8", patient.getRace());
+    assertEquals("", patient.getRegistryStatus());
+    assertEquals("", patient.getPatientClass());
+    assertEquals("F", patient.getSex());
+    assertEquals("Jr", patient.getNameSuffix());
   }
 
   @Test
@@ -154,6 +137,33 @@ public class HL7MessageParserTester {
       assertEquals("33332-0010-01", v1.getAdminNdc());
       assertEquals("", v1.getAdminCvxCode());
       assertEquals("", v1.getAdminCptCode());
+      assertEquals("A", v1.getAction());
+      assertEquals("0.5", v1.getAmount());
+      assertEquals("mL", v1.getAmountUnit());
+      assertEquals("C28161", v1.getBodyRoute());
+      assertEquals("LD", v1.getBodySite());
+      assertEquals("CP", v1.getCompletion());
+      assertEquals("", v1.getConfidentialityCode());
+      assertEquals("", v1.getCvxDerived());
+      assertEquals("X68", v1.getFacilityIdNumber());
+      assertEquals("X68", v1.getFacilityName());
+      assertEquals("", v1.getFacilityType());
+      assertEquals("", v1.getFundingSource());
+      assertEquals("", v1.getGivenByNameFirst());
+      assertEquals("", v1.getGivenByNameLast());
+      assertEquals("7832-1", v1.getGivenByNumber());
+      assertEquals("", v1.getIdPlacer());
+      assertEquals("IZ-783274", v1.getIdSubmitter());
+      assertEquals("00", v1.getInformationSource());
+      assertEquals("Z0860BB", v1.getLotNumber());
+      assertEquals("CSL", v1.getManufacturer());
+      assertEquals("RE", v1.getOrderControl());
+      assertEquals("", v1.getOrderedByNameFirst());
+      assertEquals("", v1.getOrderedByNameLast());
+      assertEquals("", v1.getOrderedByNumber());
+      assertEquals("", v1.getRefusal());
+      assertEquals("", v1.getRefusalReason());
+      assertEquals("", v1.getVaccineValidity());
     }
     {
       DqaVaccination v2 = mr.getVaccinations().get(1);

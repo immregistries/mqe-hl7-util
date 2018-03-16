@@ -3,18 +3,48 @@ package org.immregistries.dqa.hl7util.model;
 import org.apache.commons.lang3.StringUtils;
 
 public class Hl7Location {
+  private int line = 0;
   private String segmentId = "";
   private int segmentSequence = 0;
   private int fieldPosition = 0;
-  private int fieldRepetition = 0;
+  private int fieldRepetition = 1;
   private int componentNumber = 0;
   private int subComponentNumber = 0;
 
+  public int getLine() {
+    return line;
+  }
+  
+  public void setLine(int line) {
+    this.line = line;
+  }
+  
+  @Override
+  public String toString() {
+    String s = segmentId;
+    if (segmentSequence > 1) {
+      s += "[" + segmentSequence + "]";
+    }
+    if (fieldPosition > 0) {
+      s += "-" + fieldPosition;
+      if (fieldRepetition > 1) {
+        s += "[" + fieldRepetition + "]";
+      }
+      if (componentNumber > 1 || subComponentNumber > 1) {
+        s += "." + componentNumber;
+        if (subComponentNumber > 1) {
+          s += "." + subComponentNumber;
+        }
+      }
+    }
+    return s;
+  }
+
   public String getMessageMapLocator() {
     String messageMapLocator = segmentId;
-    messageMapLocator += "[" + (segmentSequence == 0 ? 1 : segmentSequence) + "]-";
+    messageMapLocator += "[" + (line - 1) + "]-";
     messageMapLocator += fieldPosition == 0 ? 1 : fieldPosition;
-    if (fieldRepetition > 1) {
+    if (fieldRepetition > 0) {
       messageMapLocator += "~" + fieldRepetition;
     }
     if (componentNumber == 0) {
@@ -33,7 +63,7 @@ public class Hl7Location {
 
   public String getMessageMapLocatorFieldOnly() {
     String messageMapLocator = segmentId;
-    messageMapLocator += "[" + (segmentSequence == 0 ? 1 : segmentSequence) + "]-";
+    messageMapLocator += "[" + (line - 1) + "]-";
     messageMapLocator += fieldPosition == 0 ? 1 : fieldPosition;
     if (fieldRepetition > 1) {
       messageMapLocator += "~" + fieldRepetition;

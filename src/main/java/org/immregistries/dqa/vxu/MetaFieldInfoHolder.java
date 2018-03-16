@@ -10,11 +10,11 @@ public abstract class MetaFieldInfoHolder implements MetaFieldInfoData {
   private Map<VxuField, MetaFieldInfo> metaFieldInfoMap = new HashMap<>();
   private int positionId = 0;
 
-  public int getPositionId() {
+  public final int getPositionId() {
     return this.positionId;
   }
 
-  public void setPositionId(int positionId) {
+  public final void setPositionId(int positionId) {
     this.positionId = positionId;
   }
 

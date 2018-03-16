@@ -64,7 +64,6 @@ public class DqaVaccination extends MetaFieldInfoHolder {
   private List<Observation> observations = new ArrayList<Observation>();
   private String orderControl = "";// new CodedEntity(CodesetType.VACCINATION_ORDER_CONTROL_CODE);
   private Id orderedBy = new Id();
-  private int positionId;
   private int positionSubId;
   private String product = "";// new CodedEntity(CodesetType.VACCINE_PRODUCT);
   private String refusal = "";// new CodedEntity(CodesetType.VACCINATION_REFUSAL);
@@ -350,10 +349,6 @@ public class DqaVaccination extends MetaFieldInfoHolder {
     return orderedBy.getNumber();
   }
 
-  public int getPositionId() {
-    return positionId;
-  }
-
   public String getProduct() {
     return this.product;
   }
@@ -545,10 +540,6 @@ public class DqaVaccination extends MetaFieldInfoHolder {
 
   public void setOrderedByNumber(String orderedByNumber) {
     orderedBy.setNumber(orderedByNumber);
-  }
-
-  public void setPositionId(int positionId) {
-    this.positionId = positionId;
   }
 
   public void setRefusalCode(String refusalCode) {

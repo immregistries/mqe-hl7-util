@@ -16,6 +16,12 @@ public class HL7MessageMap {
   protected static final Logger LOGGER = LoggerFactory.getLogger(HL7MessageMap.class);
 
   Map<String, String> locationValueMap = new HashMap<String, String>();
+  
+  
+
+  public Map<String, String> getLocationValueMap() {
+    return locationValueMap;
+  }
 
   /**
    * This is a map of the segments, and their absolute indexes. So what we have here is:
@@ -249,7 +255,15 @@ public class HL7MessageMap {
     }
   }
 
-  protected List<Integer> getIndexesForSegmentName(String segName) {
+  public int getIndexForSegmentName(String segName) {
+    List<Integer> indexList = getIndexesForSegmentName( segName);
+    if (indexList.size() > 0) {
+      return indexList.get(0);
+    }
+    return -1;
+  }
+
+  public List<Integer> getIndexesForSegmentName(String segName) {
     return this.segmentIndexes.get(segName);
   }
 

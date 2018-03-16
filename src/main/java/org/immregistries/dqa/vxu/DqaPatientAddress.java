@@ -11,7 +11,6 @@ package org.immregistries.dqa.vxu;
 public class DqaPatientAddress extends DqaAddress
 {
   private long addressId = 0;
-  private int positionId = 0;
 
   public DqaPatientAddress() {
 	  //default constructor. 
@@ -38,16 +37,6 @@ public class DqaPatientAddress extends DqaAddress
   public void setAddressId(long addressId)
   {
     this.addressId = addressId;
-  }
-
-  public int getPositionId()
-  {
-    return positionId;
-  }
-
-  public void setPositionId(int positionId)
-  {
-    this.positionId = positionId;
   }
 
 }

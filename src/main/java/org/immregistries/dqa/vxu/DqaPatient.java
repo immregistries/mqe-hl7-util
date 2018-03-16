@@ -693,6 +693,9 @@ public class DqaPatient extends MetaFieldInfoHolder {
         break;
       case PATIENT_ALIAS:
         break;
+      case PATIENT_BIRTH_COUNTY:
+        birthCounty = value;
+        break;
       case PATIENT_BIRTH_DATE:
         birthDateString = value;
         break;
@@ -732,6 +735,9 @@ public class DqaPatient extends MetaFieldInfoHolder {
         break;
       case PATIENT_NAME_MIDDLE:
         name.setMiddle(value);
+        break;
+      case PATIENT_NAME_SUFFIX:
+        name.setSuffix(value);
         break;
       case PATIENT_MOTHERS_MAIDEN_NAME:
         motherMaidenName = value;

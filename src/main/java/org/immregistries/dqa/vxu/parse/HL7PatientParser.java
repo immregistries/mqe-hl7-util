@@ -1,5 +1,9 @@
 package org.immregistries.dqa.vxu.parse;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 import org.immregistries.dqa.hl7util.model.MetaFieldInfo;
 import org.immregistries.dqa.hl7util.parser.HL7MessageMap;
 import org.immregistries.dqa.vxu.DqaPatient;
@@ -14,8 +18,12 @@ public enum HL7PatientParser{
 
   public DqaPatient getPatient(HL7MessageMap map) {
     MetaParser mp = new MetaParser(map);
+    mp.setAbsoluteSegmentIndex(map.getIndexForSegmentName("PID"));
       
     DqaPatient patient = new DqaPatient();
+    
+    List<String> keyList = new ArrayList<>(map.getLocationValueMap().keySet());
+    Collections.sort(keyList);
     
     patient.setFields(mp.mapAllRepetitions(VxuField.PATIENT_ADDRESS_STREET));
     patient.setFields(mp.mapAllRepetitions(VxuField.PATIENT_ADDRESS_STREET2));
@@ -58,6 +66,7 @@ public enum HL7PatientParser{
     patient.setField(mp.mapValue(VxuField.PATIENT_DEATH_DATE));
     patient.setField(mp.mapValue(VxuField.PATIENT_DEATH_INDICATOR));
     patient.setField(mp.mapValue(VxuField.PATIENT_ETHNICITY));
+    patient.setField(mp.mapValue(VxuField.PATIENT_PRIMARY_FACILITY_ID));
     patient.setField(mp.mapValue(VxuField.PATIENT_NAME_MIDDLE));
     patient.setField(mp.mapValue(VxuField.PATIENT_NAME_LAST));
     patient.setField(mp.mapValue(VxuField.PATIENT_NAME_FIRST));
