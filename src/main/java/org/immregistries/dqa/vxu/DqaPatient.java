@@ -95,6 +95,11 @@ public class DqaPatient extends MetaFieldInfoHolder {
   public List<DqaPatientAddress> getPatientAddressList() {
     return patientAddressList;
   }
+  
+  public DqaPatientAddress getPatientAddress()
+  {
+    return getAddress(1);
+  }
 
   public Name getAlias() {
     return alias;

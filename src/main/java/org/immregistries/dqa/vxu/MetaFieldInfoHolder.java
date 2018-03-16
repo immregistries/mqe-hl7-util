@@ -6,7 +6,7 @@ import java.util.Map;
 
 import org.immregistries.dqa.hl7util.model.MetaFieldInfo;
 
-public abstract class MetaFieldInfoHolder {
+public abstract class MetaFieldInfoHolder implements MetaFieldInfoData {
   private Map<VxuField, MetaFieldInfo> metaFieldInfoMap = new HashMap<>();
   private int positionId = 0;
 

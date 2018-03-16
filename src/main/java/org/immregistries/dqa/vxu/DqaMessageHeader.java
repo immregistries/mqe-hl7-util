@@ -218,7 +218,63 @@ public class DqaMessageHeader extends MetaFieldInfoHolder implements Serializabl
 
   @Override
   protected void setFieldFromMetaFieldInfo(MetaFieldInfo metaFieldInfo) {
-    // TODO Auto-generated method stub
+    String value = metaFieldInfo.getValue();
+    switch (metaFieldInfo.getVxuField()) {
+      case MESSAGE_ACCEPT_ACK_TYPE:
+        ackTypeAccept = value;
+        break;
+      case MESSAGE_ALT_CHARACTER_SET:
+        characterSetAlt = value;
+        break;
+      case MESSAGE_APP_ACK_TYPE:
+        ackTypeApplication = value;
+        break;
+      case MESSAGE_CHARACTER_SET:
+        characterSet = value;
+        break;
+      case MESSAGE_CONTROL_ID:
+        messageControl = value;
+        break;
+      case MESSAGE_COUNTRY_CODE:
+        country = value;
+        break;
+      case MESSAGE_DATE:
+        messageDateString = value;
+        break;
+      case MESSAGE_ENCODING_CHARACTER:
+        break;
+      case MESSAGE_PROCESSING_ID:
+        processingStatus = value;
+        break;
+      case MESSAGE_PROFILE_ID:
+        messageProfile = value;
+        break;
+      case MESSAGE_RECEIVING_APPLICATION:
+        receivingApplication = value;
+        break;
+      case MESSAGE_RECEIVING_FACILITY:
+        receivingFacility = value;
+        break;
+      case MESSAGE_SEGMENT:
+        break;
+      case MESSAGE_SENDING_APPLICATION:
+        sendingApplication = value;
+        break;
+      case MESSAGE_SENDING_FACILITY:
+        break;
+      case MESSAGE_SENDING_RESPONSIBLE_ORGANIZATION:
+        break;
+      case MESSAGE_TRIGGER:
+        break;
+      case MESSAGE_TYPE:
+        break;
+      case MESSAGE_VERSION:
+        break;
+     
+      default:
+        break;
+    
+    }
 
   }
 
