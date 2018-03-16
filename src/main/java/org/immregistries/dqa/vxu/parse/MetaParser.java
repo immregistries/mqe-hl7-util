@@ -26,11 +26,28 @@ public enum MetaParser {
         return meta;
     }
 
-    public MetaFieldInfo mapCodedValue(VxuField vxuField, HL7MessageMap map, String[] codeTableNames) {
+    public MetaFieldInfo mapCodedValue(VxuField vxuField, HL7MessageMap map, String... codeTableNames) {
         return mapCodedValue(0, vxuField, map, codeTableNames);
     }
 
-    public MetaFieldInfo mapCodedValue(int absoluteSegmentIndex, VxuField vxuField, HL7MessageMap map, String[] codeTableNames) {
+    /**
+     * This method is search for a set of possible CodeTable types.
+     * <p>an example is an RXA-5, which may have CVX, CPT, NDC.  So if you want to get
+     * the NDC values, you send in the code tables that might indicate an NDC.</p>
+     * <p>This does not account for field repetitions</p>
+     * @param absoluteSegmentIndex this is the index of the segment starting with 1 in the MSH
+     * @param vxuField the is the field reference - like RXA-5
+     * @param map this holds all the values from a message.
+     * @param searchForCodeTables this holds a list of code types you're interested in.
+     * @return a single MetaFieldInfo object, with the value specified for the first
+     * code table found, searching in the order presented in the array sent in.
+     */
+    public MetaFieldInfo mapCodedValue(int absoluteSegmentIndex, VxuField vxuField, HL7MessageMap map, String... searchForCodeTables) {
+        //If no code table is sent in to search for, then don't even try.
+        if (searchForCodeTables == null || searchForCodeTables.length < 1) {
+            return null;
+        }
+
         String locator = vxuField.getHl7Locator();
         Hl7Location hl7Location = new Hl7Location(vxuField.getHl7Locator());
         hl7Location.setComponentNumber(1);
@@ -44,13 +61,13 @@ public enum MetaParser {
         hl7Location.setComponentNumber(1);
 
         boolean valueFound = false;
-        for (String s : codeTableNames) {
-            if (s.equalsIgnoreCase(tableName)) {
+        for (String searchForCodeTable : searchForCodeTables) {
+            if (searchForCodeTable.equalsIgnoreCase(tableName)) {
                 valueFound = true;
             }
         }
         if (!valueFound) {
-            for (String s : codeTableNames) {
+            for (String s : searchForCodeTables) {
                 if (s.equalsIgnoreCase(tableNameAlt)) {
                     valueFound = true;
                 }
@@ -80,16 +97,33 @@ public enum MetaParser {
         return value;
     }
 
-    public MetaFieldInfo mapValue(VxuField vxuField, HL7MessageMap map, String selectHL7Ref, String selectValue) {
-        return mapValue(0, vxuField, map, selectHL7Ref, selectValue);
+    public MetaFieldInfo mapValueForTypes(VxuField vxuField, HL7MessageMap map, String selectHL7Ref, String... searchForCodeTypes) {
+        for (String type : searchForCodeTypes) {
+            MetaFieldInfo mfi = mapValue(vxuField, map, selectHL7Ref, type);
+            if (mfi != null) {
+                return mfi;
+            }
+        }
+        return null;
     }
 
-    public MetaFieldInfo mapValue(int absoluteSegmentIndex, VxuField vxuField, HL7MessageMap map, String selectHL7Ref, String selectValue) {
+    public MetaFieldInfo mapValue(VxuField vxuField, HL7MessageMap map, String selectHL7Ref, String searchForCodeType) {
+        return mapValue(0, vxuField, map, selectHL7Ref, searchForCodeType);
+    }
+
+
+    public MetaFieldInfo mapValue(int absoluteSegmentIndex, VxuField vxuField, HL7MessageMap map, String selectHL7Ref, String searchForCodeType) {
         {
             Hl7Location hl7Location = new Hl7Location(selectHL7Ref);
             selectHL7Ref = hl7Location.getMessageMapLocator();
         }
-        int fieldRep = map.findFieldRepWithValue(selectValue, selectHL7Ref, 1);
+
+        int segOrdinal = 1;
+        //I don't like that we're using zero as a condition switch. how could this be fixed... hmm...
+        if (absoluteSegmentIndex > 0) {
+            segOrdinal = map.getSegmentOrdinalFromAbsoluteIndex(absoluteSegmentIndex);
+        }
+        int fieldRep = map.findFieldRepWithValue(searchForCodeType, selectHL7Ref, segOrdinal);
 
         if (fieldRep > 0) {
             Hl7Location hl7Location = new Hl7Location(vxuField.getHl7Locator());

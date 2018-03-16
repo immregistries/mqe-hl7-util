@@ -101,9 +101,9 @@ public enum HL7VaccinationParser {
       shot.setField(mp.mapValue(orcIdx, VxuField.VACCINATION_FILLER_ORDER_NUMBER, map));
     }
 
-    shot.setField(mp.mapCodedValue(rxaIdx, VxuField.VACCINATION_CVX_CODE, map, new String[] {"CVX", "HL70292"}));
-    shot.setField(mp.mapCodedValue(rxaIdx,VxuField.VACCINATION_CPT_CODE, map, new String[] {"CPT", "C4"}));
-    shot.setField(mp.mapCodedValue(rxaIdx,VxuField.VACCINATION_NDC_CODE, map, new String[] {"NDC", "?"}));
+    shot.setField(mp.mapCodedValue(rxaIdx, VxuField.VACCINATION_CVX_CODE, map, "CVX", "HL70292"));
+    shot.setField(mp.mapCodedValue(rxaIdx,VxuField.VACCINATION_CPT_CODE, map, "CPT", "C4"));
+    shot.setField(mp.mapCodedValue(rxaIdx,VxuField.VACCINATION_NDC_CODE, map, "NDC", "?"));
     shot.setField(mp.mapValue(rxaIdx,VxuField.VACCINATION_ADMIN_DATE, map));
     shot.setField(mp.mapValue(rxaIdx,VxuField.VACCINATION_ADMIN_DATE_END, map));
     shot.setField(mp.mapValue(rxaIdx,VxuField.VACCINATION_ADMINISTERED_AMOUNT, map));
