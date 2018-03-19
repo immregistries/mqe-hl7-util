@@ -264,7 +264,11 @@ public class HL7MessageMap {
   }
 
   public List<Integer> getIndexesForSegmentName(String segName) {
-    return this.segmentIndexes.get(segName);
+    List<Integer> indexes = this.segmentIndexes.get(segName);
+    if (indexes == null) {
+      return new ArrayList<>();
+    }
+    return indexes;
   }
 
   /**
@@ -388,7 +392,8 @@ public class HL7MessageMap {
   /**
    * This expects a field, and a segment index.
    * 
-   * @param fieldLoc
+   * @param location
+   * @param segIndex
    * @return
    */
   public Integer getFieldRepCountFor(String location, int segIndex) {
@@ -822,7 +827,6 @@ public class HL7MessageMap {
    * <li>determine where in the list of absolute indexes the index sent in falls. This is the
    * ordinal.
    * 
-   * @param location
    * @param absoluteSegmentIndex
    * @return
    */
