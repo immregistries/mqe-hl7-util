@@ -1,8 +1,6 @@
 package org.immregistries.dqa.vxu.code;
 
-import java.util.HashMap;
-import java.util.Map;
-
+import java.util.*;
 
 public enum NokRelationship {
 	    RELATIONSHIP_BROTHER("BRO")
@@ -22,43 +20,53 @@ public enum NokRelationship {
 	  , RELATIONSHIP_STEPCHILD("SCH")
 	  , UNKNOWN("");
 
-	public String code;
+	public final String code;
 	private static final Map<String, NokRelationship> codeMap = new HashMap<String, NokRelationship>();
+	private static final List<String> RESPONSIBLE_CODES = new ArrayList<>();
 
 	static {
 		for (NokRelationship rel : NokRelationship.values()) {
 			codeMap.put(rel.code.toUpperCase(), rel);
 		}
+      RESPONSIBLE_CODES.addAll(Arrays.asList(
+            RELATIONSHIP_CARE_GIVER.code
+          , RELATIONSHIP_FATHER.code
+          , RELATIONSHIP_GRANDPARENT.code
+          , RELATIONSHIP_MOTHER.code
+          , RELATIONSHIP_PARENT.code
+          , RELATIONSHIP_GUARDIAN.code
+      ));
+
 	}
 
-	private NokRelationship(String code) {
+	NokRelationship(String code) {
 		this.code = code;
 	}
 
+	public static List<String> getResponsibleCodes() {
+	    return RESPONSIBLE_CODES;
+  }
+
 	public static NokRelationship get(String code) {
 		NokRelationship r = null;
+
 		if (code != null) {
 			r = codeMap.get(code.toUpperCase());
 		}
+
 		if (r == null) {
 			r = UNKNOWN;
-			r.code = code;
 		}
+
 		return r;
 	}
 
+	public static boolean isResponsibleRelationship(String code) {
+	    return RESPONSIBLE_CODES.contains(code);
+  }
+
 	public boolean isResponsibleRelationship() {
-		switch (this) {
-        case RELATIONSHIP_CARE_GIVER:
-        case RELATIONSHIP_FATHER:
-        case RELATIONSHIP_GRANDPARENT:
-        case RELATIONSHIP_MOTHER:
-        case RELATIONSHIP_PARENT:
-        case RELATIONSHIP_GUARDIAN:
-           return true;
-        default:
-           return false;
-		}
+		return isResponsibleRelationship(this.code);
 	}
 
 	public boolean isChildRelationship() {

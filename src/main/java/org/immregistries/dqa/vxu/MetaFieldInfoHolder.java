@@ -9,6 +9,15 @@ import org.immregistries.dqa.hl7util.model.MetaFieldInfo;
 public abstract class MetaFieldInfoHolder implements MetaFieldInfoData {
   private Map<VxuField, MetaFieldInfo> metaFieldInfoMap = new HashMap<>();
   private int positionId = 0;
+  private int messageLineNumber = 0;
+
+  public int getMessageLineNumber() {
+    return messageLineNumber;
+  }
+
+  public void setMessageLineNumber(int messageLineNumber) {
+    this.messageLineNumber = messageLineNumber;
+  }
 
   public final int getPositionId() {
     return this.positionId;

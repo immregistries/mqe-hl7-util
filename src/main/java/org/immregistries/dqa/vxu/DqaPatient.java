@@ -12,6 +12,10 @@ import org.immregistries.dqa.vxu.hl7.PatientIdNumber;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import static org.immregistries.dqa.vxu.VxuField.*;
+import static org.immregistries.dqa.vxu.VxuField.PATIENT_GUARDIAN_PHONE;
+import static org.immregistries.dqa.vxu.VxuField.PATIENT_GUARDIAN_RELATIONSHIP;
+
 public class DqaPatient extends MetaFieldInfoHolder {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(DqaPatient.class);
@@ -46,7 +50,6 @@ public class DqaPatient extends MetaFieldInfoHolder {
   private PatientIdNumber idSubmitter = new PatientIdNumber();
   private PatientIdNumber idWic = new PatientIdNumber();
 
-
   private String motherMaidenName = "";
   private Name name = new Name();
   private long patientId = 0;
@@ -68,7 +71,7 @@ public class DqaPatient extends MetaFieldInfoHolder {
 
   // This comes out of the transform step. The kin list will be interpreted, and one will be picked
   // as the responsible party.
-  private DqaNextOfKin responsibleParty = null;
+  private DqaNextOfKin responsibleParty = new DqaNextOfKin();
   
   private String email = "";
 
@@ -646,9 +649,9 @@ public class DqaPatient extends MetaFieldInfoHolder {
     this.birthCounty = birthCounty;
   }
 
-  // public void setResponsibleParty(NextOfKin responsibleParty) {
-  // this.responsibleParty = responsibleParty;
-  // }
+   public void setResponsibleParty(DqaNextOfKin responsibleParty) {
+      this.responsibleParty = responsibleParty;
+   }
 
 
   private DqaPatientAddress getAddress(int pos) {
@@ -820,6 +823,36 @@ public class DqaPatient extends MetaFieldInfoHolder {
       case PATIENT_EMAIL:
         email = value;
         break;
+        case PATIENT_GUARDIAN_NAME_FIRST:
+              getResponsibleParty().setNameFirst(value);
+          break;
+        case PATIENT_GUARDIAN_NAME_LAST:
+              getResponsibleParty().setNameLast(value);
+              break;
+        case PATIENT_GUARDIAN_ADDRESS_CITY:
+              getResponsibleParty().getAddress().setCity(value);
+              break;
+        case PATIENT_GUARDIAN_ADDRESS_STATE:
+              getResponsibleParty().getAddress().setStateCode(value);
+              break;
+        case PATIENT_GUARDIAN_ADDRESS_STREET2:
+              getResponsibleParty().getAddress().setStreet2(value);
+              break;
+        case PATIENT_GUARDIAN_ADDRESS_ZIP:
+              getResponsibleParty().getAddress().setZip(value);
+              break;
+        case PATIENT_GUARDIAN_ADDRESS_COUNTRY:
+              getResponsibleParty().getAddress().setCountryCode(value);
+              break;
+        case PATIENT_GUARDIAN_ADDRESS:
+              getResponsibleParty().getAddress().setStreet(value);
+              break;
+        case PATIENT_GUARDIAN_RELATIONSHIP:
+              getResponsibleParty().setRelationshipCode(value);
+              break;
+        case PATIENT_GUARDIAN_PHONE:
+              getResponsibleParty().setPhoneNumber(value);
+              break;
       default:
         break;
     }

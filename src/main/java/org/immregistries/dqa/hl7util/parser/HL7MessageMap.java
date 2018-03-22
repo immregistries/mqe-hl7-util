@@ -15,9 +15,7 @@ import org.slf4j.LoggerFactory;
 public class HL7MessageMap {
   protected static final Logger LOGGER = LoggerFactory.getLogger(HL7MessageMap.class);
 
-  Map<String, String> locationValueMap = new HashMap<String, String>();
-  
-  
+  private Map<String, String> locationValueMap = new HashMap<String, String>();
 
   public Map<String, String> getLocationValueMap() {
     return locationValueMap;
@@ -39,7 +37,7 @@ public class HL7MessageMap {
    * <li>Going between ordinal and absolute is easy. The absolute position is stored in the Integer.
    * The ordinal position is derived from the position in the list.
    */
-  Map<String, List<Integer>> segmentIndexes = new HashMap<String, List<Integer>>();
+  private Map<String, List<Integer>> segmentIndexes = new HashMap<String, List<Integer>>();
 
   /**
    * This is a map of fields and repetitions. It does not contain components/subcomponents. the
@@ -108,18 +106,6 @@ public class HL7MessageMap {
   //
   // }
 
-  public MetaFieldInfo getMetaAtIndex(String locationCd, int segmentIndex,
-      int fieldRepetition) {
-    MetaFieldInfo meta = new MetaFieldInfo();
-    String value = getAtIndex(locationCd, segmentIndex, fieldRepetition);
-    meta.setValue(value);
-    Hl7Location hl7Location = new Hl7Location();
-    meta.setHl7Location(hl7Location);
-    hl7Location.setFieldRepetition(fieldRepetition);
-    hl7Location.setSegmentSequence(segmentIndex);
-    return meta;
-  }
-
   /**
    * This assumes an absolute index for the segment.
    * <p>
@@ -138,8 +124,8 @@ public class HL7MessageMap {
     return this.get(locator);
   }
   
-  public String getAtIndex(Hl7Location hl7Location) {
-    String locator = getLocatorString(hl7Location);
+  public String getAtLocation(Hl7Location hl7Location) {
+    String locator = hl7Location.getMessageMapLocator();
     return this.get(locator);
   }
 
@@ -266,7 +252,7 @@ public class HL7MessageMap {
   public List<Integer> getIndexesForSegmentName(String segName) {
     List<Integer> indexes = this.segmentIndexes.get(segName);
     if (indexes == null) {
-      return new ArrayList<>();
+      return new TreeList<>();
     }
     return indexes;
   }
@@ -531,32 +517,7 @@ public class HL7MessageMap {
   
   public String get(Hl7Location hl7Location)
   {
-    return this.get(getLocatorString(hl7Location));
-  }
-
-  public String getLocatorString(Hl7Location hl7Location) {
-    String segmentName = hl7Location.getSegmentId();
-    int segIndex = hl7Location.getSegmentSequence();
-    if (segIndex <= 0) {
-      segIndex = 1;
-    }
-    int fieldNum = hl7Location.getFieldPosition();
-    if (fieldNum <= 0) {
-      fieldNum = 1;
-    }
-    int fieldRep = hl7Location.getFieldRepetition();
-    if (fieldRep <= 0) {
-      fieldRep = 1;
-    }
-    int component = hl7Location.getComponentNumber();
-    if (component <= 0) {
-      component = 1;
-    }
-    int subComponent = hl7Location.getSubComponentNumber();
-    if (subComponent <= 0) {
-      subComponent = 1;
-    }
-    return getLocatorString(segmentName, segIndex, fieldNum, fieldRep, component, subComponent);
+    return this.get(hl7Location.getMessageMapLocator());
   }
 
   public String makeLocatorString(String basiclocation, int segIndex, int fieldRep) {

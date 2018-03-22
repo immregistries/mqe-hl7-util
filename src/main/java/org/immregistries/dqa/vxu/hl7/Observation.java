@@ -1,8 +1,9 @@
 package org.immregistries.dqa.vxu.hl7;
 
+import org.immregistries.dqa.hl7util.model.MetaFieldInfo;
+import org.immregistries.dqa.vxu.MetaFieldInfoHolder;
 
-public class Observation {
-  
+public class Observation extends MetaFieldInfoHolder {
   private String observationIdentifier = "";//new CodedEntity(CodesetType.OBSERVATION_IDENTIFIER);
   private String observationIdentifierDescription = "";
   private String observationValue = "";
@@ -13,7 +14,7 @@ public class Observation {
   private String observationMethodCode ="";//this could be at the immunization level, or patient level
   //example: VXC40^Eligibility captured at the immunization level^CDCPHINVS
   //example of patient level??? 
-  
+
 	public String getSubId() {
 		return observationSubId;
 	}
@@ -79,5 +80,31 @@ public class Observation {
 		this.observationIdentifierDescription = observationIdentifierDescription;
 	}
 
-   
+		@Override
+		protected void setFieldFromMetaFieldInfo(MetaFieldInfo metaFieldInfo) {
+			String value = metaFieldInfo.getValue();
+			switch (metaFieldInfo.getVxuField()) {
+			case OBSERVATION_DATE_TIME_OF_OBSERVATION:
+				this.observationDateString = value;
+				break;
+			case OBSERVATION_VALUE_TYPE:
+				this.observationValue = value;
+				break;
+			case OBSERVATION_VALUE_DESC:
+				this.observationValueDesc = value;
+				break;
+			case OBSERVATION_VALUE:
+				this.observationValue = value;
+				break;
+			case OBSERVATION_IDENTIFIER_CODE:
+				this.observationIdentifier = value;
+				break;
+			case OBSERVATION_IDENTIFIER_DESC:
+				this.observationValueDesc = value;
+				break;
+			case OBSERVATION_SUB_ID:
+				this.observationSubId = value;
+				break;
+			}
+	}
 }

@@ -11,6 +11,9 @@ public enum VxuField {
 	 * What do you think about tagging the HL7 Location for these bad boys. Pull them from the MessageAttribute class.  
 	 */
 
+
+	//Fields: String fieldDesc, CodesetType typeOfValue, String hl7Field
+
 			//general
 			  AUTHORIZATION("authorization", null, null)
 			, CONFIGURATION("configuration", null, null)
@@ -67,7 +70,10 @@ public enum VxuField {
 			//observation
 			, OBSERVATION_VALUE_TYPE("value type", CodesetType.HL7_VALUE_TYPE, "OBX-2")
 			, OBSERVATION_IDENTIFIER_CODE("identifier code", CodesetType.OBSERVATION_IDENTIFIER, "OBX-3")
-			, OBSERVATION_VALUE("value", null, "OBX")
+      , OBSERVATION_IDENTIFIER_DESC("identifier description", CodesetType.OBSERVATION_IDENTIFIER, "OBX-3-2")
+      , OBSERVATION_SUB_ID("observation sub id", CodesetType.OBSERVATION_IDENTIFIER, "OBX-4")
+			, OBSERVATION_VALUE("value", null, "OBX-5")
+      , OBSERVATION_VALUE_DESC("value description", null, "OBX-5-2")
 			, OBSERVATION_DATE_TIME_OF_OBSERVATION("date time of observation", null, "OBX-14")
 
 			//patient
@@ -97,11 +103,13 @@ public enum VxuField {
 			, PATIENT_GUARDIAN_ADDRESS_CITY("guardian address city", null, "NK1-4.3")
 			, PATIENT_GUARDIAN_ADDRESS_STATE("guardian address state", null, "NK1-4.4")
 			, PATIENT_GUARDIAN_ADDRESS_STREET("guardian address street", null, "NK1-4.1")
+			, PATIENT_GUARDIAN_ADDRESS_STREET2("guardian address second street line", null, "NK1-4.2")
 			, PATIENT_GUARDIAN_ADDRESS_ZIP("guardian address zip", null, "NK1-4.5")
+			, PATIENT_GUARDIAN_ADDRESS_COUNTRY("guardian address zip", null, "NK1-4.6")
 			, PATIENT_GUARDIAN_NAME("guardian name", null, "NK1-2")
 			, PATIENT_GUARDIAN_NAME_FIRST("guardian name first", null, "NK1-2.2")
 			, PATIENT_GUARDIAN_NAME_LAST("guardian name last", null, "NK1-2.1")
-			, PATIENT_GUARDIAN_RESPONSIBLE_PARTY("guardian responsible party", null, "NK1")
+			, PATIENT_GUARDIAN_RESPONSIBLE_PARTY("guardian responsible party", null, "")
 			, PATIENT_GUARDIAN_PHONE("guardian phone", null, "NK1-5")
 			, PATIENT_GUARDIAN_RELATIONSHIP("guardian relationship", null, "NK1-3")
 			, PATIENT_IMMUNITY_CODE("immunity code", CodesetType.EVIDENCE_OF_IMMUNITY, null)

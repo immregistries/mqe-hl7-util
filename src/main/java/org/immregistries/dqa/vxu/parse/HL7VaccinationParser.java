@@ -8,7 +8,7 @@ import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 import org.immregistries.dqa.hl7util.model.Hl7Location;
 import org.immregistries.dqa.hl7util.parser.HL7MessageMap;
 import org.immregistries.dqa.vxu.DqaVaccination;
-import org.immregistries.dqa.vxu.VxuField;
+import static org.immregistries.dqa.vxu.VxuField.*;
 import org.immregistries.dqa.vxu.hl7.CodedEntity;
 import org.immregistries.dqa.vxu.hl7.Observation;
 import org.immregistries.dqa.vxu.hl7.OrganizationName;
@@ -39,12 +39,10 @@ public enum HL7VaccinationParser {
     int positionId = 0;
     while (startingPoint < segmentListSize) {
       positionId++;
-      int nextStartingPoint = map.getNextImmunizationStartingIndex(startingPoint);
-      int finishPoint = nextStartingPoint - 1;
-
+      int finishPoint = map.getNextImmunizationStartingIndex(startingPoint) - 1;
       DqaVaccination ts = getVaccination(map, startingPoint, finishPoint, positionId);
       shotList.add(ts);
-      startingPoint = nextStartingPoint;
+      startingPoint = finishPoint + 1;
 
       // Theory: This will naturally finish the process to the end of the segments.
     }
@@ -56,11 +54,9 @@ public enum HL7VaccinationParser {
    * @param map
    * @return
    */
-  public DqaVaccination getVaccination(HL7MessageMap map, int vaccinationStartSegment,
-      int vaccinationFinishSegment, int positionId) {
+  public DqaVaccination getVaccination(HL7MessageMap map, int vaccinationStartSegment, int vaccinationFinishSegment, int positionId) {
 
     MetaParser mp = new MetaParser(map);
-    mp.setPositionId(positionId);
     DqaVaccination shot = new DqaVaccination();
     shot.setPositionId(positionId);
 
@@ -97,36 +93,39 @@ public enum HL7VaccinationParser {
     }
 
     if (orcIdx != -1) {
-      mp.setAbsoluteSegmentIndex(orcIdx);
-      shot.setField(mp.mapValue(VxuField.VACCINATION_ORDER_CONTROL_CODE));
-      shot.setField(mp.mapValue(VxuField.VACCINATION_PLACER_ORDER_NUMBER));
-      shot.setField(mp.mapValue(VxuField.VACCINATION_FILLER_ORDER_NUMBER));
+      shot.setFields(mp.mapValues(orcIdx,
+          VACCINATION_ORDER_CONTROL_CODE,
+          VACCINATION_PLACER_ORDER_NUMBER,
+          VACCINATION_FILLER_ORDER_NUMBER
+      ));
     }
 
-    mp.setAbsoluteSegmentIndex(rxaIdx);
-    shot.setField(mp.mapCodedValue(VxuField.VACCINATION_CVX_CODE, "CVX", "HL70292"));
-    shot.setField(mp.mapCodedValue(VxuField.VACCINATION_CPT_CODE, "CPT", "C4"));
-    shot.setField(mp.mapCodedValue(VxuField.VACCINATION_NDC_CODE, "NDC", "?"));
-    shot.setField(mp.mapValue(VxuField.VACCINATION_ADMIN_DATE));
-    shot.setField(mp.mapValue(VxuField.VACCINATION_ADMIN_DATE_END));
-    shot.setField(mp.mapValue(VxuField.VACCINATION_ADMINISTERED_AMOUNT));
-    shot.setField(mp.mapValue(VxuField.VACCINATION_ADMINISTERED_UNIT));
-    shot.setField(mp.mapValue(VxuField.VACCINATION_INFORMATION_SOURCE));
-    shot.setField(mp.mapValue(VxuField.VACCINATION_GIVEN_BY));
-    shot.setField(mp.mapValue(VxuField.VACCINATION_FACILITY_ID));
-    shot.setField(mp.mapValue(VxuField.VACCINATION_FACILITY_NAME));
-    shot.setField(mp.mapValue(VxuField.VACCINATION_LOT_NUMBER));
-    shot.setField(mp.mapValue(VxuField.VACCINATION_LOT_EXPIRATION_DATE));
-    shot.setField(mp.mapValue(VxuField.VACCINATION_MANUFACTURER_CODE));
-    shot.setField(mp.mapValue(VxuField.VACCINATION_REFUSAL_REASON));
-    shot.setField(mp.mapValue(VxuField.VACCINATION_COMPLETION_STATUS));
-    shot.setField(mp.mapValue(VxuField.VACCINATION_ACTION_CODE));
-    shot.setField(mp.mapValue(VxuField.VACCINATION_SYSTEM_ENTRY_TIME));
+    shot.setField(mp.mapCodedValue(rxaIdx, VACCINATION_CVX_CODE, "CVX", "HL70292"));
+    shot.setField(mp.mapCodedValue(rxaIdx, VACCINATION_CPT_CODE, "CPT", "C4"));
+    shot.setField(mp.mapCodedValue(rxaIdx, VACCINATION_NDC_CODE, "NDC", "?"));
+
+    shot.setFields(mp.mapValues(rxaIdx,
+           VACCINATION_ADMIN_DATE
+          ,VACCINATION_ADMIN_DATE_END
+          ,VACCINATION_ADMINISTERED_AMOUNT
+          ,VACCINATION_ADMINISTERED_UNIT
+          ,VACCINATION_INFORMATION_SOURCE
+          ,VACCINATION_GIVEN_BY
+          ,VACCINATION_FACILITY_ID
+          ,VACCINATION_FACILITY_NAME
+          ,VACCINATION_LOT_NUMBER
+          ,VACCINATION_LOT_EXPIRATION_DATE
+          ,VACCINATION_MANUFACTURER_CODE
+          ,VACCINATION_REFUSAL_REASON
+          ,VACCINATION_COMPLETION_STATUS
+          ,VACCINATION_ACTION_CODE
+          ,VACCINATION_SYSTEM_ENTRY_TIME
+    ));
 
     if (rxrIdx != -1) {
-      mp.setAbsoluteSegmentIndex(rxrIdx);
-      shot.setField(mp.mapValue(VxuField.VACCINATION_BODY_ROUTE));
-      shot.setField(mp.mapValue(VxuField.VACCINATION_BODY_SITE));
+      shot.setFields(mp.mapValues(rxrIdx,
+          VACCINATION_BODY_ROUTE,
+          VACCINATION_BODY_SITE));
     }
 
     logger.info("Segment ID's being used for this shot: ORC[" + orcIdx + "] RXA[" + rxaIdx
@@ -135,17 +134,14 @@ public enum HL7VaccinationParser {
 
 
     for (Integer i : obxIdxList) {
-      mp.setAbsoluteSegmentIndex(i);
       Hl7Location hl7Location = new Hl7Location("OBX-3");
       String value = mp.getValue(hl7Location);
       if (value != null && value.equals("64994-7")) {
-        shot.setField(mp.mapValue(VxuField.VACCINATION_FINANCIAL_ELIGIBILITY_CODE));
+        shot.setFields(mp.mapValues(i, VACCINATION_FINANCIAL_ELIGIBILITY_CODE));
       }
     }
 
-
-
-    List<Observation> observations = getObservations(map, obxIdxList);
+    List<Observation> observations = getObservations(mp, obxIdxList);
     logger.info("Observation list: " + observations);
     shot.setObservations(observations);
 
@@ -236,12 +232,12 @@ public enum HL7VaccinationParser {
   /**
    * Getting the observation segments for this rxa...
    */
-  private List<Observation> getObservations(HL7MessageMap map, List<Integer> obxIdxList) {
+  private List<Observation> getObservations(MetaParser mp, List<Integer> obxIdxList) {
     logger.info("OBXidList: " + obxIdxList);
     List<Observation> list = new ArrayList<Observation>();
 
     for (Integer i : obxIdxList) {
-      Observation o = getObservation(map, i);
+      Observation o = getObservation(mp, i);
       logger.info("OBX: " + ReflectionToStringBuilder.toString(o));
       list.add(o);
     }
@@ -252,34 +248,21 @@ public enum HL7VaccinationParser {
   /**
    * Gets the observation at the index specified.
    * 
-   * @param map
+   * @param mp
    * @param idx this is the absolute index in the message, of the OBX segment.
    * @return
    */
-  protected Observation getObservation(HL7MessageMap map, Integer idx) {
+  protected Observation getObservation(MetaParser mp, Integer idx) {
     Observation o = new Observation();
-
-    String valueTypeCode = map.getAtIndex("OBX-2", idx, 1);
-    o.setValueTypeCode(valueTypeCode);
-
-    String identifier = map.getAtIndex("OBX-3", idx, 1);
-    o.setIdentifierCode(identifier);
-
-    String identifierDesc = map.getAtIndex("OBX-3-2", idx, 1);
-    o.setObservationIdentifierDescription(identifierDesc);
-
-    String subId = map.getAtIndex("OBX-4", idx, 1);
-    o.setSubId(subId);
-
-    String observationValue = map.getAtIndex("OBX-5", idx, 1);
-    o.setValue(observationValue);
-
-    String observationValueDesc = map.getAtIndex("OBX-5-2", idx, 1);
-    o.setObservationValueDesc(observationValueDesc);
-
-    String observationDate = map.getAtIndex("OBX-14", idx, 1);
-    o.setObservationDateString(observationDate);
-
+    o.setFields(mp.mapValues(idx,
+        OBSERVATION_VALUE_TYPE
+        , OBSERVATION_VALUE_DESC
+        , OBSERVATION_VALUE
+        , OBSERVATION_SUB_ID
+        , OBSERVATION_IDENTIFIER_DESC
+        , OBSERVATION_IDENTIFIER_CODE
+        , OBSERVATION_DATE_TIME_OF_OBSERVATION
+    ));
     return o;
   }
 

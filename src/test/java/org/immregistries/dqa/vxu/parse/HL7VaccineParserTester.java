@@ -85,32 +85,32 @@ public class HL7VaccineParserTester {
 		assertEquals("Should have one vaccine code", 1, cvxList.size());
 		assertEquals("first item in the list should be 998...", "998", cvxList.get(0).getCode());
 	}
-	
+	MetaParser mp = new MetaParser(map);
 	@Test 
 	public void testObservationGetter() {
 		//the first observation is the fourth segment in this message.  (zero based)
-		Observation o = vParser.getObservation(map, 4);
+		Observation o = vParser.getObservation(mp, 4);
 		assertNotNull(o);
 			
 		assertEquals("identifier", "59784-9", o.getIdentifierCode());
 		assertEquals("value", "23511006", o.getValue());
 		
-		o = vParser.getObservation(map, 8);
+		o = vParser.getObservation(mp, 8);
 		assertNotNull(o);
 		assertEquals("identifier", "64994-7", o.getIdentifierCode());
 		assertEquals("value", "V02", o.getValue());
 		
-		o = vParser.getObservation(map, 9);
+		o = vParser.getObservation(mp, 9);
 		assertNotNull(o);
 		assertEquals("identifier", "30956-7", o.getIdentifierCode());
 		assertEquals("value", "85", o.getValue());
 
-		o = vParser.getObservation(map, 10);
+		o = vParser.getObservation(mp, 10);
 		assertNotNull(o);
 		assertEquals("identifier", "29768-9", o.getIdentifierCode());
 		assertEquals("value", "20111025", o.getValue());
 		
-		o = vParser.getObservation(map, 11);
+		o = vParser.getObservation(mp, 11);
 		assertNotNull(o);
 		assertEquals("identifier", "29769-7", o.getIdentifierCode());
 		assertEquals("value", "20160413", o.getValue());

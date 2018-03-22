@@ -2,7 +2,7 @@ package org.immregistries.dqa.vxu.parse;
 
 import org.immregistries.dqa.hl7util.parser.HL7MessageMap;
 import org.immregistries.dqa.vxu.DqaMessageHeader;
-import org.immregistries.dqa.vxu.VxuField;
+import static org.immregistries.dqa.vxu.VxuField.*;
 
 public enum HL7MessageHeaderParser {
 	INSTANCE;
@@ -15,26 +15,28 @@ public enum HL7MessageHeaderParser {
 	public DqaMessageHeader getMessageHeader(HL7MessageMap map) {
 	    
 	    MetaParser mp = new MetaParser(map);
-	    mp.setAbsoluteSegmentIndex(map.getIndexForSegmentName("MSH"));
+
+	    int index = map.getIndexForSegmentName("MSH");
+
 	    DqaMessageHeader h = new DqaMessageHeader();
-	    h.setField(mp.mapValue(VxuField.MESSAGE_SENDING_APPLICATION));
-        h.setField(mp.mapValue(VxuField.MESSAGE_SENDING_FACILITY));
-        h.setField(mp.mapValue(VxuField.MESSAGE_RECEIVING_APPLICATION));
-        h.setField(mp.mapValue(VxuField.MESSAGE_RECEIVING_FACILITY));
-        h.setField(mp.mapValue(VxuField.MESSAGE_DATE));
-        h.setField(mp.mapValue(VxuField.MESSAGE_TYPE));
-        h.setField(mp.mapValue(VxuField.MESSAGE_TRIGGER));
-        h.setField(mp.mapValue(VxuField.MESSAGE_STRUCTURE));
-        h.setField(mp.mapValue(VxuField.MESSAGE_CONTROL_ID));
-        h.setField(mp.mapValue(VxuField.MESSAGE_PROCESSING_ID));
-        h.setField(mp.mapValue(VxuField.MESSAGE_VERSION));
-        h.setField(mp.mapValue(VxuField.MESSAGE_ACCEPT_ACK_TYPE));
-        h.setField(mp.mapValue(VxuField.MESSAGE_APP_ACK_TYPE));
-        h.setField(mp.mapValue(VxuField.MESSAGE_COUNTRY_CODE));
-        h.setField(mp.mapValue(VxuField.MESSAGE_CHARACTER_SET));
-        h.setField(mp.mapValue(VxuField.MESSAGE_ALT_CHARACTER_SET));
-        h.setField(mp.mapValue(VxuField.MESSAGE_PROFILE_ID));
-	    
+	    h.setFields(mp.mapValues(index,
+                MESSAGE_SENDING_APPLICATION
+              , MESSAGE_SENDING_FACILITY
+              , MESSAGE_RECEIVING_APPLICATION
+              , MESSAGE_RECEIVING_FACILITY
+              , MESSAGE_DATE
+              , MESSAGE_TYPE
+              , MESSAGE_TRIGGER
+              , MESSAGE_STRUCTURE
+              , MESSAGE_CONTROL_ID
+              , MESSAGE_PROCESSING_ID
+              , MESSAGE_VERSION
+              , MESSAGE_ACCEPT_ACK_TYPE
+              , MESSAGE_APP_ACK_TYPE
+              , MESSAGE_COUNTRY_CODE
+              , MESSAGE_CHARACTER_SET
+              , MESSAGE_ALT_CHARACTER_SET
+              , MESSAGE_PROFILE_ID));
 	    return h;
 	}
 }

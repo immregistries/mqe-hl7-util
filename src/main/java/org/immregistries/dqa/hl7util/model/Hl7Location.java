@@ -92,6 +92,12 @@ public class Hl7Location {
     // default
   }
 
+  public Hl7Location(String hl7Reference, int index, int position) {
+    this(hl7Reference);
+    this.line = index;
+    this.segmentSequence = position;
+  }
+
   public Hl7Location(String hl7Reference) {
     if (!StringUtils.isBlank(hl7Reference)) {
       int pos = hl7Reference.indexOf("-");
