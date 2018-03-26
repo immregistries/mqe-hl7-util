@@ -2,10 +2,10 @@ package org.immregistries.dqa.vxu;
 
 import java.io.Serializable;
 import java.util.Date;
-
 import org.immregistries.dqa.hl7util.model.MetaFieldInfo;
 
 public class DqaMessageHeader extends MetaFieldInfoHolder implements Serializable {
+
   private static final long serialVersionUID = 1l;
 
   private int headerId = 0;

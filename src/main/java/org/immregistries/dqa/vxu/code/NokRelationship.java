@@ -32,7 +32,7 @@ public enum NokRelationship {
       codeMap.put(rel.code.toUpperCase(), rel);
     }
     RESPONSIBLE_CODES_LIST = Arrays.asList(
-          RELATIONSHIP_CARE_GIVER.code
+        RELATIONSHIP_CARE_GIVER.code
         , RELATIONSHIP_FATHER.code
         , RELATIONSHIP_GRANDPARENT.code
         , RELATIONSHIP_MOTHER.code

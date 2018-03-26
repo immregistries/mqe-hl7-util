@@ -17,9 +17,9 @@ import javax.xml.bind.annotation.XmlValue;
 
 /**
  * <p>Java class for dynamicDef complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="dynamicDef">
  *   &lt;simpleContent>
@@ -31,8 +31,6 @@ import javax.xml.bind.annotation.XmlValue;
  *   &lt;/simpleContent>
  * &lt;/complexType>
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "dynamicDef", propOrder = {
@@ -40,109 +38,85 @@ import javax.xml.bind.annotation.XmlValue;
 })
 public class DynamicDef {
 
-    @XmlValue
-    protected String value;
-    @XmlAttribute(name = "AccAck")
-    protected String accAck;
-    @XmlAttribute(name = "AppAck")
-    protected String appAck;
-    @XmlAttribute(name = "MsgAckMode")
-    protected String msgAckMode;
+  @XmlValue
+  protected String value;
+  @XmlAttribute(name = "AccAck")
+  protected String accAck;
+  @XmlAttribute(name = "AppAck")
+  protected String appAck;
+  @XmlAttribute(name = "MsgAckMode")
+  protected String msgAckMode;
 
-    /**
-     * Gets the value of the value property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getValue() {
-        return value;
-    }
+  /**
+   * Gets the value of the value property.
+   *
+   * @return possible object is {@link String }
+   */
+  public String getValue() {
+    return value;
+  }
 
-    /**
-     * Sets the value of the value property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setValue(String value) {
-        this.value = value;
-    }
+  /**
+   * Sets the value of the value property.
+   *
+   * @param value allowed object is {@link String }
+   */
+  public void setValue(String value) {
+    this.value = value;
+  }
 
-    /**
-     * Gets the value of the accAck property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getAccAck() {
-        return accAck;
-    }
+  /**
+   * Gets the value of the accAck property.
+   *
+   * @return possible object is {@link String }
+   */
+  public String getAccAck() {
+    return accAck;
+  }
 
-    /**
-     * Sets the value of the accAck property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setAccAck(String value) {
-        this.accAck = value;
-    }
+  /**
+   * Sets the value of the accAck property.
+   *
+   * @param value allowed object is {@link String }
+   */
+  public void setAccAck(String value) {
+    this.accAck = value;
+  }
 
-    /**
-     * Gets the value of the appAck property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getAppAck() {
-        return appAck;
-    }
+  /**
+   * Gets the value of the appAck property.
+   *
+   * @return possible object is {@link String }
+   */
+  public String getAppAck() {
+    return appAck;
+  }
 
-    /**
-     * Sets the value of the appAck property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setAppAck(String value) {
-        this.appAck = value;
-    }
+  /**
+   * Sets the value of the appAck property.
+   *
+   * @param value allowed object is {@link String }
+   */
+  public void setAppAck(String value) {
+    this.appAck = value;
+  }
 
-    /**
-     * Gets the value of the msgAckMode property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getMsgAckMode() {
-        return msgAckMode;
-    }
+  /**
+   * Gets the value of the msgAckMode property.
+   *
+   * @return possible object is {@link String }
+   */
+  public String getMsgAckMode() {
+    return msgAckMode;
+  }
 
-    /**
-     * Sets the value of the msgAckMode property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setMsgAckMode(String value) {
-        this.msgAckMode = value;
-    }
+  /**
+   * Sets the value of the msgAckMode property.
+   *
+   * @param value allowed object is {@link String }
+   */
+  public void setMsgAckMode(String value) {
+    this.msgAckMode = value;
+  }
 
 }

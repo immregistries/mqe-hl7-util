@@ -16,9 +16,9 @@ import javax.xml.bind.annotation.XmlType;
 
 /**
  * <p>Java class for encodings complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="encodings">
  *   &lt;complexContent>
@@ -30,8 +30,6 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "encodings", propOrder = {
@@ -39,31 +37,25 @@ import javax.xml.bind.annotation.XmlType;
 })
 public class Encodings {
 
-    @XmlElement(name = "Encoding", required = true)
-    protected String encoding;
+  @XmlElement(name = "Encoding", required = true)
+  protected String encoding;
 
-    /**
-     * Gets the value of the encoding property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getEncoding() {
-        return encoding;
-    }
+  /**
+   * Gets the value of the encoding property.
+   *
+   * @return possible object is {@link String }
+   */
+  public String getEncoding() {
+    return encoding;
+  }
 
-    /**
-     * Sets the value of the encoding property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setEncoding(String value) {
-        this.encoding = value;
-    }
+  /**
+   * Sets the value of the encoding property.
+   *
+   * @param value allowed object is {@link String }
+   */
+  public void setEncoding(String value) {
+    this.encoding = value;
+  }
 
 }

@@ -1,7 +1,6 @@
 package org.immregistries.dqa.hl7util.parser.profile.generator;
 
 import java.util.Map;
-
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,7 +13,7 @@ import org.slf4j.LoggerFactory;
  * <br />When a complex data field only has the first component, sometimes the message will come through with <strong>just the value, and no field/component separators.</strong>  For example, a coded element might come through as: <br /><br />
  * <code><strong>1234</strong></code> instead of <code><strong>1234^^</strong></code><br /><br />
  * And we want to store the value as specifically as we can.  So if the above field is in MSH-3, the address of that data item should be <strong>MSH-3-1</strong> regardless of whether they include the component separators. <br /><br />
- *  
+ *
  * We make it so that the first component is always addressed at the root level. <br /><br />
  * <ul>
  * 	<li>Benefits: 
@@ -34,51 +33,53 @@ import org.slf4j.LoggerFactory;
  *
  */
 public class MessageProfileReaderNIST implements MessageProfileReader {
-	private static final Logger LOGGER = LoggerFactory.getLogger(MessageProfileReaderNIST.class);
 
-	private static final MessageProfile PROFILE = new MessageProfileChooser().getGeneratedMessageProfile();
-	
-	public String getDatatype(String dataLocation) {
-		String datatype = PROFILE.getFieldDataTypeMap().get(dataLocation);
-		
-		if (datatype == null) {
-			datatype = "unknown";
-		}  
-		return datatype;
-	}
+  private static final Logger LOGGER = LoggerFactory.getLogger(MessageProfileReaderNIST.class);
 
-	public String getFieldDescription(String location) {
-		String description = PROFILE.getFieldDescriptionMap().get(location);
-		if (description == null) {
-			String parentLoc = StringUtils.substringBeforeLast(location, "-");
+  private static final MessageProfile PROFILE = new MessageProfileChooser()
+      .getGeneratedMessageProfile();
+
+  public String getDatatype(String dataLocation) {
+    String datatype = PROFILE.getFieldDataTypeMap().get(dataLocation);
+
+    if (datatype == null) {
+      datatype = "unknown";
+    }
+    return datatype;
+  }
+
+  public String getFieldDescription(String location) {
+    String description = PROFILE.getFieldDescriptionMap().get(location);
+    if (description == null) {
+      String parentLoc = StringUtils.substringBeforeLast(location, "-");
 //			LOGGER.info("Parent loc: " + parentLoc);
-			if (parentLoc != null && parentLoc.contains("-")) {
-				description = PROFILE.getFieldDescriptionMap().get(parentLoc);
-				if (description != null) {
-					description = description + " - component";
-				}
-			}
-		}
-		return description;
-	}
-	
-	public FieldComplexity getDatatypeComplexity(String datatype) {
-		FieldComplexity complexity = PROFILE.getDataTypeComplexityMap().get(datatype);
-		
-		if (complexity == null) {
-			complexity = FieldComplexity.UNKNOWN;
-		}  
-		
-		return complexity;
-	}
-	
-	public FieldComplexity getComplexity(String dataLocation) {
+      if (parentLoc != null && parentLoc.contains("-")) {
+        description = PROFILE.getFieldDescriptionMap().get(parentLoc);
+        if (description != null) {
+          description = description + " - component";
+        }
+      }
+    }
+    return description;
+  }
+
+  public FieldComplexity getDatatypeComplexity(String datatype) {
+    FieldComplexity complexity = PROFILE.getDataTypeComplexityMap().get(datatype);
+
+    if (complexity == null) {
+      complexity = FieldComplexity.UNKNOWN;
+    }
+
+    return complexity;
+  }
+
+  public FieldComplexity getComplexity(String dataLocation) {
 //		LOGGER.info("profile:" + profile);
-		Map<String, String> fieldDataType = PROFILE.getFieldDataTypeMap();
-		String dataType = fieldDataType.get(dataLocation);
-		FieldComplexity complexity = getDatatypeComplexity(dataType);
-		return complexity;
-	}
-	
+    Map<String, String> fieldDataType = PROFILE.getFieldDataTypeMap();
+    String dataType = fieldDataType.get(dataLocation);
+    FieldComplexity complexity = getDatatypeComplexity(dataType);
+    return complexity;
+  }
+
 
 }

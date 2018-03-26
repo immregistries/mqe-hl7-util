@@ -10,7 +10,6 @@ package org.immregistries.dqa.hl7util.parser.profile.intf;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
@@ -20,9 +19,9 @@ import javax.xml.bind.annotation.XmlType;
 
 /**
  * <p>Java class for segment complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="segment">
  *   &lt;complexContent>
@@ -39,8 +38,6 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "segment", propOrder = {
@@ -48,112 +45,94 @@ import javax.xml.bind.annotation.XmlType;
 })
 public class Segment implements HL7Segment {
 
-    @XmlElement(name = "Field")
-    protected List<Field> field;
-    @XmlAttribute(name = "LongName")
-    protected String longName;
-    @XmlAttribute(name = "Max")
-    protected String max;
-    @XmlAttribute(name = "Min")
-    protected Byte min;
-    @XmlAttribute(name = "Name")
-    protected String name;
-    @XmlAttribute(name = "Usage")
-    protected String usage;
+  @XmlElement(name = "Field")
+  protected List<Field> field;
+  @XmlAttribute(name = "LongName")
+  protected String longName;
+  @XmlAttribute(name = "Max")
+  protected String max;
+  @XmlAttribute(name = "Min")
+  protected Byte min;
+  @XmlAttribute(name = "Name")
+  protected String name;
+  @XmlAttribute(name = "Usage")
+  protected String usage;
 
-	public List<Field> getField() {
-        if (field == null) {
-            field = new ArrayList<Field>();
-        }
-        return this.field;
+  public List<Field> getField() {
+    if (field == null) {
+      field = new ArrayList<Field>();
     }
+    return this.field;
+  }
 
-	public String getLongName() {
-        return longName;
-    }
+  public String getLongName() {
+    return longName;
+  }
 
-	public void setLongName(String value) {
-        this.longName = value;
-    }
+  public void setLongName(String value) {
+    this.longName = value;
+  }
 
-    /**
-     * Gets the value of the max property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getMax() {
-        return max;
-    }
+  /**
+   * Gets the value of the max property.
+   *
+   * @return possible object is {@link String }
+   */
+  public String getMax() {
+    return max;
+  }
 
-    /**
-     * Sets the value of the max property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setMax(String value) {
-        this.max = value;
-    }
+  /**
+   * Sets the value of the max property.
+   *
+   * @param value allowed object is {@link String }
+   */
+  public void setMax(String value) {
+    this.max = value;
+  }
 
-    /**
-     * Gets the value of the min property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Byte }
-     *     
-     */
-    public Byte getMin() {
-        return min;
-    }
+  /**
+   * Gets the value of the min property.
+   *
+   * @return possible object is {@link Byte }
+   */
+  public Byte getMin() {
+    return min;
+  }
 
-    /**
-     * Sets the value of the min property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Byte }
-     *     
-     */
-    public void setMin(Byte value) {
-        this.min = value;
-    }
+  /**
+   * Sets the value of the min property.
+   *
+   * @param value allowed object is {@link Byte }
+   */
+  public void setMin(Byte value) {
+    this.min = value;
+  }
 
-	public String getName() {
-        return name;
-    }
+  public String getName() {
+    return name;
+  }
 
-    public void setName(String value) {
-        this.name = value;
-    }
+  public void setName(String value) {
+    this.name = value;
+  }
 
-    /**
-     * Gets the value of the usage property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getUsage() {
-        return usage;
-    }
+  /**
+   * Gets the value of the usage property.
+   *
+   * @return possible object is {@link String }
+   */
+  public String getUsage() {
+    return usage;
+  }
 
-    /**
-     * Sets the value of the usage property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setUsage(String value) {
-        this.usage = value;
-    }
+  /**
+   * Sets the value of the usage property.
+   *
+   * @param value allowed object is {@link String }
+   */
+  public void setUsage(String value) {
+    this.usage = value;
+  }
 
 }

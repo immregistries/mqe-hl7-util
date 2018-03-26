@@ -1,40 +1,41 @@
 package org.immregistries.dqa.hl7util.test;
 
+import java.util.Random;
 import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Random;
 public class MessageGenerator {
 
-    private static final Logger logger = LoggerFactory.getLogger(MessageGenerator.class);
-    //this needs:
-    //current year, current month, unique number, first name, birth year, birth month,
-    //current year, current month, current year, current month.
-    private NameGenerator generator = new NameGenerator();
+  private static final Logger logger = LoggerFactory.getLogger(MessageGenerator.class);
+  //this needs:
+  //current year, current month, unique number, first name, birth year, birth month,
+  //current year, current month, current year, current month.
+  private NameGenerator generator = new NameGenerator();
 
-    public String getUniqueMessage() {
-        DateTime dtCurrent = DateTime.now();
-        final int currentYear = dtCurrent.getYear();
-        final int julianDay = dtCurrent.getDayOfYear();
-        final int currentMonth = dtCurrent.getMonthOfYear();
+  public String getUniqueMessage() {
+    DateTime dtCurrent = DateTime.now();
+    final int currentYear = dtCurrent.getYear();
+    final int julianDay = dtCurrent.getDayOfYear();
+    final int currentMonth = dtCurrent.getMonthOfYear();
 
-        //need a month for the birth that's in the past.  and one for the immunization in the present.
-        //lets just say birth is three months ago.
-        DateTime dt = DateTime.now();
-        dt = dt.minusMonths(3);
-        int birthMonth = dt.getMonthOfYear();
-        int birthYear = dt.getYear();
+    //need a month for the birth that's in the past.  and one for the immunization in the present.
+    //lets just say birth is three months ago.
+    DateTime dt = DateTime.now();
+    dt = dt.minusMonths(3);
+    int birthMonth = dt.getMonthOfYear();
+    int birthYear = dt.getYear();
 
-        final String firstName = generator.getRandomName();
-        final String lastName = generator.getRandomName();
-        final String mothersName = generator.getRandomName();
-        final String mothersMaiden = generator.getRandomName();
-        final int hashName = firstName.hashCode();
+    final String firstName = generator.getRandomName();
+    final String lastName = generator.getRandomName();
+    final String mothersName = generator.getRandomName();
+    final String mothersMaiden = generator.getRandomName();
+    final int hashName = firstName.hashCode();
 
-        final String gender = new Random().nextBoolean() ? "M" : "F";
+    final String gender = new Random().nextBoolean() ? "M" : "F";
 
-        String testMessageFormat = "MSH|^~\\&||1255-60-20|MCIR|MDCH|%d%d0301131228-0500||VXU^V04^VXU_V04|3WzJ-A.01.01.2aF|T|2.5.1|"
+    String testMessageFormat =
+        "MSH|^~\\&||1255-60-20|MCIR|MDCH|%d%d0301131228-0500||VXU^V04^VXU_V04|3WzJ-A.01.01.2aF|T|2.5.1|"
             + "\nPID|||3WzJ-A.01.01%s^^^AIRA-TEST^MR||%s^%s^^^^^L|%s^%s|%d%02d01|%s||2076-8^Native Hawaiian or Other Pacific Islander^HL70005|81 Page Pl^^GR^MI^49544^USA^P||^PRN^PH^^^616^9245843|||||||||2135-2^Hispanic or Latino^HL70005|Birth Place PID-23|||"
             + "\nPD1|||||||||||02^Reminder/Recall - any method^HL70215|||||A|20170301|20170301|"
             + "\nNK1|1|%s^%s^^^^^L|MTH^Mother^HL70063|81 Page Pl^^GR^MI^49544^USA^P|^PRN^PH^^^616^9245843|"
@@ -49,15 +50,15 @@ public class MessageGenerator {
 //            + "\nRXA|0|1|%d%02d01||00005-0100-01^Trumenba^NDC|0.5|mL^milliliters^UCUM||00^Administered^NIP001||||||N3783EO||PFR^Pfizer, Inc^MVX|||CP|A";
             + "\nRXA|0|1|%d%02d01||66019-0302-10^FluMist Quadrivalent^NDC|0.5|mL^milliliters^UCUM||00^Administered^NIP001||||||N3783EO||MED^^MVX|||CP|A";
 
-        return String.format(testMessageFormat,
-            currentYear, currentMonth,
-            (hashName + julianDay),
-            lastName, firstName,
-            mothersMaiden, mothersName,
-            birthYear, birthMonth,
-            gender,
-            lastName, mothersName,
-            currentYear, currentMonth,
-            currentYear, currentMonth);
-    }
+    return String.format(testMessageFormat,
+        currentYear, currentMonth,
+        (hashName + julianDay),
+        lastName, firstName,
+        mothersMaiden, mothersName,
+        birthYear, birthMonth,
+        gender,
+        lastName, mothersName,
+        currentYear, currentMonth,
+        currentYear, currentMonth);
+  }
 }

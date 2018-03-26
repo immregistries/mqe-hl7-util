@@ -1,10 +1,6 @@
 package org.immregistries.dqa.vxu.parse;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-
-import org.apache.commons.lang3.ArrayUtils;
 import org.immregistries.dqa.hl7util.parser.HL7MessageMap;
 import org.immregistries.dqa.hl7util.parser.MessageParserHL7;
 import org.immregistries.dqa.vxu.DqaMessageHeader;
@@ -16,20 +12,17 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * <ul>
- * <li>This class will parse a VXU message and put it into objects that represent the business
+ * <ul> <li>This class will parse a VXU message and put it into objects that represent the business
  * concepts.
- * 
+ *
  * <li>Declaration: This class will not get data from any external sources. Any data transformations
  * will happen in other classes, as augmentation after this class is invoked. This will give you
  * ONLY what's in the message, and will not look up anything, or add it it. it WILL interpret the
  * information that exists in the message so that the values are put into the appropriate places in
  * the object model. Keep in mind this strategic difference between transforming the data V.S.
- * Interpreting the data. <br />
- * <br />
+ * Interpreting the data. <br /> <br />
  *
  * @author Josh Hull
- *
  */
 public enum HL7MessageParser {
   INSTANCE;
@@ -45,7 +38,7 @@ public enum HL7MessageParser {
 
   /**
    * Extracts all the values from the message into objects that can be used to process the message.
-   * 
+   *
    * @param message VXU text
    * @return a set of objects representing the business concepts
    */

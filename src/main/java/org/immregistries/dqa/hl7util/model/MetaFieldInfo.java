@@ -3,6 +3,7 @@ package org.immregistries.dqa.hl7util.model;
 import org.immregistries.dqa.vxu.VxuField;
 
 public class MetaFieldInfo {
+
   private String value;
   private Hl7Location hl7Location = null;
   private VxuField vxuField = null;
@@ -24,13 +25,14 @@ public class MetaFieldInfo {
     this.hl7Location = hl7Location;
   }
 
-  public MetaFieldInfo(String valueIn, VxuField fieldIn, int positionIdIn, int absoluteSegmentIndexIn) {
-      Hl7Location hl7Location = new Hl7Location(fieldIn.getHl7Locator());
-      hl7Location.setSegmentSequence(positionIdIn);
-      hl7Location.setLine(absoluteSegmentIndexIn + 1);
-      this.setVxuField(fieldIn);
-      this.setValue(valueIn);
-      this.setHl7Location(hl7Location);
+  public MetaFieldInfo(String valueIn, VxuField fieldIn, int positionIdIn,
+      int absoluteSegmentIndexIn) {
+    Hl7Location hl7Location = new Hl7Location(fieldIn.getHl7Locator());
+    hl7Location.setSegmentSequence(positionIdIn);
+    hl7Location.setLine(absoluteSegmentIndexIn + 1);
+    this.setVxuField(fieldIn);
+    this.setValue(valueIn);
+    this.setHl7Location(hl7Location);
   }
 
   public Hl7Location getHl7Location() {

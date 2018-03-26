@@ -1,107 +1,106 @@
 package org.immregistries.dqa.vxu;
 
 import java.util.Date;
-
 import org.immregistries.dqa.core.util.DateUtility;
 
 public class VaccinationVIS {
-	
-	private DateUtility datr = DateUtility.INSTANCE;
-	
-	private int visId = 0;
-	private DqaVaccination vaccination = null;
-	private int positionId = 0;
-	private boolean skipped = false;
-	private String document = "";// new
-									// CodedEntity(CodesetType.VACCINATION_VIS_DOC_TYPE);
-	private String cvx = "";// new
-							// CodedEntity(CodesetType.VACCINATION_VIS_CVX_CODE);
-	private String publishedDateString = "";
-	private String presentedDateString = "";
 
-	public String getCvxCode() {
-		return cvx;
-	}
+  private DateUtility datr = DateUtility.INSTANCE;
 
-	public void setCvxCode(String cvxCode) {
-		cvx = cvxCode;
-	}
+  private int visId = 0;
+  private DqaVaccination vaccination = null;
+  private int positionId = 0;
+  private boolean skipped = false;
+  private String document = "";// new
+  // CodedEntity(CodesetType.VACCINATION_VIS_DOC_TYPE);
+  private String cvx = "";// new
+  // CodedEntity(CodesetType.VACCINATION_VIS_CVX_CODE);
+  private String publishedDateString = "";
+  private String presentedDateString = "";
 
-	public int getVisId() {
-		return visId;
-	}
+  public String getCvxCode() {
+    return cvx;
+  }
 
-	public void setVisId(int visId) {
-		this.visId = visId;
-	}
+  public void setCvxCode(String cvxCode) {
+    cvx = cvxCode;
+  }
 
-	public DqaVaccination getVaccination() {
-		return vaccination;
-	}
+  public int getVisId() {
+    return visId;
+  }
 
-	public void setVaccination(DqaVaccination vaccination) {
-		this.vaccination = vaccination;
-	}
+  public void setVisId(int visId) {
+    this.visId = visId;
+  }
 
-	public int getPositionId() {
-		return positionId;
-	}
+  public DqaVaccination getVaccination() {
+    return vaccination;
+  }
 
-	public void setPositionId(int positionId) {
-		this.positionId = positionId;
-	}
+  public void setVaccination(DqaVaccination vaccination) {
+    this.vaccination = vaccination;
+  }
 
-	public boolean isSkipped() {
-		return skipped;
-	}
+  public int getPositionId() {
+    return positionId;
+  }
 
-	public void setSkipped(boolean skipped) {
-		this.skipped = skipped;
-	}
+  public void setPositionId(int positionId) {
+    this.positionId = positionId;
+  }
 
-	public String getDocumentCode() {
-		return document;
-	}
+  public boolean isSkipped() {
+    return skipped;
+  }
 
-	public void setDocumentCode(String documentCode) {
-		this.document = documentCode;
-	}
+  public void setSkipped(boolean skipped) {
+    this.skipped = skipped;
+  }
 
-	public Date getPublishedDate() {
-		return datr.parseDate(publishedDateString);
-	}
+  public String getDocumentCode() {
+    return document;
+  }
 
-	public Date getPresentedDate() {
-		return datr.parseDate(presentedDateString);
-	}
+  public void setDocumentCode(String documentCode) {
+    this.document = documentCode;
+  }
 
-	public String getDocument() {
-		return document;
-	}
+  public Date getPublishedDate() {
+    return datr.parseDate(publishedDateString);
+  }
 
-	public String getPublishedDateString() {
-		return publishedDateString;
-	}
+  public Date getPresentedDate() {
+    return datr.parseDate(presentedDateString);
+  }
 
-	public void setPublishedDateString(String publishedDateString) {
-		this.publishedDateString = publishedDateString;
-	}
+  public String getDocument() {
+    return document;
+  }
 
-	public String getPresentedDateString() {
-		return presentedDateString;
-	}
+  public String getPublishedDateString() {
+    return publishedDateString;
+  }
 
-	public void setPresentedDateString(String presentedDateString) {
-		this.presentedDateString = presentedDateString;
-	}
+  public void setPublishedDateString(String publishedDateString) {
+    this.publishedDateString = publishedDateString;
+  }
 
-	@Override
-	public String toString() {
-		return "VaccinationVIS [visId=" + visId
-				+ ", vaccination=" + vaccination + ", positionId=" + positionId
-				+ ", skipped=" + skipped + ", document=" + document + ", cvx="
-				+ cvx + ", publishedDateString=" + publishedDateString
-				+ ", presentedDateString=" + presentedDateString + "]";
-	}
+  public String getPresentedDateString() {
+    return presentedDateString;
+  }
+
+  public void setPresentedDateString(String presentedDateString) {
+    this.presentedDateString = presentedDateString;
+  }
+
+  @Override
+  public String toString() {
+    return "VaccinationVIS [visId=" + visId
+        + ", vaccination=" + vaccination + ", positionId=" + positionId
+        + ", skipped=" + skipped + ", document=" + document + ", cvx="
+        + cvx + ", publishedDateString=" + publishedDateString
+        + ", presentedDateString=" + presentedDateString + "]";
+  }
 
 }

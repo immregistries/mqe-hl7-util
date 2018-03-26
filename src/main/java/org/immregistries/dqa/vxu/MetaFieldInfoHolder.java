@@ -3,10 +3,10 @@ package org.immregistries.dqa.vxu;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import org.immregistries.dqa.hl7util.model.MetaFieldInfo;
 
 public abstract class MetaFieldInfoHolder implements MetaFieldInfoData {
+
   private Map<VxuField, MetaFieldInfo> metaFieldInfoMap = new HashMap<>();
   private int positionId = 0;
   private int messageLineNumber = 0;

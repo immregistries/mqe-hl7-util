@@ -1,6 +1,6 @@
 /*
  * Copyright 2013 by Dandelion Software & Research, Inc (DSR)
- * 
+ *
  * This application was written for immunization information system (IIS) community and has been
  * released by DSR under an Apache 2 License with the hope that this software will be used to
  * improve Public Health.
@@ -9,7 +9,6 @@ package org.immregistries.dqa.hl7util.builder;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
-
 import org.apache.commons.lang3.StringUtils;
 import org.immregistries.dqa.hl7util.Reportable;
 import org.immregistries.dqa.hl7util.ReportableSource;
@@ -18,6 +17,7 @@ import org.immregistries.dqa.hl7util.model.CodedWithExceptions;
 import org.immregistries.dqa.hl7util.model.Hl7Location;
 
 public class HL7Util {
+
   public static final String MESSAGE_TYPE_VXU = "VXU";
   public static final String MESSAGE_TYPE_QBP = "QBP";
 
@@ -99,19 +99,19 @@ public class HL7Util {
     // MSH
     ack.append("MSH|^~\\&");
     ack.append("|" + ackData.getSendingApplication()); // MSH-3 Sending
-                                                       // Application
+    // Application
     ack.append("|" + ackData.getSendingFacility()); // MSH-4 Sending Facility
     ack.append("|" + ackData.getReceivingApplication()); // MSH-5 Receiving
     // Application
     ack.append("|" + ackData.getReceivingFacility()); // MSH-6 Receiving
-                                                      // Facility
+    // Facility
     ack.append("|" + messageDate); // MSH-7 Date/Time of Message
     ack.append("|"); // MSH-8 Security
     ack.append("|ACK"); // MSH-9
     // Message
     // Type
     ack.append("|" + messageDate + "." + getNextAckCount()); // MSH-10 Message
-                                                             // Control ID
+    // Control ID
     ack.append("|P"); // MSH-11 Processing ID
     ack.append("|2.5.1"); // MSH-12 Version ID
     ack.append("|"); // MSH-13

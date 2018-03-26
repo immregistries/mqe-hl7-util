@@ -3,7 +3,6 @@ package org.immregistries.dqa.vxu;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
 import org.apache.commons.lang3.StringUtils;
 import org.immregistries.dqa.hl7util.model.MetaFieldInfo;
 import org.immregistries.dqa.vxu.hl7.Id;
@@ -58,7 +57,7 @@ public class DqaVaccination extends MetaFieldInfoHolder {
   private String idPlacer = "";
   private String idSubmitter = "";
   private String informationSource = "";// new
-                                        // CodedEntity(CodesetType.VACCINATION_INFORMATION_SOURCE);
+  // CodedEntity(CodesetType.VACCINATION_INFORMATION_SOURCE);
   private String lotNumber = "";
   private String manufacturer = "";// new CodedEntity(CodesetType.VACCINATION_MANUFACTURER_CODE);
   private List<Observation> observations = new ArrayList<Observation>();
@@ -663,141 +662,141 @@ public class DqaVaccination extends MetaFieldInfoHolder {
     String value = metaFieldInfo.getValue();
     if (StringUtils.isNotEmpty(value)) {
       switch (metaFieldInfo.getVxuField()) {
-      case VACCINATION_ACTION_CODE:
-        action = value;
-        break;
-      case VACCINATION_ADMINISTERED_AMOUNT:
-        amount = value;
-        break;
-      case VACCINATION_ADMINISTERED_UNIT:
-        amountUnit = value;
-        break;
-      case VACCINATION_ADMIN_CODE:
-        break;
-      case VACCINATION_ADMIN_CODE_TABLE:
-        break;
-      case VACCINATION_ADMIN_DATE:
-        adminDateString = value;
-        break;
-      case VACCINATION_ADMIN_DATE_END:
-        adminDateEndString = value;
-        break;
-      case VACCINATION_BODY_ROUTE:
-        bodyRoute = value;
-        break;
-      case VACCINATION_BODY_SITE:
-        bodySite = value;
-        break;
-      case VACCINATION_COMPLETION_STATUS:
-        completion = value;
-        break;
-      case VACCINATION_CONFIDENTIALITY_CODE:
-        confidentiality = value;
-        break;
-      case VACCINATION_CPT_CODE:
-        adminCpt = value;
-        break;
-      case VACCINATION_CVX_CODE:
-        adminCvx = value;
-        break;
-      case VACCINATION_CVX_CODE_AND_CPT_CODE:
-        break;
-      case VACCINATION_FACILITY_ID:
-        facility.setId(value);
-        break;
-      case VACCINATION_FACILITY_NAME:
-        facility.setName(value);
-        break;
-      case VACCINATION_FACILITY_TYPE:
-        break;
-      case VACCINATION_FILLER_ORDER_NUMBER:
-        idSubmitter = value;
-        break;
-      case VACCINATION_FINANCIAL_ELIGIBILITY_CODE:
-        financialEligibility = value;
-        break;
-      case VACCINATION_GIVEN_BY:
-        givenBy.setNumber(value);
-        break;
-      case VACCINATION_ID:
-        break;
-      case VACCINATION_ID_OF_RECEIVER:
-        idPlacer = value;
-        break;
-      case VACCINATION_ID_OF_SENDER:
-        idSubmitter = value;
-        break;
-      case VACCINATION_INFORMATION_SOURCE:
-        informationSource = value;
-        break;
-      case VACCINATION_LOT_EXPIRATION_DATE:
-        expirationDateString = value;
-        break;
-      case VACCINATION_LOT_NUMBER:
-        lotNumber = value;
-        break;
-      case VACCINATION_MANUFACTURER_CODE:
-        manufacturer = value;
-        break;
-      case VACCINATION_ORDERED_BY:
-        orderedBy.setNumber(value);
-        break;
-      case VACCINATION_ORDER_CONTROL_CODE:
-        orderControl = value;
-        break;
-      case VACCINATION_ORDER_FACILITY_ID:
-        facility.setId(value);
-        break;
-      case VACCINATION_ORDER_FACILITY_NAME:
-        facility.setName(value);
-        break;
-      case VACCINATION_PLACER_ORDER_NUMBER:
-        idPlacer = value;
-        break;
-      case VACCINATION_PRODUCT:
-        product = value;
-        break;
-      case VACCINATION_RECORDED_BY:
-        break;
-      case VACCINATION_REFUSAL_REASON:
-        refusalReason = value;
-        break;
-      case VACCINATION_SYSTEM_ENTRY_TIME:
-        systemEntryDateString = value;
-        break;
-      case VACCINATION_TRADE_NAME:
-        tradeName = value;
-        break;
-      case VACCINATION_TRADE_NAME_AND_MANUFACTURER:
-        break;
-      case VACCINATION_TRADE_NAME_AND_VACCINE:
-        break;
-      case VACCINATION_VALIDITY_CODE:
-        vaccineValidity = value;
-        break;
-      case VACCINATION_VIS:
-        break;
-      case VACCINATION_VIS_CVX_CODE:
-        vaccinationVis.setCvxCode(value);
-        break;
-      case VACCINATION_VIS_DELIVERY_DATE:
-        break;
-      case VACCINATION_VIS_DOCUMENT_TYPE:
-        vaccinationVis.setDocumentCode(value);
-        break;
-      case VACCINATION_VIS_PRESENTED_DATE:
-        vaccinationVis.setPresentedDateString(value);
-        break;
-      case VACCINATION_VIS_PUBLISHED_DATE:
-        vaccinationVis.setPublishedDateString(value);
-        break;
-      case VACCINATION_VIS_VERSION_DATE:
-        break;
-      case VACCINATION_NDC_CODE:
-        adminNdc = value;
-        break;
-      default:
-        break;
+        case VACCINATION_ACTION_CODE:
+          action = value;
+          break;
+        case VACCINATION_ADMINISTERED_AMOUNT:
+          amount = value;
+          break;
+        case VACCINATION_ADMINISTERED_UNIT:
+          amountUnit = value;
+          break;
+        case VACCINATION_ADMIN_CODE:
+          break;
+        case VACCINATION_ADMIN_CODE_TABLE:
+          break;
+        case VACCINATION_ADMIN_DATE:
+          adminDateString = value;
+          break;
+        case VACCINATION_ADMIN_DATE_END:
+          adminDateEndString = value;
+          break;
+        case VACCINATION_BODY_ROUTE:
+          bodyRoute = value;
+          break;
+        case VACCINATION_BODY_SITE:
+          bodySite = value;
+          break;
+        case VACCINATION_COMPLETION_STATUS:
+          completion = value;
+          break;
+        case VACCINATION_CONFIDENTIALITY_CODE:
+          confidentiality = value;
+          break;
+        case VACCINATION_CPT_CODE:
+          adminCpt = value;
+          break;
+        case VACCINATION_CVX_CODE:
+          adminCvx = value;
+          break;
+        case VACCINATION_CVX_CODE_AND_CPT_CODE:
+          break;
+        case VACCINATION_FACILITY_ID:
+          facility.setId(value);
+          break;
+        case VACCINATION_FACILITY_NAME:
+          facility.setName(value);
+          break;
+        case VACCINATION_FACILITY_TYPE:
+          break;
+        case VACCINATION_FILLER_ORDER_NUMBER:
+          idSubmitter = value;
+          break;
+        case VACCINATION_FINANCIAL_ELIGIBILITY_CODE:
+          financialEligibility = value;
+          break;
+        case VACCINATION_GIVEN_BY:
+          givenBy.setNumber(value);
+          break;
+        case VACCINATION_ID:
+          break;
+        case VACCINATION_ID_OF_RECEIVER:
+          idPlacer = value;
+          break;
+        case VACCINATION_ID_OF_SENDER:
+          idSubmitter = value;
+          break;
+        case VACCINATION_INFORMATION_SOURCE:
+          informationSource = value;
+          break;
+        case VACCINATION_LOT_EXPIRATION_DATE:
+          expirationDateString = value;
+          break;
+        case VACCINATION_LOT_NUMBER:
+          lotNumber = value;
+          break;
+        case VACCINATION_MANUFACTURER_CODE:
+          manufacturer = value;
+          break;
+        case VACCINATION_ORDERED_BY:
+          orderedBy.setNumber(value);
+          break;
+        case VACCINATION_ORDER_CONTROL_CODE:
+          orderControl = value;
+          break;
+        case VACCINATION_ORDER_FACILITY_ID:
+          facility.setId(value);
+          break;
+        case VACCINATION_ORDER_FACILITY_NAME:
+          facility.setName(value);
+          break;
+        case VACCINATION_PLACER_ORDER_NUMBER:
+          idPlacer = value;
+          break;
+        case VACCINATION_PRODUCT:
+          product = value;
+          break;
+        case VACCINATION_RECORDED_BY:
+          break;
+        case VACCINATION_REFUSAL_REASON:
+          refusalReason = value;
+          break;
+        case VACCINATION_SYSTEM_ENTRY_TIME:
+          systemEntryDateString = value;
+          break;
+        case VACCINATION_TRADE_NAME:
+          tradeName = value;
+          break;
+        case VACCINATION_TRADE_NAME_AND_MANUFACTURER:
+          break;
+        case VACCINATION_TRADE_NAME_AND_VACCINE:
+          break;
+        case VACCINATION_VALIDITY_CODE:
+          vaccineValidity = value;
+          break;
+        case VACCINATION_VIS:
+          break;
+        case VACCINATION_VIS_CVX_CODE:
+          vaccinationVis.setCvxCode(value);
+          break;
+        case VACCINATION_VIS_DELIVERY_DATE:
+          break;
+        case VACCINATION_VIS_DOCUMENT_TYPE:
+          vaccinationVis.setDocumentCode(value);
+          break;
+        case VACCINATION_VIS_PRESENTED_DATE:
+          vaccinationVis.setPresentedDateString(value);
+          break;
+        case VACCINATION_VIS_PUBLISHED_DATE:
+          vaccinationVis.setPublishedDateString(value);
+          break;
+        case VACCINATION_VIS_VERSION_DATE:
+          break;
+        case VACCINATION_NDC_CODE:
+          adminNdc = value;
+          break;
+        default:
+          break;
 
       }
     }

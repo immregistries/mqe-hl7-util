@@ -3,147 +3,147 @@ package org.immregistries.dqa.hl7util.builder;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
 import org.immregistries.dqa.hl7util.Reportable;
 
 public class AckData {
-	private String messageProfileId = "";
-	private String messageVersionId = "";
-	private AckResult result = AckResult.APP_ERROR;// default is error???
-	private List<Reportable> reportables = new ArrayList<Reportable>();
-	private String messageControlId = "";
-	private String processingControlId = "";
-	private String receivingApplication = "";
-	private String receivingFacility = "";
-	private String sendingApplication = "";
-	private String sendingFacility = "";
-	private Date messageDate = new Date();
-	private String responseType = "";
-	private String profileId = "";
-	
-	public AckData() {
-	}
 
-	public AckData(String messageProfileId, String messageVersionId,
-			AckResult result, List<Reportable> list, String messageControlId,
-			String processingControlId, String receivingApplication,
-			String receivingFacility, String sendingApplication,
-			String sendingFacility, Date messageDate, String responseType,
-			String profileId) {
-		this.messageProfileId = messageProfileId;
-		this.messageVersionId = messageVersionId;
-		this.result = result;
-		this.reportables.addAll(list);
-		this.messageControlId = messageControlId;
-		this.processingControlId = processingControlId;
-		this.receivingApplication = receivingApplication;
-		this.receivingFacility = receivingFacility;
-		this.sendingApplication = sendingApplication;
-		this.sendingFacility = sendingFacility;
-	}
+  private String messageProfileId = "";
+  private String messageVersionId = "";
+  private AckResult result = AckResult.APP_ERROR;// default is error???
+  private List<Reportable> reportables = new ArrayList<Reportable>();
+  private String messageControlId = "";
+  private String processingControlId = "";
+  private String receivingApplication = "";
+  private String receivingFacility = "";
+  private String sendingApplication = "";
+  private String sendingFacility = "";
+  private Date messageDate = new Date();
+  private String responseType = "";
+  private String profileId = "";
 
-	public String getMessageProfileId() {
-		return messageProfileId;
-	}
+  public AckData() {
+  }
 
-	public void setMessageProfileId(String messageProfileId) {
-		this.messageProfileId = messageProfileId;
-	}
+  public AckData(String messageProfileId, String messageVersionId,
+      AckResult result, List<Reportable> list, String messageControlId,
+      String processingControlId, String receivingApplication,
+      String receivingFacility, String sendingApplication,
+      String sendingFacility, Date messageDate, String responseType,
+      String profileId) {
+    this.messageProfileId = messageProfileId;
+    this.messageVersionId = messageVersionId;
+    this.result = result;
+    this.reportables.addAll(list);
+    this.messageControlId = messageControlId;
+    this.processingControlId = processingControlId;
+    this.receivingApplication = receivingApplication;
+    this.receivingFacility = receivingFacility;
+    this.sendingApplication = sendingApplication;
+    this.sendingFacility = sendingFacility;
+  }
 
-	public String getMessageVersionId() {
-		return messageVersionId;
-	}
+  public String getMessageProfileId() {
+    return messageProfileId;
+  }
 
-	public void setMessageVersionId(String messageVersionId) {
-		this.messageVersionId = messageVersionId;
-	}
+  public void setMessageProfileId(String messageProfileId) {
+    this.messageProfileId = messageProfileId;
+  }
 
-	public AckResult getResult() {
-		return result;
-	}
+  public String getMessageVersionId() {
+    return messageVersionId;
+  }
 
-	public void setResult(AckResult result) {
-		this.result = result;
-	}
+  public void setMessageVersionId(String messageVersionId) {
+    this.messageVersionId = messageVersionId;
+  }
 
-	public List<Reportable> getReportables() {
-		return reportables;
-	}
+  public AckResult getResult() {
+    return result;
+  }
 
-	public void setReportables(List<Reportable> reportables) {
-		this.reportables = reportables;
-	}
+  public void setResult(AckResult result) {
+    this.result = result;
+  }
 
-	public String getMessageControlId() {
-		return messageControlId;
-	}
+  public List<Reportable> getReportables() {
+    return reportables;
+  }
 
-	public void setMessageControlId(String messageControlId) {
-		this.messageControlId = messageControlId;
-	}
+  public void setReportables(List<Reportable> reportables) {
+    this.reportables = reportables;
+  }
 
-	public String getProcessingControlId() {
-		return processingControlId;
-	}
+  public String getMessageControlId() {
+    return messageControlId;
+  }
 
-	public void setProcessingControlId(String processingControlId) {
-		this.processingControlId = processingControlId;
-	}
+  public void setMessageControlId(String messageControlId) {
+    this.messageControlId = messageControlId;
+  }
 
-	public String getReceivingApplication() {
-		return receivingApplication;
-	}
+  public String getProcessingControlId() {
+    return processingControlId;
+  }
 
-	public void setReceivingApplication(String receivingApplication) {
-		this.receivingApplication = receivingApplication;
-	}
+  public void setProcessingControlId(String processingControlId) {
+    this.processingControlId = processingControlId;
+  }
 
-	public String getReceivingFacility() {
-		return receivingFacility;
-	}
+  public String getReceivingApplication() {
+    return receivingApplication;
+  }
 
-	public void setReceivingFacility(String receivingFacility) {
-		this.receivingFacility = receivingFacility;
-	}
+  public void setReceivingApplication(String receivingApplication) {
+    this.receivingApplication = receivingApplication;
+  }
 
-	public String getSendingApplication() {
-		return sendingApplication;
-	}
+  public String getReceivingFacility() {
+    return receivingFacility;
+  }
 
-	public void setSendingApplication(String sendingApplication) {
-		this.sendingApplication = sendingApplication;
-	}
+  public void setReceivingFacility(String receivingFacility) {
+    this.receivingFacility = receivingFacility;
+  }
 
-	public String getSendingFacility() {
-		return sendingFacility;
-	}
+  public String getSendingApplication() {
+    return sendingApplication;
+  }
 
-	public void setSendingFacility(String sendingFacility) {
-		this.sendingFacility = sendingFacility;
-	}
+  public void setSendingApplication(String sendingApplication) {
+    this.sendingApplication = sendingApplication;
+  }
 
-	public Date getMessageDate() {
-		return messageDate;
-	}
+  public String getSendingFacility() {
+    return sendingFacility;
+  }
 
-	public void setMessageDate(Date messageDate) {
-		this.messageDate = messageDate;
-	}
+  public void setSendingFacility(String sendingFacility) {
+    this.sendingFacility = sendingFacility;
+  }
 
-	public String getResponseType() {
-		return responseType;
-	}
+  public Date getMessageDate() {
+    return messageDate;
+  }
 
-	public void setResponseType(String responseType) {
-		this.responseType = responseType;
-	}
+  public void setMessageDate(Date messageDate) {
+    this.messageDate = messageDate;
+  }
 
-	public String getProfileId() {
-		return profileId;
-	}
+  public String getResponseType() {
+    return responseType;
+  }
 
-	public void setProfileId(String profileId) {
-		this.profileId = profileId;
-	}
+  public void setResponseType(String responseType) {
+    this.responseType = responseType;
+  }
+
+  public String getProfileId() {
+    return profileId;
+  }
+
+  public void setProfileId(String profileId) {
+    this.profileId = profileId;
+  }
 
 }

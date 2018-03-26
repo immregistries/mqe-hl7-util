@@ -5,14 +5,13 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import org.apache.commons.collections4.list.TreeList;
 import org.immregistries.dqa.hl7util.model.Hl7Location;
-import org.immregistries.dqa.hl7util.model.MetaFieldInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class HL7MessageMap {
+
   protected static final Logger LOGGER = LoggerFactory.getLogger(HL7MessageMap.class);
 
   private Map<String, String> locationValueMap = new HashMap<String, String>();
@@ -51,20 +50,20 @@ public class HL7MessageMap {
   /**
    * The basic assumption is that this method will fill in any details you don't. The minimum
    * required is to tell the segment and the field. For example:
-   * 
+   *
    * <p>
    * <code>map.get("MSH-4");</code>
    * </p>
-   * 
+   *
    * <p>
    * The easy way to tell what it will return is this: If you don't provide a value, this method
    * will look for the first.
    * </p>
-   * 
+   *
    * <p>
    * If you do send something in, and it includes the segment number, it is expected that this is an
    * index, not an ordinal.
-   * 
+   *
    * So here are what will be auto-filled in:
    * <ul>
    * <li>If no segment index is provided, this will return the first
@@ -72,7 +71,7 @@ public class HL7MessageMap {
    * <li>If no component is provided, this will return the first
    * <li>If no sub-component is provided, this will return the first.
    * </ul>
-   * 
+   *
    * @param location
    * @return
    */
@@ -113,7 +112,7 @@ public class HL7MessageMap {
    * correct to send in either 7 or 11.
    * <p>
    * In the previous example sending in a 1 or 2 would be incorrect.
-   * 
+   *
    * @param locationCd
    * @param segmentIndex
    * @param fieldRepetition
@@ -123,7 +122,7 @@ public class HL7MessageMap {
     String locator = generateLocatorForIndex(locationCd, segmentIndex, fieldRepetition);
     return this.get(locator);
   }
-  
+
   public String getAtLocation(Hl7Location hl7Location) {
     String locator = hl7Location.getMessageMapLocator();
     return this.get(locator);
@@ -137,7 +136,7 @@ public class HL7MessageMap {
    * correct to send in either 7 or 11.
    * <p>
    * In the previous example sending in a 1 or 2 would be incorrect.
-   * 
+   *
    * @param locationCd
    * @param absoluteSegmentIndex
    * @return
@@ -156,7 +155,7 @@ public class HL7MessageMap {
    * correct to send in either 1 or 2.
    * <p>
    * In the previous example sending in a 7 or 11 would be incorrect.
-   * 
+   *
    * @param locationCd
    * @param ordinal
    * @param fieldRepetition
@@ -169,7 +168,7 @@ public class HL7MessageMap {
 
   /**
    * This assumes an absolute segment index coming in.
-   * 
+   *
    * @param locationCd
    * @param segmentIndex
    * @param fieldRepetition
@@ -184,10 +183,9 @@ public class HL7MessageMap {
   }
 
 
-
   /**
    * This returns the segment index (absolute index) where the value resides.
-   * 
+   *
    * @param targetValue
    * @param location
    * @param fieldRep
@@ -220,7 +218,7 @@ public class HL7MessageMap {
 
   /**
    * Returns a list of Segment INDEXES of segments which hold this value.
-   * 
+   *
    * @param targetValues
    * @param location
    * @param fieldRep
@@ -242,7 +240,7 @@ public class HL7MessageMap {
   }
 
   public int getIndexForSegmentName(String segName) {
-    List<Integer> indexList = getIndexesForSegmentName( segName);
+    List<Integer> indexList = getIndexesForSegmentName(segName);
     if (indexList.size() > 0) {
       return indexList.get(0);
     }
@@ -287,7 +285,7 @@ public class HL7MessageMap {
    * Returns a list of segment ORDINALS of segments which hold this value.
    * <p>
    * Example - for RXA, a value of 1 would mean the first RXA in the message.
-   * 
+   *
    * @param targetValues
    * @param location
    * @param fieldRep
@@ -338,7 +336,7 @@ public class HL7MessageMap {
    * <li>RXA-5-4 - ST - Administered Code:Alternate Identifier (simple)
    * <li>RXA-5-5 - ST - Administered Code:Alternate Text (simple)
    * <li>RXA-5-6 - ID - Administered Code:Name of Alternate Coding System (simple)
-   * 
+   *
    * @param targetValue
    * @param location
    * @param segmentOrdinal
@@ -385,7 +383,7 @@ public class HL7MessageMap {
    * </ul>
    * <br />
    * if you need it to build your locator call the other overloaded version of this method. <br />
-   * 
+   *
    * @param fieldLoc
    * @return
    */
@@ -403,7 +401,7 @@ public class HL7MessageMap {
 
   /**
    * This expects a field, and a segment index.
-   * 
+   *
    * @param location
    * @param segIndex
    * @return
@@ -486,7 +484,7 @@ public class HL7MessageMap {
    * we get it, which may be out of order. <br />
    * <p>
    * This is going to be more powerful in general, because the order its sent in will not matter.
-   * 
+   *
    * @param locator
    */
   protected void indexTheLocatorSegment(String locator) {
@@ -521,7 +519,7 @@ public class HL7MessageMap {
    * This method returns the number of segments of the given name that are present in the message.
    * <p>
    * This is most relevant for the NK1 segments.
-   * 
+   *
    * @param segmentName
    * @return count of segments with that name in the message.
    */
@@ -540,9 +538,8 @@ public class HL7MessageMap {
     return segmentName + "[" + segIndex + "]-" + fieldNum + "~" + fieldRep + "-" + component + "-"
         + subComponent;
   }
-  
-  public String get(Hl7Location hl7Location)
-  {
+
+  public String get(Hl7Location hl7Location) {
     return this.get(hl7Location.getMessageMapLocator());
   }
 
@@ -586,9 +583,9 @@ public class HL7MessageMap {
 
   /**
    * THe intention of this method is to determine the field repetition from the locator.
-   * 
+   *
    * If there is no field repetition information, it will assume it's the first field rep.
-   * 
+   *
    * @param locString
    * @return
    */
@@ -612,7 +609,7 @@ public class HL7MessageMap {
   /**
    * Keep the segment, seg index, and field number. remove the field repetition, and
    * component/subcomponent parts. return the result.
-   * 
+   *
    * @param locator
    * @return
    */
@@ -627,7 +624,8 @@ public class HL7MessageMap {
       String[] parts = locator.split("\\-");
       if (parts.length > 1) {
         return parts[0] + "-" + parts[1];
-      } ;
+      }
+      ;
     }
     // If it gets here, that means it doesn't have a field rep or component information... So it
     // already is how we want it to be.
@@ -636,7 +634,7 @@ public class HL7MessageMap {
 
   /**
    * Puts a zero for the field number, if there's not one already supplied.
-   * 
+   *
    * @param locString
    * @return
    */
@@ -681,10 +679,9 @@ public class HL7MessageMap {
   }
 
 
-
   /*
    * (non-Javadoc)
-   * 
+   *
    * @see java.lang.Object#toString()
    */
   @Override
@@ -694,7 +691,7 @@ public class HL7MessageMap {
 
   /**
    * This seems way over complicated. Refactor once you verify it works.
-   * 
+   *
    * @return
    */
   public List<String> getMessageSegments() {
@@ -748,7 +745,7 @@ public class HL7MessageMap {
    * this is all one-based. So send in a 1 based ordinal segment . that means the first apperaance
    * of a segment will get a ordinal of 1. <br />
    * This method will return the absolute index that the segment appears for the segments ordinal.
-   * 
+   *
    * @param location
    * @param ordinal
    * @return
@@ -769,21 +766,21 @@ public class HL7MessageMap {
   /**
    * This method takes a segment name, and an ordinal, and returns the index at which that segment
    * appears in the message at that ordinal.
-   * 
+   *
    * For example, if there are two NK1 records like this:
    * <ul>
    * <li>MSH
    * <li>PID
    * <li>NK1
    * <li>NK1
-   * 
+   *
    * if you send in a "2" to the method for NK1, the appropriate answer would be 4 since our indexes
    * are 1 based.
-   * 
+   *
    * <br />
    * If you send in an ordinal that does not exist in the message, like if you sent in a "3" for the
    * previous example, you would see a -1 in return as an indicator that it doesn't exist.
-   * 
+   *
    * @param segmentName
    * @param ordinal
    * @return
@@ -814,7 +811,7 @@ public class HL7MessageMap {
    * <li>For that segment, get the list of absolute indexes where it appears in the message.
    * <li>determine where in the list of absolute indexes the index sent in falls. This is the
    * ordinal.
-   * 
+   *
    * @param absoluteSegmentIndex
    * @return
    */
@@ -841,7 +838,6 @@ public class HL7MessageMap {
   }
 
 
-
   public String getSegmentAtAbsoluteIndex(int absoluteSegmentIndex) {
     for (String segment : segmentIndexes.keySet()) {
       List<Integer> seglist = segmentIndexes.get(segment);
@@ -854,9 +850,10 @@ public class HL7MessageMap {
 
   // If I were going to make this "generic", I would put this next method into an extension
   // of this class for ImmunizationMapping
+
   /**
    * This returns a zero based index for the start of the next immunization record.
-   * 
+   *
    * @param startingPoint
    * @return
    */

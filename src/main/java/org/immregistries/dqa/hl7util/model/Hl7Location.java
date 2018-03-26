@@ -3,6 +3,7 @@ package org.immregistries.dqa.hl7util.model;
 import org.apache.commons.lang3.StringUtils;
 
 public class Hl7Location {
+
   private int line = 0;
   private String segmentId = "";
   private int segmentSequence = 0;
@@ -14,11 +15,11 @@ public class Hl7Location {
   public int getLine() {
     return line;
   }
-  
+
   public void setLine(int line) {
     this.line = line;
   }
-  
+
   @Override
   public String toString() {
     String s = segmentId;

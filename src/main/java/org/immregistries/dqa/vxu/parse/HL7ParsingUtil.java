@@ -6,119 +6,120 @@ import org.immregistries.dqa.vxu.DqaPhoneNumber;
 import org.immregistries.dqa.vxu.hl7.Id;
 
 public enum HL7ParsingUtil {
-	INSTANCE;
+  INSTANCE;
 
-	public DqaAddress getAddressFromOrdinal(HL7MessageMap map, String locator,
-			int ordinal, int fieldrep) {
-		int index = map.getAbsoluteIndexForLocationOrdinal(locator, ordinal);
-		return getAddressFromIndex(map, locator, index, fieldrep);
-	}
-	
-	/*  Values from value set HL7 0201 for tel-use-code (component 2) 
-	 *  PRN Primary Residence Number R
-	 *	ORN Other Residence Number R
-	 *	WPN Work Number R
-	 *	VHN Vacation Home Number R
-	 *	ASN Answering Service Number R
-	 *	EMR Emergency Number R
-	 *	NET Network (email) address
-	 *	PRS Personal R
-	 *	BPN Beeper number
-	 */
-	/*
-	 * Values from value set HL7 0202 for tel-equipment-code (component 3)
-	 * PH Telephone
-	 * FX Fax
-	 * MD Modem
-	 * CP Cellular or Mobile Phone
-	 * BP Beeper
-	 * Internet Internet Address
-	 * X.400 X.400 email address
-	 * TDD Telecommunications Device for the Deaf
-	 * TTY Teletypewriter
-	 */
-	public DqaPhoneNumber getPhoneAt(HL7MessageMap map, String fieldLocator, int segIdx) {
-		DqaPhoneNumber ph = new DqaPhoneNumber();
-		
-		//These aren't often set. But we should capture them if they are. 
-		String telUseCode = map.getAtIndex(fieldLocator + "-2", segIdx, 1);
-		String telEquipCode = map.getAtIndex(fieldLocator + "-3", segIdx, 1);
-		String email = map.getAtIndex(fieldLocator + "-4", segIdx, 1);
-		
-		ph.setTelEquipCode(telEquipCode);
-		ph.setTelUseCode(telUseCode);
-		ph.setEmail(email);
-		
-		//As of version 2.3, the number should not be present in the first field.  it is deprecated. 
-		//		we will check the current positions first. 
-		String localNumber = map.getAtIndex(fieldLocator + "-7", segIdx, 1);
-		
-		if (localNumber != null) {
-			ph.setLocalNumber(localNumber);
-			
-			String areaCode = map.getAtIndex(fieldLocator + "-6", segIdx, 1);
-			ph.setAreaCode(areaCode);
-			
-		} else {
-			//This is what was originally happening. 
-			String phone = map.getAtIndex(fieldLocator, segIdx, 1);
-			ph.setNumber(phone);
-		}
+  public DqaAddress getAddressFromOrdinal(HL7MessageMap map, String locator,
+      int ordinal, int fieldrep) {
+    int index = map.getAbsoluteIndexForLocationOrdinal(locator, ordinal);
+    return getAddressFromIndex(map, locator, index, fieldrep);
+  }
 
-		return ph;
-	}
-	
-	public Id getId(HL7MessageMap map, String field, int segIdx, int fieldRep) {
-		Id ce = new Id();
-		ce.setNumber(map.getAtIndex(field + "-1", segIdx, fieldRep));
-		ce.setAssigningAuthorityCode(map.getAtIndex(field + "-4", segIdx,
-				fieldRep));
-		ce.setTypeCode(map.getAtIndex(field + "-5", segIdx, fieldRep));
-		return ce;
-	}
+  /*  Values from value set HL7 0201 for tel-use-code (component 2)
+   *  PRN Primary Residence Number R
+   *	ORN Other Residence Number R
+   *	WPN Work Number R
+   *	VHN Vacation Home Number R
+   *	ASN Answering Service Number R
+   *	EMR Emergency Number R
+   *	NET Network (email) address
+   *	PRS Personal R
+   *	BPN Beeper number
+   */
+  /*
+   * Values from value set HL7 0202 for tel-equipment-code (component 3)
+   * PH Telephone
+   * FX Fax
+   * MD Modem
+   * CP Cellular or Mobile Phone
+   * BP Beeper
+   * Internet Internet Address
+   * X.400 X.400 email address
+   * TDD Telecommunications Device for the Deaf
+   * TTY Teletypewriter
+   */
+  public DqaPhoneNumber getPhoneAt(HL7MessageMap map, String fieldLocator, int segIdx) {
+    DqaPhoneNumber ph = new DqaPhoneNumber();
 
-	public DqaAddress getAddressFromIndex(HL7MessageMap map, String locator, int segmentIndex, int fieldRep) {
-		DqaAddress address = new DqaAddress();
-        address.setStreet(map.getAtIndex(locator+ "-1", segmentIndex, fieldRep));
-        address.setStreet2(map.getAtIndex(locator+ "-2", segmentIndex, fieldRep));
-        address.setCity(map.getAtIndex(locator+ "-3", segmentIndex, fieldRep));
-        address.setStateCode(map.getAtIndex(locator+ "-4", segmentIndex, fieldRep));
-        address.setZip(map.getAtIndex(locator+ "-5", segmentIndex, fieldRep));
-        address.setCountryCode(map.getAtIndex(locator+ "-6", segmentIndex, fieldRep));
-        address.setTypeCode(map.getAtIndex(locator+ "-7", segmentIndex, fieldRep));
-        address.setCountyParishCode(map.getAtIndex(locator+ "-8", segmentIndex, fieldRep));
-        return address;
+    //These aren't often set. But we should capture them if they are.
+    String telUseCode = map.getAtIndex(fieldLocator + "-2", segIdx, 1);
+    String telEquipCode = map.getAtIndex(fieldLocator + "-3", segIdx, 1);
+    String email = map.getAtIndex(fieldLocator + "-4", segIdx, 1);
+
+    ph.setTelEquipCode(telEquipCode);
+    ph.setTelUseCode(telUseCode);
+    ph.setEmail(email);
+
+    //As of version 2.3, the number should not be present in the first field.  it is deprecated.
+    //		we will check the current positions first.
+    String localNumber = map.getAtIndex(fieldLocator + "-7", segIdx, 1);
+
+    if (localNumber != null) {
+      ph.setLocalNumber(localNumber);
+
+      String areaCode = map.getAtIndex(fieldLocator + "-6", segIdx, 1);
+      ph.setAreaCode(areaCode);
+
+    } else {
+      //This is what was originally happening.
+      String phone = map.getAtIndex(fieldLocator, segIdx, 1);
+      ph.setNumber(phone);
+    }
+
+    return ph;
+  }
+
+  public Id getId(HL7MessageMap map, String field, int segIdx, int fieldRep) {
+    Id ce = new Id();
+    ce.setNumber(map.getAtIndex(field + "-1", segIdx, fieldRep));
+    ce.setAssigningAuthorityCode(map.getAtIndex(field + "-4", segIdx,
+        fieldRep));
+    ce.setTypeCode(map.getAtIndex(field + "-5", segIdx, fieldRep));
+    return ce;
+  }
+
+  public DqaAddress getAddressFromIndex(HL7MessageMap map, String locator, int segmentIndex,
+      int fieldRep) {
+    DqaAddress address = new DqaAddress();
+    address.setStreet(map.getAtIndex(locator + "-1", segmentIndex, fieldRep));
+    address.setStreet2(map.getAtIndex(locator + "-2", segmentIndex, fieldRep));
+    address.setCity(map.getAtIndex(locator + "-3", segmentIndex, fieldRep));
+    address.setStateCode(map.getAtIndex(locator + "-4", segmentIndex, fieldRep));
+    address.setZip(map.getAtIndex(locator + "-5", segmentIndex, fieldRep));
+    address.setCountryCode(map.getAtIndex(locator + "-6", segmentIndex, fieldRep));
+    address.setTypeCode(map.getAtIndex(locator + "-7", segmentIndex, fieldRep));
+    address.setCountyParishCode(map.getAtIndex(locator + "-8", segmentIndex, fieldRep));
+    return address;
+  }
+
+  public static String escapeHL7Chars(String s) {
+    if (s == null) {
+      return "";
+    }
+    StringBuilder sb = new StringBuilder();
+    for (char c : s.toCharArray()) {
+      if (c >= ' ') {
+        switch (c) {
+          case '~':
+            sb.append("\\R\\");
+            break;
+          case '\\':
+            sb.append("\\E\\");
+            break;
+          case '|':
+            sb.append("\\F\\");
+            break;
+          case '^':
+            sb.append("\\S\\");
+            break;
+          case '&':
+            sb.append("\\T\\");
+            break;
+          default:
+            sb.append(c);
+        }
       }
-
-	public static String escapeHL7Chars(String s) {
-		if (s == null) {
-			return "";
-		}
-		StringBuilder sb = new StringBuilder();
-		for (char c : s.toCharArray()) {
-			if (c >= ' ') {
-				switch (c) {
-				case '~':
-					sb.append("\\R\\");
-					break;
-				case '\\':
-					sb.append("\\E\\");
-					break;
-				case '|':
-					sb.append("\\F\\");
-					break;
-				case '^':
-					sb.append("\\S\\");
-					break;
-				case '&':
-					sb.append("\\T\\");
-					break;
-				default:
-					sb.append(c);
-				}
-			}
-		}
-		return sb.toString();
-	}
+    }
+    return sb.toString();
+  }
 
 }

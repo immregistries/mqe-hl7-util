@@ -1,7 +1,7 @@
 package org.immregistries.dqa.hl7util.model;
 
-public class CodedWithExceptions
-{
+public class CodedWithExceptions {
+
   private String identifier = "";
   private String text = "";
   private String nameOfCodingSystem = "";
@@ -13,63 +13,51 @@ public class CodedWithExceptions
     // default
   }
 
-  public String getIdentifier()
-  {
+  public String getIdentifier() {
     return identifier;
   }
 
-  public void setIdentifier(String identifier)
-  {
+  public void setIdentifier(String identifier) {
     this.identifier = identifier;
   }
 
-  public String getText()
-  {
+  public String getText() {
     return text;
   }
 
-  public void setText(String text)
-  {
+  public void setText(String text) {
     this.text = text;
   }
 
-  public String getNameOfCodingSystem()
-  {
+  public String getNameOfCodingSystem() {
     return nameOfCodingSystem;
   }
 
-  public void setNameOfCodingSystem(String nameOfCodingSystem)
-  {
+  public void setNameOfCodingSystem(String nameOfCodingSystem) {
     this.nameOfCodingSystem = nameOfCodingSystem;
   }
 
-  public String getAlternateIdentifier()
-  {
+  public String getAlternateIdentifier() {
     return alternateIdentifier;
   }
 
-  public void setAlternateIdentifier(String alternateIdentifier)
-  {
+  public void setAlternateIdentifier(String alternateIdentifier) {
     this.alternateIdentifier = alternateIdentifier;
   }
 
-  public String getAlternateText()
-  {
+  public String getAlternateText() {
     return alternateText;
   }
 
-  public void setAlternateText(String alternateText)
-  {
+  public void setAlternateText(String alternateText) {
     this.alternateText = alternateText;
   }
 
-  public String getNameOfAlternateCodingSystem()
-  {
+  public String getNameOfAlternateCodingSystem() {
     return nameOfAlternateCodingSystem;
   }
 
-  public void setNameOfAlternateCodingSystem(String nameOfAlternatedingSystem)
-  {
+  public void setNameOfAlternateCodingSystem(String nameOfAlternatedingSystem) {
     this.nameOfAlternateCodingSystem = nameOfAlternatedingSystem;
   }
 

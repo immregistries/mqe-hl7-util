@@ -1,15 +1,15 @@
 package org.immregistries.dqa.vxu;
 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 import org.immregistries.dqa.vxu.hl7.Id;
 import org.immregistries.dqa.vxu.hl7.Observation;
 import org.immregistries.dqa.vxu.hl7.OrganizationName;
 import org.joda.time.DateTime;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
 public class DqaRefusal {
+
   public static final String ACTION_CODE_ADD = "A";
   public static final String ACTION_CODE_DELETE = "D";
   public static final String ACTION_CODE_UPDATE = "U";

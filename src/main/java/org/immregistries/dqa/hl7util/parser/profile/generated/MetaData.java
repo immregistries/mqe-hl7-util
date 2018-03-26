@@ -17,9 +17,9 @@ import javax.xml.bind.annotation.XmlValue;
 
 /**
  * <p>Java class for metaData complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="metaData">
  *   &lt;simpleContent>
@@ -34,8 +34,6 @@ import javax.xml.bind.annotation.XmlValue;
  *   &lt;/simpleContent>
  * &lt;/complexType>
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "metaData", propOrder = {
@@ -43,187 +41,145 @@ import javax.xml.bind.annotation.XmlValue;
 })
 public class MetaData {
 
-    @XmlValue
-    protected String value;
-    @XmlAttribute(name = "Name")
-    protected String name;
-    @XmlAttribute(name = "OrgName")
-    protected String orgName;
-    @XmlAttribute(name = "Status")
-    protected String status;
-    @XmlAttribute(name = "Topics")
-    protected String topics;
-    @XmlAttribute(name = "Version")
-    protected String version;
-    @XmlAttribute(name = "Date")
-    protected String date;
+  @XmlValue
+  protected String value;
+  @XmlAttribute(name = "Name")
+  protected String name;
+  @XmlAttribute(name = "OrgName")
+  protected String orgName;
+  @XmlAttribute(name = "Status")
+  protected String status;
+  @XmlAttribute(name = "Topics")
+  protected String topics;
+  @XmlAttribute(name = "Version")
+  protected String version;
+  @XmlAttribute(name = "Date")
+  protected String date;
 
-    /**
-     * Gets the value of the value property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getValue() {
-        return value;
-    }
+  /**
+   * Gets the value of the value property.
+   *
+   * @return possible object is {@link String }
+   */
+  public String getValue() {
+    return value;
+  }
 
-    /**
-     * Sets the value of the value property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setValue(String value) {
-        this.value = value;
-    }
+  /**
+   * Sets the value of the value property.
+   *
+   * @param value allowed object is {@link String }
+   */
+  public void setValue(String value) {
+    this.value = value;
+  }
 
-    /**
-     * Gets the value of the name property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getName() {
-        return name;
-    }
+  /**
+   * Gets the value of the name property.
+   *
+   * @return possible object is {@link String }
+   */
+  public String getName() {
+    return name;
+  }
 
-    /**
-     * Sets the value of the name property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setName(String value) {
-        this.name = value;
-    }
+  /**
+   * Sets the value of the name property.
+   *
+   * @param value allowed object is {@link String }
+   */
+  public void setName(String value) {
+    this.name = value;
+  }
 
-    /**
-     * Gets the value of the orgName property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getOrgName() {
-        return orgName;
-    }
+  /**
+   * Gets the value of the orgName property.
+   *
+   * @return possible object is {@link String }
+   */
+  public String getOrgName() {
+    return orgName;
+  }
 
-    /**
-     * Sets the value of the orgName property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setOrgName(String value) {
-        this.orgName = value;
-    }
+  /**
+   * Sets the value of the orgName property.
+   *
+   * @param value allowed object is {@link String }
+   */
+  public void setOrgName(String value) {
+    this.orgName = value;
+  }
 
-    /**
-     * Gets the value of the status property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getStatus() {
-        return status;
-    }
+  /**
+   * Gets the value of the status property.
+   *
+   * @return possible object is {@link String }
+   */
+  public String getStatus() {
+    return status;
+  }
 
-    /**
-     * Sets the value of the status property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setStatus(String value) {
-        this.status = value;
-    }
+  /**
+   * Sets the value of the status property.
+   *
+   * @param value allowed object is {@link String }
+   */
+  public void setStatus(String value) {
+    this.status = value;
+  }
 
-    /**
-     * Gets the value of the topics property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getTopics() {
-        return topics;
-    }
+  /**
+   * Gets the value of the topics property.
+   *
+   * @return possible object is {@link String }
+   */
+  public String getTopics() {
+    return topics;
+  }
 
-    /**
-     * Sets the value of the topics property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setTopics(String value) {
-        this.topics = value;
-    }
+  /**
+   * Sets the value of the topics property.
+   *
+   * @param value allowed object is {@link String }
+   */
+  public void setTopics(String value) {
+    this.topics = value;
+  }
 
-    /**
-     * Gets the value of the version property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getVersion() {
-        return version;
-    }
+  /**
+   * Gets the value of the version property.
+   *
+   * @return possible object is {@link String }
+   */
+  public String getVersion() {
+    return version;
+  }
 
-    /**
-     * Sets the value of the version property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setVersion(String value) {
-        this.version = value;
-    }
+  /**
+   * Sets the value of the version property.
+   *
+   * @param value allowed object is {@link String }
+   */
+  public void setVersion(String value) {
+    this.version = value;
+  }
 
-    /**
-     * Gets the value of the date property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getDate() {
-        return date;
-    }
+  /**
+   * Gets the value of the date property.
+   *
+   * @return possible object is {@link String }
+   */
+  public String getDate() {
+    return date;
+  }
 
-    /**
-     * Sets the value of the date property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setDate(String value) {
-        this.date = value;
-    }
+  /**
+   * Sets the value of the date property.
+   *
+   * @param value allowed object is {@link String }
+   */
+  public void setDate(String value) {
+    this.date = value;
+  }
 
 }

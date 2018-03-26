@@ -10,32 +10,32 @@ package org.immregistries.dqa.vxu;
 
 public class DqaPatientAddress extends DqaAddress {
 
-    private long addressId = 0;
+  private long addressId = 0;
 
-    public DqaPatientAddress() {
-        //default constructor.
-    }
+  public DqaPatientAddress() {
+    //default constructor.
+  }
 
-    public DqaPatientAddress(DqaAddress a) {
-        if (a != null) {
-            this.setStreet(a.getStreet());
-            this.setStreet2(a.getStreet2());
-            this.setCity(a.getCity());
-            this.setStateCode(a.getStateCode());
-            this.setZip(a.getZip());
-            this.setCountryCode(a.getCountryCode());
-            this.setTypeCode(a.getTypeCode());
-            this.setCountyParishCode(a.getCountyParishCode());
-        }
+  public DqaPatientAddress(DqaAddress a) {
+    if (a != null) {
+      this.setStreet(a.getStreet());
+      this.setStreet2(a.getStreet2());
+      this.setCity(a.getCity());
+      this.setStateCode(a.getStateCode());
+      this.setZip(a.getZip());
+      this.setCountryCode(a.getCountryCode());
+      this.setTypeCode(a.getTypeCode());
+      this.setCountyParishCode(a.getCountyParishCode());
     }
+  }
 
-    public long getAddressId() {
-        return addressId;
-    }
+  public long getAddressId() {
+    return addressId;
+  }
 
-    public void setAddressId(long addressId) {
-        this.addressId = addressId;
-    }
+  public void setAddressId(long addressId) {
+    this.addressId = addressId;
+  }
 
 //    @Override protected void setFieldFromMetaFieldInfo(MetaFieldInfo metaFieldInfo) {
 //        String value = metaFieldInfo.getValue();

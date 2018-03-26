@@ -13,16 +13,15 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
-
 import org.immregistries.dqa.hl7util.parser.profile.generated.ConformanceStatement;
 import org.immregistries.dqa.hl7util.parser.profile.generated.Predicate;
 
 
 /**
  * <p>Java class for subComponent complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="subComponent">
  *   &lt;complexContent>
@@ -37,14 +36,13 @@ import org.immregistries.dqa.hl7util.parser.profile.generated.Predicate;
  *       &lt;attribute name="Name" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="Table" type="{http://www.w3.org/2001/XMLSchema}short" />
  *       &lt;attribute name="Usage" type="{http://www.w3.org/2001/XMLSchema}string" />
- *       &lt;attribute name="PredicateFalseUsage" type="{http://www.w3.org/2001/XMLSchema}string" />
+ *       &lt;attribute name="PredicateFalseUsage" type="{http://www.w3.org/2001/XMLSchema}string"
+ * />
  *       &lt;attribute name="PredicateTrueUsage" type="{http://www.w3.org/2001/XMLSchema}string" />
  *     &lt;/restriction>
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "subComponent", propOrder = {
@@ -53,257 +51,203 @@ import org.immregistries.dqa.hl7util.parser.profile.generated.Predicate;
 })
 public class SubComponent implements HL7SubComponent {
 
-    @XmlElement(name = "Predicate")
-    protected Predicate predicate;
-    @XmlElement(name = "ConformanceStatement", required = true)
-    protected ConformanceStatement conformanceStatement;
-    @XmlAttribute(name = "Datatype")
-    protected String datatype;
-    @XmlAttribute(name = "MaxLength")
-    protected Short maxLength;
-    @XmlAttribute(name = "MinLength")
-    protected Byte minLength;
-    @XmlAttribute(name = "Name")
-    protected String name;
-    @XmlAttribute(name = "Table")
-    protected Short table;
-    @XmlAttribute(name = "Usage")
-    protected String usage;
-    @XmlAttribute(name = "PredicateFalseUsage")
-    protected String predicateFalseUsage;
-    @XmlAttribute(name = "PredicateTrueUsage")
-    protected String predicateTrueUsage;
+  @XmlElement(name = "Predicate")
+  protected Predicate predicate;
+  @XmlElement(name = "ConformanceStatement", required = true)
+  protected ConformanceStatement conformanceStatement;
+  @XmlAttribute(name = "Datatype")
+  protected String datatype;
+  @XmlAttribute(name = "MaxLength")
+  protected Short maxLength;
+  @XmlAttribute(name = "MinLength")
+  protected Byte minLength;
+  @XmlAttribute(name = "Name")
+  protected String name;
+  @XmlAttribute(name = "Table")
+  protected Short table;
+  @XmlAttribute(name = "Usage")
+  protected String usage;
+  @XmlAttribute(name = "PredicateFalseUsage")
+  protected String predicateFalseUsage;
+  @XmlAttribute(name = "PredicateTrueUsage")
+  protected String predicateTrueUsage;
 
-    /**
-     * Gets the value of the predicate property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Predicate }
-     *     
-     */
-    public Predicate getPredicate() {
-        return predicate;
-    }
+  /**
+   * Gets the value of the predicate property.
+   *
+   * @return possible object is {@link Predicate }
+   */
+  public Predicate getPredicate() {
+    return predicate;
+  }
 
-    /**
-     * Sets the value of the predicate property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Predicate }
-     *     
-     */
-    public void setPredicate(Predicate value) {
-        this.predicate = value;
-    }
+  /**
+   * Sets the value of the predicate property.
+   *
+   * @param value allowed object is {@link Predicate }
+   */
+  public void setPredicate(Predicate value) {
+    this.predicate = value;
+  }
 
-    /**
-     * Gets the value of the conformanceStatement property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link ConformanceStatement }
-     *     
-     */
-    public ConformanceStatement getConformanceStatement() {
-        return conformanceStatement;
-    }
+  /**
+   * Gets the value of the conformanceStatement property.
+   *
+   * @return possible object is {@link ConformanceStatement }
+   */
+  public ConformanceStatement getConformanceStatement() {
+    return conformanceStatement;
+  }
 
-    /**
-     * Sets the value of the conformanceStatement property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link ConformanceStatement }
-     *     
-     */
-    public void setConformanceStatement(ConformanceStatement value) {
-        this.conformanceStatement = value;
-    }
+  /**
+   * Sets the value of the conformanceStatement property.
+   *
+   * @param value allowed object is {@link ConformanceStatement }
+   */
+  public void setConformanceStatement(ConformanceStatement value) {
+    this.conformanceStatement = value;
+  }
 
-    /* (non-Javadoc)
-	 * @see org.immregistries.dqa.hl7util.parser.profile.generated.HL7SubComponent#getDatatype()
-	 */
-    @Override
-	public String getDatatype() {
-        return datatype;
-    }
+  /* (non-Javadoc)
+   * @see org.immregistries.dqa.hl7util.parser.profile.generated.HL7SubComponent#getDatatype()
+   */
+  @Override
+  public String getDatatype() {
+    return datatype;
+  }
 
-    /**
-     * Sets the value of the datatype property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setDatatype(String value) {
-        this.datatype = value;
-    }
+  /**
+   * Sets the value of the datatype property.
+   *
+   * @param value allowed object is {@link String }
+   */
+  public void setDatatype(String value) {
+    this.datatype = value;
+  }
 
-    /**
-     * Gets the value of the maxLength property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Short }
-     *     
-     */
-    public Short getMaxLength() {
-        return maxLength;
-    }
+  /**
+   * Gets the value of the maxLength property.
+   *
+   * @return possible object is {@link Short }
+   */
+  public Short getMaxLength() {
+    return maxLength;
+  }
 
-    /**
-     * Sets the value of the maxLength property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Short }
-     *     
-     */
-    public void setMaxLength(Short value) {
-        this.maxLength = value;
-    }
+  /**
+   * Sets the value of the maxLength property.
+   *
+   * @param value allowed object is {@link Short }
+   */
+  public void setMaxLength(Short value) {
+    this.maxLength = value;
+  }
 
-    /**
-     * Gets the value of the minLength property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Byte }
-     *     
-     */
-    public Byte getMinLength() {
-        return minLength;
-    }
+  /**
+   * Gets the value of the minLength property.
+   *
+   * @return possible object is {@link Byte }
+   */
+  public Byte getMinLength() {
+    return minLength;
+  }
 
-    /**
-     * Sets the value of the minLength property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Byte }
-     *     
-     */
-    public void setMinLength(Byte value) {
-        this.minLength = value;
-    }
+  /**
+   * Sets the value of the minLength property.
+   *
+   * @param value allowed object is {@link Byte }
+   */
+  public void setMinLength(Byte value) {
+    this.minLength = value;
+  }
 
-    /* (non-Javadoc)
-	 * @see org.immregistries.dqa.hl7util.parser.profile.generated.HL7SubComponent#getName()
-	 */
-    @Override
-	public String getName() {
-        return name;
-    }
+  /* (non-Javadoc)
+   * @see org.immregistries.dqa.hl7util.parser.profile.generated.HL7SubComponent#getName()
+   */
+  @Override
+  public String getName() {
+    return name;
+  }
 
-    /**
-     * Sets the value of the name property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setName(String value) {
-        this.name = value;
-    }
+  /**
+   * Sets the value of the name property.
+   *
+   * @param value allowed object is {@link String }
+   */
+  public void setName(String value) {
+    this.name = value;
+  }
 
-    /**
-     * Gets the value of the table property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Short }
-     *     
-     */
-    public Short getTable() {
-        return table;
-    }
+  /**
+   * Gets the value of the table property.
+   *
+   * @return possible object is {@link Short }
+   */
+  public Short getTable() {
+    return table;
+  }
 
-    /**
-     * Sets the value of the table property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Short }
-     *     
-     */
-    public void setTable(Short value) {
-        this.table = value;
-    }
+  /**
+   * Sets the value of the table property.
+   *
+   * @param value allowed object is {@link Short }
+   */
+  public void setTable(Short value) {
+    this.table = value;
+  }
 
-    /**
-     * Gets the value of the usage property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getUsage() {
-        return usage;
-    }
+  /**
+   * Gets the value of the usage property.
+   *
+   * @return possible object is {@link String }
+   */
+  public String getUsage() {
+    return usage;
+  }
 
-    /**
-     * Sets the value of the usage property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setUsage(String value) {
-        this.usage = value;
-    }
+  /**
+   * Sets the value of the usage property.
+   *
+   * @param value allowed object is {@link String }
+   */
+  public void setUsage(String value) {
+    this.usage = value;
+  }
 
-    /**
-     * Gets the value of the predicateFalseUsage property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getPredicateFalseUsage() {
-        return predicateFalseUsage;
-    }
+  /**
+   * Gets the value of the predicateFalseUsage property.
+   *
+   * @return possible object is {@link String }
+   */
+  public String getPredicateFalseUsage() {
+    return predicateFalseUsage;
+  }
 
-    /**
-     * Sets the value of the predicateFalseUsage property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setPredicateFalseUsage(String value) {
-        this.predicateFalseUsage = value;
-    }
+  /**
+   * Sets the value of the predicateFalseUsage property.
+   *
+   * @param value allowed object is {@link String }
+   */
+  public void setPredicateFalseUsage(String value) {
+    this.predicateFalseUsage = value;
+  }
 
-    /**
-     * Gets the value of the predicateTrueUsage property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getPredicateTrueUsage() {
-        return predicateTrueUsage;
-    }
+  /**
+   * Gets the value of the predicateTrueUsage property.
+   *
+   * @return possible object is {@link String }
+   */
+  public String getPredicateTrueUsage() {
+    return predicateTrueUsage;
+  }
 
-    /**
-     * Sets the value of the predicateTrueUsage property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setPredicateTrueUsage(String value) {
-        this.predicateTrueUsage = value;
-    }
+  /**
+   * Sets the value of the predicateTrueUsage property.
+   *
+   * @param value allowed object is {@link String }
+   */
+  public void setPredicateTrueUsage(String value) {
+    this.predicateTrueUsage = value;
+  }
 
 }

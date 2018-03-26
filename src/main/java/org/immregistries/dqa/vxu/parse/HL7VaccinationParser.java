@@ -1,14 +1,44 @@
 package org.immregistries.dqa.vxu.parse;
 
+import static org.immregistries.dqa.vxu.VxuField.OBSERVATION_DATE_TIME_OF_OBSERVATION;
+import static org.immregistries.dqa.vxu.VxuField.OBSERVATION_IDENTIFIER_CODE;
+import static org.immregistries.dqa.vxu.VxuField.OBSERVATION_IDENTIFIER_DESC;
+import static org.immregistries.dqa.vxu.VxuField.OBSERVATION_SUB_ID;
+import static org.immregistries.dqa.vxu.VxuField.OBSERVATION_VALUE;
+import static org.immregistries.dqa.vxu.VxuField.OBSERVATION_VALUE_DESC;
+import static org.immregistries.dqa.vxu.VxuField.OBSERVATION_VALUE_TYPE;
+import static org.immregistries.dqa.vxu.VxuField.VACCINATION_ACTION_CODE;
+import static org.immregistries.dqa.vxu.VxuField.VACCINATION_ADMINISTERED_AMOUNT;
+import static org.immregistries.dqa.vxu.VxuField.VACCINATION_ADMINISTERED_UNIT;
+import static org.immregistries.dqa.vxu.VxuField.VACCINATION_ADMIN_DATE;
+import static org.immregistries.dqa.vxu.VxuField.VACCINATION_ADMIN_DATE_END;
+import static org.immregistries.dqa.vxu.VxuField.VACCINATION_BODY_ROUTE;
+import static org.immregistries.dqa.vxu.VxuField.VACCINATION_BODY_SITE;
+import static org.immregistries.dqa.vxu.VxuField.VACCINATION_COMPLETION_STATUS;
+import static org.immregistries.dqa.vxu.VxuField.VACCINATION_CPT_CODE;
+import static org.immregistries.dqa.vxu.VxuField.VACCINATION_CVX_CODE;
+import static org.immregistries.dqa.vxu.VxuField.VACCINATION_FACILITY_ID;
+import static org.immregistries.dqa.vxu.VxuField.VACCINATION_FACILITY_NAME;
+import static org.immregistries.dqa.vxu.VxuField.VACCINATION_FILLER_ORDER_NUMBER;
+import static org.immregistries.dqa.vxu.VxuField.VACCINATION_FINANCIAL_ELIGIBILITY_CODE;
+import static org.immregistries.dqa.vxu.VxuField.VACCINATION_GIVEN_BY;
+import static org.immregistries.dqa.vxu.VxuField.VACCINATION_INFORMATION_SOURCE;
+import static org.immregistries.dqa.vxu.VxuField.VACCINATION_LOT_EXPIRATION_DATE;
+import static org.immregistries.dqa.vxu.VxuField.VACCINATION_LOT_NUMBER;
+import static org.immregistries.dqa.vxu.VxuField.VACCINATION_MANUFACTURER_CODE;
+import static org.immregistries.dqa.vxu.VxuField.VACCINATION_NDC_CODE;
+import static org.immregistries.dqa.vxu.VxuField.VACCINATION_ORDER_CONTROL_CODE;
+import static org.immregistries.dqa.vxu.VxuField.VACCINATION_PLACER_ORDER_NUMBER;
+import static org.immregistries.dqa.vxu.VxuField.VACCINATION_REFUSAL_REASON;
+import static org.immregistries.dqa.vxu.VxuField.VACCINATION_SYSTEM_ENTRY_TIME;
+
 import java.util.ArrayList;
 import java.util.List;
-
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 import org.immregistries.dqa.hl7util.model.Hl7Location;
 import org.immregistries.dqa.hl7util.parser.HL7MessageMap;
 import org.immregistries.dqa.vxu.DqaVaccination;
-import static org.immregistries.dqa.vxu.VxuField.*;
 import org.immregistries.dqa.vxu.hl7.CodedEntity;
 import org.immregistries.dqa.vxu.hl7.Observation;
 import org.immregistries.dqa.vxu.hl7.OrganizationName;
@@ -23,9 +53,6 @@ public enum HL7VaccinationParser {
 
   /**
    * This builds a list of Vaccinations from the message map.
-   * 
-   * @param map
-   * @return
    */
   public List<DqaVaccination> getVaccinationList(HL7MessageMap map) {
     // Start a list of shots
@@ -54,7 +81,8 @@ public enum HL7VaccinationParser {
    * @param map
    * @return
    */
-  public DqaVaccination getVaccination(HL7MessageMap map, int vaccinationStartSegment, int vaccinationFinishSegment, int positionId) {
+  public DqaVaccination getVaccination(HL7MessageMap map, int vaccinationStartSegment,
+      int vaccinationFinishSegment, int positionId) {
 
     MetaParser mp = new MetaParser(map);
     DqaVaccination shot = new DqaVaccination();
@@ -105,21 +133,21 @@ public enum HL7VaccinationParser {
     shot.setField(mp.mapCodedValue(rxaIdx, VACCINATION_NDC_CODE, "NDC", "?"));
 
     shot.setFields(mp.mapValues(rxaIdx,
-           VACCINATION_ADMIN_DATE
-          ,VACCINATION_ADMIN_DATE_END
-          ,VACCINATION_ADMINISTERED_AMOUNT
-          ,VACCINATION_ADMINISTERED_UNIT
-          ,VACCINATION_INFORMATION_SOURCE
-          ,VACCINATION_GIVEN_BY
-          ,VACCINATION_FACILITY_ID
-          ,VACCINATION_FACILITY_NAME
-          ,VACCINATION_LOT_NUMBER
-          ,VACCINATION_LOT_EXPIRATION_DATE
-          ,VACCINATION_MANUFACTURER_CODE
-          ,VACCINATION_REFUSAL_REASON
-          ,VACCINATION_COMPLETION_STATUS
-          ,VACCINATION_ACTION_CODE
-          ,VACCINATION_SYSTEM_ENTRY_TIME
+        VACCINATION_ADMIN_DATE
+        , VACCINATION_ADMIN_DATE_END
+        , VACCINATION_ADMINISTERED_AMOUNT
+        , VACCINATION_ADMINISTERED_UNIT
+        , VACCINATION_INFORMATION_SOURCE
+        , VACCINATION_GIVEN_BY
+        , VACCINATION_FACILITY_ID
+        , VACCINATION_FACILITY_NAME
+        , VACCINATION_LOT_NUMBER
+        , VACCINATION_LOT_EXPIRATION_DATE
+        , VACCINATION_MANUFACTURER_CODE
+        , VACCINATION_REFUSAL_REASON
+        , VACCINATION_COMPLETION_STATUS
+        , VACCINATION_ACTION_CODE
+        , VACCINATION_SYSTEM_ENTRY_TIME
     ));
 
     if (rxrIdx != -1) {
@@ -130,8 +158,6 @@ public enum HL7VaccinationParser {
 
     logger.info("Segment ID's being used for this shot: ORC[" + orcIdx + "] RXA[" + rxaIdx
         + "] RXR[" + rxrIdx + "] OBX{" + obxIdxList + "}");
-
-
 
     for (Integer i : obxIdxList) {
       Hl7Location hl7Location = new Hl7Location("OBX-3");
@@ -150,14 +176,10 @@ public enum HL7VaccinationParser {
 
   // TODO: I think most of the rest of this can be deleted. but we need to modify the tests to make
   // sure.
+
   /**
    * Question: Is this a transformation??? Should we be doing this in the transform layer? Picking
    * the financial eligibility out of the OBX segments?
-   * 
-   * @param map
-   * @param associatedRxaSegId
-   * @param obxIdxList
-   * @return
    */
   protected String getShotVFCCode(HL7MessageMap map, int associatedRxaSegId,
       List<Integer> obxIdxList) {
@@ -185,7 +207,7 @@ public enum HL7VaccinationParser {
       int finish = obxIdxList.get(obxIdxList.size() - 1);
       // It's a VFC code if the OBX-3 value is "64994-7". SO look for that:
       List<Integer> vfcObxList = map.findAllSegmentRepsWithValuesWithinRange(
-          new String[] {"64994-7"}, "OBX-3", start, finish, 1);
+          new String[]{"64994-7"}, "OBX-3", start, finish, 1);
       logger.info("Observation segments: " + vfcObxList);
 
       if (vfcObxList != null && vfcObxList.size() > 0) {
@@ -212,10 +234,6 @@ public enum HL7VaccinationParser {
 
   /**
    * Expects a relative index.
-   * 
-   * @param map
-   * @param rxaIdx
-   * @return
    */
   protected List<CodedEntity> getVaccineCodes(HL7MessageMap map, int rxaIdx) {
     List<CodedEntity> vaxList = new ArrayList<>();
@@ -247,10 +265,8 @@ public enum HL7VaccinationParser {
 
   /**
    * Gets the observation at the index specified.
-   * 
-   * @param mp
+   *
    * @param idx this is the absolute index in the message, of the OBX segment.
-   * @return
    */
   protected Observation getObservation(MetaParser mp, Integer idx) {
     Observation o = new Observation();
@@ -268,12 +284,6 @@ public enum HL7VaccinationParser {
 
   /**
    * Expects a segment index information from.
-   * 
-   * @param map
-   * @param field
-   * @param rxaIdx
-   * @param fieldRep
-   * @return
    */
   protected CodedEntity getCodedEntity(HL7MessageMap map, String field, int rxaIdx, int fieldRep) {
     logger.info("Getting coded entity at : " + field + " seg abs idx: " + rxaIdx);

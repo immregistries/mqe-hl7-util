@@ -1,59 +1,53 @@
 package org.immregistries.dqa.vxu.hl7;
 
-public class Id
-{
+public class Id {
+
   private String assigningAuthority = "";//new CodedEntity(CodesetType.ID_ASSIGNING_AUTHORITY);
   private Name name = null;
   private String number = "";
   private String type = "";//new CodedEntity(CodesetType.ID_TYPE_CODE);
-  
-  public boolean isEmpty()
-  {
+
+  public boolean isEmpty() {
     return number == null || number.isEmpty();
   }
 
-  public String getAssigningAuthority()
-  {
+  public String getAssigningAuthority() {
     return assigningAuthority;
   }
 
-  public String getAssigningAuthorityCode()
-  {
+  public String getAssigningAuthorityCode() {
     return assigningAuthority;
   }
 
-  public Name getName()
-  {
-    if (name == null)
-    {
+  public Name getName() {
+    if (name == null) {
       name = new Name();
     }
     return name;
   }
-  public String getNumber()
-  {
+
+  public String getNumber() {
     return number;
   }
-  public String getType()
-  {
+
+  public String getType() {
     return type;
   }
-  public String getTypeCode()
-  {
+
+  public String getTypeCode() {
     return type;
   }
-  public void setAssigningAuthorityCode(String assigningAuthorityCode)
-  {
+
+  public void setAssigningAuthorityCode(String assigningAuthorityCode) {
     this.assigningAuthority = assigningAuthorityCode;
   }
-  public void setNumber(String number)
-  {
+
+  public void setNumber(String number) {
     this.number = number;
   }
-  
-  public void setTypeCode(String typeCode)
-  {
+
+  public void setTypeCode(String typeCode) {
     this.type = typeCode;
   }
-  
+
 }
