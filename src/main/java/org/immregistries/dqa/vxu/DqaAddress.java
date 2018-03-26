@@ -1,8 +1,6 @@
 package org.immregistries.dqa.vxu;
 
-import org.immregistries.dqa.hl7util.model.MetaFieldInfo;
-
-public class DqaAddress extends MetaFieldInfoHolder {
+public class DqaAddress {
     @Override
     public String toString() {
         return "Address {street=" + street + ", street2=" + street2 + ", city="
@@ -151,9 +149,5 @@ public class DqaAddress extends MetaFieldInfoHolder {
             return false;
 
         return true;
-    }
-
-    @Override protected void setFieldFromMetaFieldInfo(MetaFieldInfo metaFieldInfo) {
-
     }
 }

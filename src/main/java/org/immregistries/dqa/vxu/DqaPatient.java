@@ -3,7 +3,6 @@ package org.immregistries.dqa.vxu;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
 import org.immregistries.dqa.hl7util.model.MetaFieldInfo;
 import org.immregistries.dqa.vxu.hl7.Id;
 import org.immregistries.dqa.vxu.hl7.Name;
@@ -11,10 +10,6 @@ import org.immregistries.dqa.vxu.hl7.OrganizationName;
 import org.immregistries.dqa.vxu.hl7.PatientIdNumber;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import static org.immregistries.dqa.vxu.VxuField.*;
-import static org.immregistries.dqa.vxu.VxuField.PATIENT_GUARDIAN_PHONE;
-import static org.immregistries.dqa.vxu.VxuField.PATIENT_GUARDIAN_RELATIONSHIP;
 
 public class DqaPatient extends MetaFieldInfoHolder {
 
@@ -72,7 +67,7 @@ public class DqaPatient extends MetaFieldInfoHolder {
   // This comes out of the transform step. The kin list will be interpreted, and one will be picked
   // as the responsible party.
   private DqaNextOfKin responsibleParty = new DqaNextOfKin();
-  
+
   private String email = "";
 
   public String getEmail() {
@@ -98,9 +93,8 @@ public class DqaPatient extends MetaFieldInfoHolder {
   public List<DqaPatientAddress> getPatientAddressList() {
     return patientAddressList;
   }
-  
-  public DqaPatientAddress getPatientAddress()
-  {
+
+  public DqaPatientAddress getPatientAddress() {
     return getAddress(1);
   }
 
@@ -637,10 +631,6 @@ public class DqaPatient extends MetaFieldInfoHolder {
     this.financialEligibilityDateString = financialEligibilityDateString;
   }
 
-  public DqaNextOfKin getResponsibleParty() {
-    return responsibleParty;
-  }
-
   public String getBirthCounty() {
     return birthCounty;
   }
@@ -649,9 +639,13 @@ public class DqaPatient extends MetaFieldInfoHolder {
     this.birthCounty = birthCounty;
   }
 
-   public void setResponsibleParty(DqaNextOfKin responsibleParty) {
-      this.responsibleParty = responsibleParty;
-   }
+  public void setResponsibleParty(DqaNextOfKin responsibleParty) {
+    this.responsibleParty = responsibleParty;
+  }
+
+  public DqaNextOfKin getResponsibleParty() {
+    return responsibleParty;
+  }
 
 
   private DqaPatientAddress getAddress(int pos) {
@@ -668,32 +662,6 @@ public class DqaPatient extends MetaFieldInfoHolder {
     String value = metaFieldInfo.getValue();
     int pos = metaFieldInfo.getHl7Location().getFieldRepetition();
     switch (metaFieldInfo.getVxuField()) {
-      case PATIENT_ADDRESS:
-        break;
-      case PATIENT_ADDRESS_CITY:
-        getAddress(pos).setCity(value);
-        break;
-      case PATIENT_ADDRESS_COUNTRY:
-        getAddress(pos).setCountryCode(value);
-        break;
-      case PATIENT_ADDRESS_COUNTY:
-        getAddress(pos).setCountyParishCode(value);
-        break;
-      case PATIENT_ADDRESS_STATE:
-        getAddress(pos).setStateCode(value);
-        break;
-      case PATIENT_ADDRESS_STREET:
-        getAddress(pos).setStreet(value);
-        break;
-      case PATIENT_ADDRESS_STREET2:
-        getAddress(pos).setStreet2(value);
-        break;
-      case PATIENT_ADDRESS_TYPE:
-        getAddress(pos).setTypeCode(value);
-        break;
-      case PATIENT_ADDRESS_ZIP:
-        getAddress(pos).setZip(value);
-        break;
       case PATIENT_ALIAS:
         break;
       case PATIENT_BIRTH_COUNTY:
@@ -771,6 +739,32 @@ public class DqaPatient extends MetaFieldInfoHolder {
       case PATIENT_PHONE_LOCAL_NUMBER:
         phone.setLocalNumber(value);
         break;
+      case PATIENT_ADDRESS:
+        break;
+      case PATIENT_ADDRESS_CITY:
+        getAddress(pos).setCity(value);
+        break;
+      case PATIENT_ADDRESS_COUNTRY:
+        getAddress(pos).setCountryCode(value);
+        break;
+      case PATIENT_ADDRESS_COUNTY:
+        getAddress(pos).setCountyParishCode(value);
+        break;
+      case PATIENT_ADDRESS_STATE:
+        getAddress(pos).setStateCode(value);
+        break;
+      case PATIENT_ADDRESS_STREET:
+        getAddress(pos).setStreet(value);
+        break;
+      case PATIENT_ADDRESS_STREET2:
+        getAddress(pos).setStreet2(value);
+        break;
+      case PATIENT_ADDRESS_TYPE:
+        getAddress(pos).setTypeCode(value);
+        break;
+      case PATIENT_ADDRESS_ZIP:
+        getAddress(pos).setZip(value);
+        break;
       case PATIENT_PRIMARY_FACILITY_ID:
         facility.setId(value);
         break;
@@ -823,36 +817,23 @@ public class DqaPatient extends MetaFieldInfoHolder {
       case PATIENT_EMAIL:
         email = value;
         break;
-        case PATIENT_GUARDIAN_NAME_FIRST:
-              getResponsibleParty().setNameFirst(value);
-          break;
-        case PATIENT_GUARDIAN_NAME_LAST:
-              getResponsibleParty().setNameLast(value);
-              break;
-        case PATIENT_GUARDIAN_ADDRESS_CITY:
-              getResponsibleParty().getAddress().setCity(value);
-              break;
-        case PATIENT_GUARDIAN_ADDRESS_STATE:
-              getResponsibleParty().getAddress().setStateCode(value);
-              break;
-        case PATIENT_GUARDIAN_ADDRESS_STREET2:
-              getResponsibleParty().getAddress().setStreet2(value);
-              break;
-        case PATIENT_GUARDIAN_ADDRESS_ZIP:
-              getResponsibleParty().getAddress().setZip(value);
-              break;
-        case PATIENT_GUARDIAN_ADDRESS_COUNTRY:
-              getResponsibleParty().getAddress().setCountryCode(value);
-              break;
-        case PATIENT_GUARDIAN_ADDRESS:
-              getResponsibleParty().getAddress().setStreet(value);
-              break;
-        case PATIENT_GUARDIAN_RELATIONSHIP:
-              getResponsibleParty().setRelationshipCode(value);
-              break;
-        case PATIENT_GUARDIAN_PHONE:
-              getResponsibleParty().setPhoneNumber(value);
-              break;
+      case PATIENT_GUARDIAN_NAME_FIRST:
+      case PATIENT_GUARDIAN_NAME_LAST:
+      case PATIENT_GUARDIAN_ADDRESS_CITY:
+      case PATIENT_GUARDIAN_ADDRESS_STATE:
+      case PATIENT_GUARDIAN_ADDRESS_STREET:
+      case PATIENT_GUARDIAN_ADDRESS_STREET2:
+      case PATIENT_GUARDIAN_ADDRESS_ZIP:
+      case PATIENT_GUARDIAN_ADDRESS_COUNTRY:
+      case PATIENT_GUARDIAN_ADDRESS:
+      case PATIENT_GUARDIAN_RELATIONSHIP:
+      case PATIENT_GUARDIAN_PHONE:
+      case PATIENT_GUARDIAN_PHONE_AREA_CODE:
+      case PATIENT_GUARDIAN_PHONE_LOCAL_NUMBER:
+      case PATIENT_GUARDIAN_PHONE_TEL_USE_CODE:
+      case PATIENT_GUARDIAN_PHONE_TEL_EQUIP_CODE:
+        getResponsibleParty().setField(metaFieldInfo);
+        break;
       default:
         break;
     }

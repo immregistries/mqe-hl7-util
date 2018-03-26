@@ -371,8 +371,7 @@ public class MessageParserHL7 implements MessageParser {
 		//The MSH segment needs some special splitting.  The MSH-1 field needs to be the field delimiter. 
 		if ("MSH".equals(this.getSegmentName(segment))) {
 			//the first field delimiter is actually the value for MSH-1.
-			List<String> fieldList = new ArrayList<String>(); 
-			fieldList.addAll(Arrays.asList(fields));
+			List<String> fieldList = new ArrayList<>(Arrays.asList(fields));
 			fieldList.add(1, this.fieldSeparator);
 			fields = fieldList.toArray(fields);
 		}

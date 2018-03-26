@@ -249,6 +249,32 @@ public class HL7MessageMap {
     return -1;
   }
 
+  public String unifyLocatorFormat(String location) {
+    //HL7 format uses a dot...  like NK1-15.1
+    //This will reformat to this format of NK1-15-1
+    if (location.contains(".")) {
+      return location.replaceAll("\\.", "-");
+    }
+    return location;
+  }
+
+  public int findFirstSegmentWhereFieldHas(String location, String... searchCodes) {
+    if (location == null || location.length() < 3) {
+      return -1;
+    }
+//    String standardizedLoc = unifyLocatorFormat(location);
+    String seg = this.getSegmentNameFromLocator(location);
+    List<Integer> segs = this.getIndexesForSegmentName(seg);
+    for (Integer i : segs) {
+      //find rel code:
+      String value = this.getAtIndex(location, i);
+      if (Arrays.asList(searchCodes).contains(value)) {
+        return i;
+      }
+    }
+    return -1;
+  }
+
   public List<Integer> getIndexesForSegmentName(String segName) {
     List<Integer> indexes = this.segmentIndexes.get(segName);
     if (indexes == null) {
@@ -536,6 +562,7 @@ public class HL7MessageMap {
   }
 
   protected String fillInLocation(String location) {
+    location = unifyLocatorFormat(location);
     location = addSegmentIndexIfMissing(location);
     location = addZeroFieldNumberIfMissing(location);
     location = addFieldRepIfMIssing(location);

@@ -171,74 +171,96 @@ public class DqaNextOfKin extends MetaFieldInfoHolder {
     String value = metaFieldInfo.getValue();
     switch (metaFieldInfo.getVxuField()) {
       case NEXT_OF_KIN_ADDRESS:
+      case PATIENT_GUARDIAN_ADDRESS:
         break;
       case NEXT_OF_KIN_ADDRESS_CITY:
+      case PATIENT_GUARDIAN_ADDRESS_CITY:
         address.setCity(value);
         break;
       case NEXT_OF_KIN_ADDRESS_COUNTRY:
+      case PATIENT_GUARDIAN_ADDRESS_COUNTRY:
         address.setCountryCode(value);
         break;
       case NEXT_OF_KIN_ADDRESS_COUNTY:
+      case PATIENT_GUARDIAN_ADDRESS_COUNTY:
         address.setCountyParishCode(value);
         break;
       case NEXT_OF_KIN_ADDRESS_STATE:
+      case PATIENT_GUARDIAN_ADDRESS_STATE:
         address.setStateCode(value);
         break;
       case NEXT_OF_KIN_ADDRESS_STREET:
+      case PATIENT_GUARDIAN_ADDRESS_STREET:
         address.setStreet(value);
         break;
       case NEXT_OF_KIN_ADDRESS_STREET2:
+      case PATIENT_GUARDIAN_ADDRESS_STREET2:
         address.setStreet2(value);
         break;
       case NEXT_OF_KIN_ADDRESS_TYPE:
+//      case PATIENT_GUARDIAN_ADDRESS_TYPE:
         address.setTypeCode(value);
         break;
       case NEXT_OF_KIN_ADDRESS_ZIP:
+      case PATIENT_GUARDIAN_ADDRESS_ZIP:
         address.setZip(value);
         break;
       case NEXT_OF_KIN_NAME:
+      case PATIENT_GUARDIAN_NAME:
         break;
       case NEXT_OF_KIN_NAME_SUFFIX:
+//      case PATIENT_GUARDIAN_NAME_SUFFIX:
         name.setSuffix(value);
         break;
       case NEXT_OF_KIN_NAME_FIRST:
+      case PATIENT_GUARDIAN_NAME_FIRST:
         name.setFirst(value);
         break;
       case NEXT_OF_KIN_NAME_LAST:
+      case PATIENT_GUARDIAN_NAME_LAST:
         name.setLast(value);
         break;
       case NEXT_OF_KIN_NAME_MIDDLE:
+      case PATIENT_GUARDIAN_NAME_MIDDLE:
         name.setMiddle(value);
         break;
       case NEXT_OF_KIN_PHONE:
+      case PATIENT_GUARDIAN_PHONE:
         phone.setNumber(value);
         break;
       case NEXT_OF_KIN_PHONE_LOCAL_NUMBER:
+      case PATIENT_GUARDIAN_PHONE_LOCAL_NUMBER:
         phone.setLocalNumber(value);
         break;
       case NEXT_OF_KIN_PHONE_AREA_CODE:
+      case PATIENT_GUARDIAN_PHONE_AREA_CODE:
         phone.setAreaCode(value);
         break;
       case NEXT_OF_KIN_PHONE_TEL_EQUIP_CODE:
+      case PATIENT_GUARDIAN_PHONE_TEL_EQUIP_CODE:
         phone.setTelEquipCode(value);
         break;
       case NEXT_OF_KIN_PHONE_TEL_USE_CODE:
+      case PATIENT_GUARDIAN_PHONE_TEL_USE_CODE:
         phone.setTelUseCode(value);
         break;
       case NEXT_OF_KIN_RELATIONSHIP:
+      case PATIENT_GUARDIAN_RELATIONSHIP:
         relationship = value;
         break;
       case NEXT_OF_KIN_SSN:
         break;
       case NEXT_OF_KIN_EMAIL:
+      case PATIENT_GUARDIAN_EMAIL:
         email = value;
         break;
       case NEXT_OF_KIN_PRIMARY_LANGUAGE:
+      case PATIENT_GUARDIAN_PRIMARY_LANGUAGE:
         primaryLanguageCode = value;
-      break;
+        break;
       default:
         break;
     }
-
   }
 }
+
