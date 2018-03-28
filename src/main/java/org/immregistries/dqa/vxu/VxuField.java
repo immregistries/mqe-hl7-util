@@ -160,7 +160,6 @@ public enum VxuField {
   PATIENT_SUBMITTER_ID("submitter id", null, "PID-3"),
   PATIENT_SUBMITTER_ID_AUTHORITY("submitter id authority", null, "PID-3.4"),
   PATIENT_SUBMITTER_ID_TYPE_CODE("submitter id type code", null, "PID-3.5"),
-  PATIENT_SYSTEM_CREATION_DATE("system creation date", null, null),
   PATIENT_VFC_EFFECTIVE_DATE("VFC effective date", null, "PV1-20.2"),
   PATIENT_VFC_STATUS("VFC status", CodesetType.FINANCIAL_STATUS_CODE, "PV1-20.1"),
   PATIENT_WIC_ID("WIC id", null, "PID-3")

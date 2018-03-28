@@ -62,7 +62,6 @@ public class DqaPatient extends MetaFieldInfoHolder {
   private boolean skipped = false;
   // private List<PhoneNumber> patientPhoneList = new ArrayList<PhoneNumber>();
   private List<PatientImmunity> patientImmunityList = new ArrayList<PatientImmunity>();
-  private Date systemCreationDate = null;
 
   // This comes out of the transform step. The kin list will be interpreted, and one will be picked
   // as the responsible party.
@@ -76,14 +75,6 @@ public class DqaPatient extends MetaFieldInfoHolder {
 
   public void setEmail(String email) {
     this.email = email;
-  }
-
-  public Date getSystemCreationDate() {
-    return systemCreationDate;
-  }
-
-  public void setSystemCreationDate(Date systemCreationDate) {
-    this.systemCreationDate = systemCreationDate;
   }
 
   public List<PatientImmunity> getPatientImmunityList() {
@@ -804,8 +795,6 @@ public class DqaPatient extends MetaFieldInfoHolder {
         break;
       case PATIENT_SUBMITTER_ID_TYPE_CODE:
         idSubmitter.setTypeCode(value);
-        break;
-      case PATIENT_SYSTEM_CREATION_DATE:
         break;
       case PATIENT_VFC_EFFECTIVE_DATE:
         break;
