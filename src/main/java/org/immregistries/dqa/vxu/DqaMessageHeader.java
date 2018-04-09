@@ -27,6 +27,7 @@ public class DqaMessageHeader extends MetaFieldInfoHolder implements Serializabl
   private String sendingApplication = "";
   private String sendingFacility = "";
   private String messageVersion = "";
+  private String sendingRespOrg = "";
 
   @Override
   public String toString() {
@@ -282,5 +283,13 @@ public class DqaMessageHeader extends MetaFieldInfoHolder implements Serializabl
     }
 
   }
+
+public String getSendingRespOrg() {
+	return sendingRespOrg;
+}
+
+public void setSendingRespOrg(String sendingRespOrg) {
+	this.sendingRespOrg = sendingRespOrg;
+}
 
 }

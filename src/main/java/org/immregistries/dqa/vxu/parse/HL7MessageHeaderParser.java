@@ -22,6 +22,7 @@ import org.immregistries.dqa.hl7util.parser.HL7MessageMap;
 import org.immregistries.dqa.vxu.DqaMessageHeader;
 
 public enum HL7MessageHeaderParser {
+
   INSTANCE;
 
   /**
@@ -57,4 +58,5 @@ public enum HL7MessageHeaderParser {
         , MESSAGE_PROFILE_ID));
     return h;
   }
+
 }
