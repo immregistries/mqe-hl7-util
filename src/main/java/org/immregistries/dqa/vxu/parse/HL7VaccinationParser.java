@@ -163,6 +163,7 @@ public enum HL7VaccinationParser {
 
     for (Integer i : obxIdxList) {
       Hl7Location hl7Location = new Hl7Location("OBX-3");
+      //TODO: This isn't taking into account the segment sequence...  I'm not sure if thats going to work.
       String value = mp.getValue(hl7Location);
       if (value != null && value.equals("64994-7")) {
         shot.setFields(mp.mapValues(i, VACCINATION_FINANCIAL_ELIGIBILITY_CODE));
