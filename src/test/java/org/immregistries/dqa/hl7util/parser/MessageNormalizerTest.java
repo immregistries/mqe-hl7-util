@@ -8,9 +8,6 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
-
-import org.immregistries.dqa.hl7util.parser.MessageParser;
-import org.immregistries.dqa.hl7util.parser.MessageParserHL7;
 import org.immregistries.dqa.hl7util.parser.model.HL7MessagePart;
 import org.junit.Test;
 //@RunWith(SpringJUnit4ClassRunner.class)

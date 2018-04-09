@@ -18,9 +18,9 @@ import javax.xml.bind.annotation.XmlType;
 
 /**
  * <p>Java class for anonymous complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType>
  *   &lt;complexContent>
@@ -37,8 +37,6 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
@@ -50,161 +48,125 @@ import javax.xml.bind.annotation.XmlType;
 @XmlRootElement(name = "HL7v2xConformanceProfile")
 public class HL7V2XConformanceProfile {
 
-    @XmlElement(name = "MetaData", required = true)
-    protected MetaData metaData;
-    @XmlElement(name = "Encodings", required = true)
-    protected Encodings encodings;
-    @XmlElement(name = "DynamicDef", required = true)
-    protected DynamicDef dynamicDef;
-    @XmlElement(name = "HL7v2xStaticDef", required = true)
-    protected StaticDef hl7V2XStaticDef;
-    @XmlAttribute(name = "HL7Version")
-    protected String hl7Version;
-    @XmlAttribute(name = "ProfileType")
-    protected String profileType;
+  @XmlElement(name = "MetaData", required = true)
+  protected MetaData metaData;
+  @XmlElement(name = "Encodings", required = true)
+  protected Encodings encodings;
+  @XmlElement(name = "DynamicDef", required = true)
+  protected DynamicDef dynamicDef;
+  @XmlElement(name = "HL7v2xStaticDef", required = true)
+  protected StaticDef hl7V2XStaticDef;
+  @XmlAttribute(name = "HL7Version")
+  protected String hl7Version;
+  @XmlAttribute(name = "ProfileType")
+  protected String profileType;
 
-    /**
-     * Gets the value of the metaData property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link MetaData }
-     *     
-     */
-    public MetaData getMetaData() {
-        return metaData;
-    }
+  /**
+   * Gets the value of the metaData property.
+   *
+   * @return possible object is {@link MetaData }
+   */
+  public MetaData getMetaData() {
+    return metaData;
+  }
 
-    /**
-     * Sets the value of the metaData property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link MetaData }
-     *     
-     */
-    public void setMetaData(MetaData value) {
-        this.metaData = value;
-    }
+  /**
+   * Sets the value of the metaData property.
+   *
+   * @param value allowed object is {@link MetaData }
+   */
+  public void setMetaData(MetaData value) {
+    this.metaData = value;
+  }
 
-    /**
-     * Gets the value of the encodings property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Encodings }
-     *     
-     */
-    public Encodings getEncodings() {
-        return encodings;
-    }
+  /**
+   * Gets the value of the encodings property.
+   *
+   * @return possible object is {@link Encodings }
+   */
+  public Encodings getEncodings() {
+    return encodings;
+  }
 
-    /**
-     * Sets the value of the encodings property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Encodings }
-     *     
-     */
-    public void setEncodings(Encodings value) {
-        this.encodings = value;
-    }
+  /**
+   * Sets the value of the encodings property.
+   *
+   * @param value allowed object is {@link Encodings }
+   */
+  public void setEncodings(Encodings value) {
+    this.encodings = value;
+  }
 
-    /**
-     * Gets the value of the dynamicDef property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link DynamicDef }
-     *     
-     */
-    public DynamicDef getDynamicDef() {
-        return dynamicDef;
-    }
+  /**
+   * Gets the value of the dynamicDef property.
+   *
+   * @return possible object is {@link DynamicDef }
+   */
+  public DynamicDef getDynamicDef() {
+    return dynamicDef;
+  }
 
-    /**
-     * Sets the value of the dynamicDef property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link DynamicDef }
-     *     
-     */
-    public void setDynamicDef(DynamicDef value) {
-        this.dynamicDef = value;
-    }
+  /**
+   * Sets the value of the dynamicDef property.
+   *
+   * @param value allowed object is {@link DynamicDef }
+   */
+  public void setDynamicDef(DynamicDef value) {
+    this.dynamicDef = value;
+  }
 
-    /**
-     * Gets the value of the hl7V2XStaticDef property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link StaticDef }
-     *     
-     */
-    public StaticDef getHL7V2XStaticDef() {
-        return hl7V2XStaticDef;
-    }
+  /**
+   * Gets the value of the hl7V2XStaticDef property.
+   *
+   * @return possible object is {@link StaticDef }
+   */
+  public StaticDef getHL7V2XStaticDef() {
+    return hl7V2XStaticDef;
+  }
 
-    /**
-     * Sets the value of the hl7V2XStaticDef property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link StaticDef }
-     *     
-     */
-    public void setHL7V2XStaticDef(StaticDef value) {
-        this.hl7V2XStaticDef = value;
-    }
+  /**
+   * Sets the value of the hl7V2XStaticDef property.
+   *
+   * @param value allowed object is {@link StaticDef }
+   */
+  public void setHL7V2XStaticDef(StaticDef value) {
+    this.hl7V2XStaticDef = value;
+  }
 
-    /**
-     * Gets the value of the hl7Version property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getHL7Version() {
-        return hl7Version;
-    }
+  /**
+   * Gets the value of the hl7Version property.
+   *
+   * @return possible object is {@link String }
+   */
+  public String getHL7Version() {
+    return hl7Version;
+  }
 
-    /**
-     * Sets the value of the hl7Version property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setHL7Version(String value) {
-        this.hl7Version = value;
-    }
+  /**
+   * Sets the value of the hl7Version property.
+   *
+   * @param value allowed object is {@link String }
+   */
+  public void setHL7Version(String value) {
+    this.hl7Version = value;
+  }
 
-    /**
-     * Gets the value of the profileType property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getProfileType() {
-        return profileType;
-    }
+  /**
+   * Gets the value of the profileType property.
+   *
+   * @return possible object is {@link String }
+   */
+  public String getProfileType() {
+    return profileType;
+  }
 
-    /**
-     * Sets the value of the profileType property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setProfileType(String value) {
-        this.profileType = value;
-    }
+  /**
+   * Sets the value of the profileType property.
+   *
+   * @param value allowed object is {@link String }
+   */
+  public void setProfileType(String value) {
+    this.profileType = value;
+  }
 
 }

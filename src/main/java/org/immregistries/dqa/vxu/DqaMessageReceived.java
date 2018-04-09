@@ -6,57 +6,64 @@ import java.util.List;
 
 public class DqaMessageReceived {
 
-	/**
-	 * This is metadata about this message. There may be more metadata to add to this. 
-	 */
-	private Date receivedDate = new Date();
+  /**
+   * This is metadata about this message. There may be more metadata to add to this.
+   */
+  private Date receivedDate = new Date();
 
-	/*
-	 * below here are all objects taken from the message itself.
-	 */
-	private DqaMessageHeader messageHeader = new DqaMessageHeader();
-	private DqaPatient patient = new DqaPatient();
-	private List<DqaNextOfKin> nextOfKins = new ArrayList<DqaNextOfKin>();
-	private List<DqaVaccination> vaccinations = new ArrayList<DqaVaccination>();
+  /*
+   * below here are all objects taken from the message itself.
+   */
+  private DqaMessageHeader messageHeader = new DqaMessageHeader();
+  private DqaPatient patient = new DqaPatient();
+  private List<DqaNextOfKin> nextOfKins = new ArrayList<DqaNextOfKin>();
+  private List<DqaVaccination> vaccinations = new ArrayList<DqaVaccination>();
 
-	public List<DqaNextOfKin> getNextOfKins() {
-		return nextOfKins;
-	}
+  @Override
+  public String toString() {
+    return "DqaMessageReceived{" + "receivedDate=" + receivedDate + ", messageHeader="
+        + messageHeader + ", patient=" + patient + ", nextOfKins="
+        + nextOfKins + ", vaccinations=" + vaccinations + '}';
+  }
 
-	public DqaPatient getPatient() {
-		return patient;
-	}
+  public List<DqaNextOfKin> getNextOfKins() {
+    return nextOfKins;
+  }
 
-	public List<DqaVaccination> getVaccinations() {
-		return vaccinations;
-	}
+  public DqaPatient getPatient() {
+    return patient;
+  }
 
-	public void setNextOfKins(List<DqaNextOfKin> nextOfKins) {
-		this.nextOfKins = nextOfKins;
-	}
+  public List<DqaVaccination> getVaccinations() {
+    return vaccinations;
+  }
 
-	public void setPatient(DqaPatient patient) {
-		this.patient = patient;
-	}
+  public void setNextOfKins(List<DqaNextOfKin> nextOfKins) {
+    this.nextOfKins = nextOfKins;
+  }
 
-	public void setVaccinations(List<DqaVaccination> vaccinations) {
-		this.vaccinations = vaccinations;
-	}
+  public void setPatient(DqaPatient patient) {
+    this.patient = patient;
+  }
 
-	public Date getReceivedDate() {
-		return receivedDate;
-	}
+  public void setVaccinations(List<DqaVaccination> vaccinations) {
+    this.vaccinations = vaccinations;
+  }
 
-	public void setReceivedDate(Date receivedDate) {
-		this.receivedDate = receivedDate;
-	}
+  public Date getReceivedDate() {
+    return receivedDate;
+  }
 
-	public DqaMessageHeader getMessageHeader() {
-		return messageHeader;
-	}
+  public void setReceivedDate(Date receivedDate) {
+    this.receivedDate = receivedDate;
+  }
 
-	public void setMessageHeader(DqaMessageHeader messageHeader) {
-		this.messageHeader = messageHeader;
-	}
+  public DqaMessageHeader getMessageHeader() {
+    return messageHeader;
+  }
+
+  public void setMessageHeader(DqaMessageHeader messageHeader) {
+    this.messageHeader = messageHeader;
+  }
 
 }

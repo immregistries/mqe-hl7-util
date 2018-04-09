@@ -3,19 +3,18 @@ package org.immregistries.dqa.vxu.parse;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
+import java.util.ArrayList;
 import java.util.List;
-
 import org.immregistries.dqa.hl7util.parser.HL7MessageMap;
 import org.immregistries.dqa.hl7util.parser.MessageParserHL7;
 import org.immregistries.dqa.vxu.DqaVaccination;
 import org.immregistries.dqa.vxu.hl7.CodedEntity;
 import org.immregistries.dqa.vxu.hl7.Observation;
-import org.immregistries.dqa.vxu.parse.HL7VaccineParser;
 import org.junit.Test;
 
 public class HL7VaccineParserTester {
 	private MessageParserHL7 rootParser = new MessageParserHL7();
-	private HL7VaccineParser vParser = HL7VaccineParser.INSTANCE;
+	private HL7VaccinationParser vParser = HL7VaccinationParser.INSTANCE;
 	
 	private static final String IMMUNITY_MSG = 
 	/* 0*/		 "MSH|^~\\&|||||20160413161526-0400||VXU^V04^VXU_V04|2bK5-B.07.14.1Nx|P|2.5.1|\r"
@@ -31,8 +30,25 @@ public class HL7VaccineParserTester {
 	/*10*/		+"OBX|3|TS|29768-9^Date vaccine information statement published^LN|2|20111025||||||F|\r"
 	/*11*/		+"OBX|4|TS|29769-7^Date vaccine information statement presented^LN|2|20160413||||||F|\r";
 	
+	private static String VFC_BREAKER = 
+			"MSH|^~\\&|||||20170427122558-0600||VXU^V04^VXU_V04|2jCa-L.IZ-AD-2|D|2.5.1|||ER|AL|||||Z22^CDCPHINVS||\r"
+           +"PID|1||U37X24^^^AIRA-TEST^MR||Story^Archie^A^^^^L|Brennan^Rayna|20161019|M||2028-9^Asian^CDCREC|278 Shelby Cir^^Wyoming^MI^49418^USA^P||^PRN^PH^^^616^8248132~^NET^^Elise.Wong@isp.com|||||||||2186-5^Not Hispanic or Latino^CDCREC||N|1|||||N\r"
+           +"PD1|||||||||||02^Reminder/Recall - any method^HL70215|N|20150624|||A|20170427|20170427\r"
+           +"ORC|RE|AU37X24.1^NIST-AA-IZ-2|BU37X24.1^AIRA|||||||7824^Jackson^Lily^Suzanne^^^^^NIST-PI-1^L^^^PRN||654^Thomas^Wilma^Elizabeth^^^^^NIST-PI-1^L^^^MD|||||NISTEHRFAC^NISTEHRFacility^HL70362\r"
+           +"RXA|0|1|20170217||20^DTaP^CVX|999|mL^mL^UCUM||01^Historical^NIP001|7824^Jackson^Lily^Suzanne^^^^^NIST-PI-1^L^^^PRN|^^^NIST-Clinic-1||||315841|20151216|PMC^Sanofi Pasteur^MVX|||CP|A\r"
+           +"RXR|OTH^Intramuscular^NCIT|RD^Right Deltoid^HL70163\r"
+           +"OBX|1|CE|30963-3^Vaccine Funding Source^LN|1|PHC70^Private^CDCPHINVS||||||F|||20150624\r"
+           +"OBX|2|CE|64994-7^Vaccine Funding Program Eligibility^LN|2|V01^Not VFC Eligible^HL70064||||||F|||20150624|||VXC40^per immunization^CDCPHINVS\r"
+           +"OBX|3|CE|69764-9^Document Type^LN|3|253088698300028811150224^Tetanus/Diphtheria (Td) VIS^cdcgs1vis||||||F|||20150624\r"
+           +"OBX|4|DT|29769-7^Date Vis Presented^LN|3|20150624||||||F|||20150624\r"
+           +"ORC|RE||BU37X24.2^AIRA|||||||7824^Jackson^Lily^Suzanne^^^^^NIST-PI-1^L^^^PRN|||||||NISTEHRFAC^NISTEHRFacility^HL70362\r"
+           +"RXA|0|1|20170217||20^DTaP^CVX|999|||01^Historical^NIP001|||||||||||CP|A\r"
+           +"ORC|RE||BU37X24.3^AIRA|||||||I-23432^Burden^Donna^A^^^^^NIST-AA-1^L^^^PRN||57422^RADON^NICHOLAS^^^^^^NIST-AA-1^L|||||NISTEHRFAC^NISTEHRFacility^HL70362\r"
+           +"RXA|0|1|20170427||49^Hib^CVX|0.5|mL^milliliters^UCUM||00^Administered^NIP001||||||U5086LL||MSD^Merck and Co^MVX|||CP|A\r";
+	
 	private HL7MessageMap map = rootParser.getMessagePartMap(IMMUNITY_MSG);
 	
+
 	@Test
 	public void test4() {
 		List<DqaVaccination> vaccList = vParser.getVaccinationList(map);
@@ -52,12 +68,12 @@ public class HL7VaccineParserTester {
 		assertEquals("Should have two", 2, vList.size());
 		//first one should not have RXR info.  
 		DqaVaccination immVac = vList.get(0);
-		assertEquals("shouldn't have rxr info - route", null, immVac.getBodyRoute());
-		assertEquals("shouldn't have rxr info - site", null, immVac.getBodySite());
+		assertEquals("1 shouldn't have rxr info - route", "", immVac.getBodyRoute());
+		assertEquals("1 shouldn't have rxr info - site", "", immVac.getBodySite());
 		//Second one should.
 		DqaVaccination hepAVac = vList.get(1);
-		assertEquals("should have rxr info - route", "IM", hepAVac.getBodyRoute());
-		assertEquals("should have rxr info - site", "RT", hepAVac.getBodySite());
+		assertEquals("2 should have rxr info - route", "IM", hepAVac.getBodyRoute());
+		assertEquals("2 should have rxr info - site", "RT", hepAVac.getBodySite());
 	}
 	
 	@Test
@@ -67,35 +83,44 @@ public class HL7VaccineParserTester {
 		assertEquals("Should have one vaccine code", 1, cvxList.size());
 		assertEquals("first item in the list should be 998...", "998", cvxList.get(0).getCode());
 	}
-	
+	MetaParser mp = new MetaParser(map);
 	@Test 
 	public void testObservationGetter() {
 		//the first observation is the fourth segment in this message.  (zero based)
-		Observation o = vParser.getObservation(map, 4);
+		Observation o = vParser.getObservation(mp, 4);
 		assertNotNull(o);
 			
 		assertEquals("identifier", "59784-9", o.getIdentifierCode());
 		assertEquals("value", "23511006", o.getValue());
 		
-		o = vParser.getObservation(map, 8);
+		o = vParser.getObservation(mp, 8);
 		assertNotNull(o);
 		assertEquals("identifier", "64994-7", o.getIdentifierCode());
 		assertEquals("value", "V02", o.getValue());
 		
-		o = vParser.getObservation(map, 9);
+		o = vParser.getObservation(mp, 9);
 		assertNotNull(o);
 		assertEquals("identifier", "30956-7", o.getIdentifierCode());
 		assertEquals("value", "85", o.getValue());
 
-		o = vParser.getObservation(map, 10);
+		o = vParser.getObservation(mp, 10);
 		assertNotNull(o);
 		assertEquals("identifier", "29768-9", o.getIdentifierCode());
 		assertEquals("value", "20111025", o.getValue());
 		
-		o = vParser.getObservation(map, 11);
+		o = vParser.getObservation(mp, 11);
 		assertNotNull(o);
 		assertEquals("identifier", "29769-7", o.getIdentifierCode());
 		assertEquals("value", "20160413", o.getValue());
+	}
+	
+	@Test
+	public void testVfcProblems() {
+		String message = VFC_BREAKER;
+		HL7MessageMap messageMap = rootParser.getMessagePartMap(message);
+		List<Integer> obxIdxList = new ArrayList<Integer>(); 
+		String vfc = vParser.getShotVFCCode(messageMap, 13, obxIdxList);
+		assertEquals("Should not find a vfc code",  "V00", vfc);
 	}
 
 }

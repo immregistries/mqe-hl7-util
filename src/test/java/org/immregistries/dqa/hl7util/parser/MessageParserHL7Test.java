@@ -10,8 +10,6 @@ import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-
-import org.immregistries.dqa.hl7util.parser.MessageParserHL7;
 import org.immregistries.dqa.hl7util.parser.model.HL7MessagePart;
 import org.immregistries.dqa.hl7util.parser.profile.generator.FieldComplexity;
 import org.junit.Test;

@@ -1,64 +1,111 @@
 package org.immregistries.dqa.vxu.hl7;
 
+import org.immregistries.dqa.hl7util.model.MetaFieldInfo;
+import org.immregistries.dqa.vxu.MetaFieldInfoHolder;
 
-public class Observation {
-  
+public class Observation extends MetaFieldInfoHolder {
+
   private String observationIdentifier = "";//new CodedEntity(CodesetType.OBSERVATION_IDENTIFIER);
+  private String observationIdentifierDescription = "";
   private String observationValue = "";
+  private String observationValueDesc = "";
   private String observationDateString;
   private String observationSubId = "";
   private String valueType = "";//new CodedEntity(CodesetType.HL7_VALUE_TYPE);
-  private String observationMethodCode ="";//this could be at the immunization level, or patient level
+  private String observationMethodCode = "";//this could be at the immunization level, or patient level
   //example: VXC40^Eligibility captured at the immunization level^CDCPHINVS
   //example of patient level??? 
-  
-	public String getSubId() {
-		return observationSubId;
-	}
 
-	public void setSubId(String subId) {
-		this.observationSubId = subId;
-	}
+  public String getSubId() {
+    return observationSubId;
+  }
 
-	public String getIdentifierCode() {
-		return this.observationIdentifier;
-	}
+  public void setSubId(String subId) {
+    this.observationSubId = subId;
+  }
 
-	public String getValue() {
-		return observationValue;
-	}
+  public String getIdentifierCode() {
+    return this.observationIdentifier;
+  }
 
-	public String getValueTypeCode() {
-		return valueType;
-	}
+  public String getValue() {
+    return observationValue;
+  }
 
-	public void setIdentifierCode(String observationIdentifierCode) {
-		this.observationIdentifier = observationIdentifierCode;
-	}
+  public String getValueTypeCode() {
+    return valueType;
+  }
 
-	public void setValue(String observationValue) {
-		this.observationValue = observationValue;
-	}
+  public void setIdentifierCode(String observationIdentifierCode) {
+    this.observationIdentifier = observationIdentifierCode;
+  }
 
-	public void setValueTypeCode(String valueTypeCode) {
-		this.valueType = valueTypeCode;
-	}
+  public void setValue(String observationValue) {
+    this.observationValue = observationValue;
+  }
 
-	public String getObservationMethodCode() {
-		return observationMethodCode;
-	}
+  public void setValueTypeCode(String valueTypeCode) {
+    this.valueType = valueTypeCode;
+  }
 
-	public void setObservationMethodCode(String observationMethodCode) {
-		this.observationMethodCode = observationMethodCode;
-	}
+  public String getObservationMethodCode() {
+    return observationMethodCode;
+  }
 
-	public String getObservationDateString() {
-		return observationDateString;
-	}
+  public void setObservationMethodCode(String observationMethodCode) {
+    this.observationMethodCode = observationMethodCode;
+  }
 
-	public void setObservationDateString(String observationDateString) {
-		this.observationDateString = observationDateString;
-	}
+  public String getObservationDateString() {
+    return observationDateString;
+  }
 
-   
+  public void setObservationDateString(String observationDateString) {
+    this.observationDateString = observationDateString;
+  }
+
+  public String getObservationValueDesc() {
+    return observationValueDesc;
+  }
+
+  public void setObservationValueDesc(String observationValueDesc) {
+    this.observationValueDesc = observationValueDesc;
+  }
+
+  public String getObservationIdentifierDescription() {
+    return observationIdentifierDescription;
+  }
+
+  public void setObservationIdentifierDescription(
+      String observationIdentifierDescription) {
+    this.observationIdentifierDescription = observationIdentifierDescription;
+  }
+
+  @Override
+  protected void setFieldFromMetaFieldInfo(MetaFieldInfo metaFieldInfo) {
+    String value = metaFieldInfo.getValue();
+    switch (metaFieldInfo.getVxuField()) {
+      case OBSERVATION_DATE_TIME_OF_OBSERVATION:
+        this.observationDateString = value;
+        break;
+      case OBSERVATION_VALUE_TYPE:
+        this.observationValue = value;
+        break;
+      case OBSERVATION_VALUE_DESC:
+        this.observationValueDesc = value;
+        break;
+      case OBSERVATION_VALUE:
+        this.observationValue = value;
+        break;
+      case OBSERVATION_IDENTIFIER_CODE:
+        this.observationIdentifier = value;
+        break;
+      case OBSERVATION_IDENTIFIER_DESC:
+        this.observationValueDesc = value;
+        break;
+      case OBSERVATION_SUB_ID:
+        this.observationSubId = value;
+        break;
+    }
+  }
 }

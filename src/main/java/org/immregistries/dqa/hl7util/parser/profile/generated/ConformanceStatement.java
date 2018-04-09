@@ -17,9 +17,9 @@ import javax.xml.bind.annotation.XmlType;
 
 /**
  * <p>Java class for conformanceStatement complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="conformanceStatement">
  *   &lt;complexContent>
@@ -33,8 +33,6 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "conformanceStatement", propOrder = {
@@ -42,83 +40,65 @@ import javax.xml.bind.annotation.XmlType;
 })
 public class ConformanceStatement {
 
-    @XmlElement(name = "EnglishDescription", required = true)
-    protected String englishDescription;
-    @XmlAttribute(name = "id")
-    protected String id;
-    @XmlAttribute(name = "Profile")
-    protected String profile;
+  @XmlElement(name = "EnglishDescription", required = true)
+  protected String englishDescription;
+  @XmlAttribute(name = "id")
+  protected String id;
+  @XmlAttribute(name = "Profile")
+  protected String profile;
 
-    /**
-     * Gets the value of the englishDescription property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getEnglishDescription() {
-        return englishDescription;
-    }
+  /**
+   * Gets the value of the englishDescription property.
+   *
+   * @return possible object is {@link String }
+   */
+  public String getEnglishDescription() {
+    return englishDescription;
+  }
 
-    /**
-     * Sets the value of the englishDescription property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setEnglishDescription(String value) {
-        this.englishDescription = value;
-    }
+  /**
+   * Sets the value of the englishDescription property.
+   *
+   * @param value allowed object is {@link String }
+   */
+  public void setEnglishDescription(String value) {
+    this.englishDescription = value;
+  }
 
-    /**
-     * Gets the value of the id property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getId() {
-        return id;
-    }
+  /**
+   * Gets the value of the id property.
+   *
+   * @return possible object is {@link String }
+   */
+  public String getId() {
+    return id;
+  }
 
-    /**
-     * Sets the value of the id property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setId(String value) {
-        this.id = value;
-    }
+  /**
+   * Sets the value of the id property.
+   *
+   * @param value allowed object is {@link String }
+   */
+  public void setId(String value) {
+    this.id = value;
+  }
 
-    /**
-     * Gets the value of the profile property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getProfile() {
-        return profile;
-    }
+  /**
+   * Gets the value of the profile property.
+   *
+   * @return possible object is {@link String }
+   */
+  public String getProfile() {
+    return profile;
+  }
 
-    /**
-     * Sets the value of the profile property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setProfile(String value) {
-        this.profile = value;
-    }
+  /**
+   * Sets the value of the profile property.
+   *
+   * @param value allowed object is {@link String }
+   */
+  public void setProfile(String value) {
+    this.profile = value;
+  }
 
 }

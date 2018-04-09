@@ -2,7 +2,6 @@ package org.immregistries.dqa.hl7util.builder;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
-
 import org.immregistries.dqa.hl7util.Reportable;
 import org.immregistries.dqa.hl7util.SeverityLevel;
 
@@ -13,23 +12,19 @@ public enum AckBuilder {
   INSTANCE;
   public static final String PROCESSING_ID_DEBUG = "D";
 
-  public String buildAckFrom(AckData ackDataIn)
-  {
+  public String buildAckFrom(AckData ackDataIn) {
 
     String controlId = ackDataIn.getMessageControlId();
     String processingId = ackDataIn.getProcessingControlId();
     AckResult ackCode = AckResult.APP_ACCEPT;
     String hl7ErrorCode = "0";
-    if (hasErrors(ackDataIn))
-    {
+    if (hasErrors(ackDataIn)) {
       ackCode = AckResult.APP_ERROR;
-      for (Reportable r : ackDataIn.getReportables())
-      {
-        if (r.getSeverity() == SeverityLevel.ERROR && r.getHl7ErrorCode() != null && r.getHl7ErrorCode().getIdentifier() != null)
-        {
+      for (Reportable r : ackDataIn.getReportables()) {
+        if (r.getSeverity() == SeverityLevel.ERROR && r.getHl7ErrorCode() != null
+            && r.getHl7ErrorCode().getIdentifier() != null) {
           hl7ErrorCode = r.getHl7ErrorCode().getIdentifier();
-          if (hl7ErrorCode != null && hl7ErrorCode.startsWith("2"))
-          {
+          if (hl7ErrorCode != null && hl7ErrorCode.startsWith("2")) {
             ackCode = AckResult.APP_REJECT;
             break;
           }
@@ -43,34 +38,25 @@ public enum AckBuilder {
     // SoftwareVersion.BINARY_ID
     // + "|\r");
     ack.append("MSA|" + ackCode.getCode() + "|" + controlId + "|\r");
-    for (Reportable r : ackDataIn.getReportables())
-    {
-      if (r.getSeverity() == SeverityLevel.ERROR)
-      {
-        HL7Util.makeERRSegment(ack, r, processingId.equals(PROCESSING_ID_DEBUG));
+    for (Reportable r : ackDataIn.getReportables()) {
+      if (r.getSeverity() == SeverityLevel.ERROR) {
+        ack.append(HL7Util.makeERRSegment(r, PROCESSING_ID_DEBUG.equals(processingId)));
       }
     }
-    for (Reportable r : ackDataIn.getReportables())
-    {
-      if (r.getSeverity() == SeverityLevel.WARN)
-      {
-        HL7Util.makeERRSegment(ack, r, processingId.equals(PROCESSING_ID_DEBUG));
+    for (Reportable r : ackDataIn.getReportables()) {
+      if (r.getSeverity() == SeverityLevel.WARN) {
+        ack.append(HL7Util.makeERRSegment(r, PROCESSING_ID_DEBUG.equals(processingId)));
       }
     }
-    for (Reportable r : ackDataIn.getReportables())
-    {
-      if (r.getSeverity() == SeverityLevel.INFO)
-      {
-        HL7Util.makeERRSegment(ack, r, processingId.equals(PROCESSING_ID_DEBUG));
+    for (Reportable r : ackDataIn.getReportables()) {
+      if (r.getSeverity() == SeverityLevel.INFO) {
+        ack.append(HL7Util.makeERRSegment(r, PROCESSING_ID_DEBUG.equals(processingId)));
       }
     }
-    if (processingId.equals(PROCESSING_ID_DEBUG))
-    {
-      for (Reportable r : ackDataIn.getReportables())
-      {
-        if (r.getSeverity() == SeverityLevel.ACCEPT)
-        {
-          HL7Util.makeERRSegment(ack, r, processingId.equals(PROCESSING_ID_DEBUG));
+    if (PROCESSING_ID_DEBUG.equals(processingId)) {
+      for (Reportable r : ackDataIn.getReportables()) {
+        if (r.getSeverity() == SeverityLevel.ACCEPT) {
+          ack.append(HL7Util.makeERRSegment(r, PROCESSING_ID_DEBUG.equals(processingId)));
         }
       }
     }
@@ -106,38 +92,32 @@ public enum AckBuilder {
 //
 //  }
 
-  private static boolean hasErrors(AckData ackDataIn)
-  {
-    for (Reportable reportable : ackDataIn.getReportables())
-    {
-      if (reportable.getSeverity() == SeverityLevel.ERROR || reportable.getSeverity() == SeverityLevel.WARN)
-      {
+  private static boolean hasErrors(AckData ackDataIn) {
+    for (Reportable reportable : ackDataIn.getReportables()) {
+      if (reportable.getSeverity() == SeverityLevel.ERROR
+          || reportable.getSeverity() == SeverityLevel.WARN) {
         return true;
       }
     }
     return false;
   }
 
-  public static void makeHeader(StringBuilder ack, AckData ackDataIn, String profileId, String responseType)
-  {
+  public static void makeHeader(StringBuilder ack, AckData ackDataIn, String profileId,
+      String responseType) {
     String receivingApplication = ackDataIn.getSendingApplication();
     String receivingFacility = ackDataIn.getSendingFacility();
     String sendingApplication = ackDataIn.getReceivingApplication();
     String sendingFacility = ackDataIn.getReceivingFacility();
-    if (receivingApplication == null)
-    {
+    if (receivingApplication == null) {
       receivingApplication = "";
     }
-    if (receivingFacility == null)
-    {
+    if (receivingFacility == null) {
       receivingFacility = "";
     }
-    if (sendingApplication == null || sendingApplication.equals(""))
-    {
+    if (sendingApplication == null || sendingApplication.equals("")) {
       sendingApplication = "MCIR";
     }
-    if (sendingFacility == null || sendingFacility.equals(""))
-    {
+    if (sendingFacility == null || sendingFacility.equals("")) {
       sendingFacility = "MCIR";
     }
     SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmssZ");
@@ -150,20 +130,18 @@ public enum AckBuilder {
     ack.append("|" + receivingFacility); // MSH-6 Receiving Facility
     ack.append("|" + messageDate); // MSH-7 Date/Time of Message
     ack.append("|"); // MSH-8 Security
-    if (responseType == null)
-    {
+    if (responseType == null) {
       responseType = "ACK^V04^ACK";
     }
     ack.append("|" + responseType); // MSH-9
     // Message
     // Type
     ack.append("|" + messageDate + "." + getNextAckCount()); // MSH-10 Message
-                                                             // Control ID
+    // Control ID
     ack.append("|P"); // MSH-11 Processing ID
     ack.append("|2.5.1"); // MSH-12 Version ID
     ack.append("|");
-    if (profileId != null)
-    {
+    if (profileId != null) {
       ack.append("||NE|NE|||||" + profileId + "^CDCPHINVS|");
     }
     ack.append("\r");
@@ -172,10 +150,8 @@ public enum AckBuilder {
 
   private static int ackCount = 1;
 
-  public static synchronized int getNextAckCount()
-  {
-    if (ackCount == Integer.MAX_VALUE)
-    {
+  public static synchronized int getNextAckCount() {
+    if (ackCount == Integer.MAX_VALUE) {
       ackCount = 1;
     }
     return ackCount++;

@@ -1,10 +1,11 @@
 package org.immregistries.dqa.core.util;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import java.util.Date;
-
-import org.immregistries.dqa.core.util.DateUtility;
 import org.joda.time.DateTime;
 import org.junit.Test;
 
@@ -20,7 +21,6 @@ public class DateUtilityTest {
 		String isADate = "20160101";
 		assertTrue("it's good, really[" + isADate + "]", datr.isDate(isADate));
 //		System.out.println(datr.parseDate(isADate));
-		
 		isADate = "2016-01-01";
 		assertFalse("it's bad, really[" + isADate + "]", datr.isDate(isADate));
 //		System.out.println(datr.parseDate(isADate));
@@ -75,13 +75,15 @@ public class DateUtilityTest {
 		DateTime today = new DateTime();
 		DateTime eighteenYearsAgo = today.minusYears(18);
 		DateTime seventeenYearsAgo = eighteenYearsAgo.plusDays(1);
+		DateTime nullDate = null;
 //		System.out.println("Age 18 string: " + eighteenYearsAgo);
 //		System.out.println("Age 17 string: " + seventeenYearsAgo);
 		
 		assertEquals("should calculate to 18", 18, datr.getAge(eighteenYearsAgo.toDate()));
 		assertEquals("Should calculate to 17", 17, datr.getAge(seventeenYearsAgo.toDate()));
 		assertEquals("should be zero if born today", 0, datr.getAge(today.toDate()));
-		assertEquals("Should be zero if it's a null input", 0, datr.getAge(null));
+		DateTime dt = null;
+		assertEquals("Should be -1 if it's a null input", -1, datr.getAge(dt));
 		
 		int superLongYears = 18923;
 		assertEquals("Should be able to handle a very old age", superLongYears, datr.getAge(today.minusYears(superLongYears).toDate()));

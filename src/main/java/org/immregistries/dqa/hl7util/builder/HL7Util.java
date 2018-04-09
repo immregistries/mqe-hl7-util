@@ -1,22 +1,25 @@
 /*
  * Copyright 2013 by Dandelion Software & Research, Inc (DSR)
- * 
+ *
  * This application was written for immunization information system (IIS) community and has been
  * released by DSR under an Apache 2 License with the hope that this software will be used to
  * improve Public Health.
  */
 package org.immregistries.dqa.hl7util.builder;
 
+import static org.immregistries.dqa.vxu.parse.HL7ParsingUtil.escapeHL7Chars;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
-
 import org.apache.commons.lang3.StringUtils;
 import org.immregistries.dqa.hl7util.Reportable;
+import org.immregistries.dqa.hl7util.ReportableSource;
 import org.immregistries.dqa.hl7util.SeverityLevel;
 import org.immregistries.dqa.hl7util.model.CodedWithExceptions;
-import org.immregistries.dqa.hl7util.model.ErrorLocation;
+import org.immregistries.dqa.hl7util.model.Hl7Location;
 
 public class HL7Util {
+
   public static final String MESSAGE_TYPE_VXU = "VXU";
   public static final String MESSAGE_TYPE_QBP = "QBP";
 
@@ -98,19 +101,19 @@ public class HL7Util {
     // MSH
     ack.append("MSH|^~\\&");
     ack.append("|" + ackData.getSendingApplication()); // MSH-3 Sending
-                                                       // Application
+    // Application
     ack.append("|" + ackData.getSendingFacility()); // MSH-4 Sending Facility
     ack.append("|" + ackData.getReceivingApplication()); // MSH-5 Receiving
     // Application
     ack.append("|" + ackData.getReceivingFacility()); // MSH-6 Receiving
-                                                      // Facility
+    // Facility
     ack.append("|" + messageDate); // MSH-7 Date/Time of Message
     ack.append("|"); // MSH-8 Security
     ack.append("|ACK"); // MSH-9
     // Message
     // Type
     ack.append("|" + messageDate + "." + getNextAckCount()); // MSH-10 Message
-                                                             // Control ID
+    // Control ID
     ack.append("|P"); // MSH-11 Processing ID
     ack.append("|2.5.1"); // MSH-12 Version ID
     ack.append("|"); // MSH-13
@@ -129,7 +132,7 @@ public class HL7Util {
     // + "|\r");
     ack.append("MSA|" + ackType + "|" + ackData.getProcessingControlId() + "|\r");
 
-    makeERRSegment(ack, severityLevel, "", message, reportable);
+    ack.append(makeERRSegment(severityLevel, message, reportable));
 
     return ack.toString();
 
@@ -137,84 +140,60 @@ public class HL7Util {
 
   public static void appendErrorCode(StringBuilder ack, CodedWithExceptions cwe) {
     if (cwe != null) {
-      if (!cwe.hasIdentifier()) {
-        cwe.setIdentifier("0");
-        cwe.setText("Message accepted");
-        cwe.setNameOfCodingSystem("HL70357");
-      } else if (cwe.getText() == null || cwe.getText().equals("")) {
-        cwe.setNameOfCodingSystem("HL70357");
-        if (cwe.getIdentifier().equals("0")) {
-          cwe.setText("Message accepted");
-        } else if (cwe.getIdentifier().equals("100")) {
-          cwe.setText("Segment sequence error");
-        } else if (cwe.getIdentifier().equals("101")) {
-          cwe.setText("Required field missing");
-        } else if (cwe.getIdentifier().equals("102")) {
-          cwe.setText("Data type error");
-        } else if (cwe.getIdentifier().equals("103")) {
-          cwe.setText("Table value not found");
-        } else if (cwe.getIdentifier().equals("200")) {
-          cwe.setText("Unsupported message type");
-        } else if (cwe.getIdentifier().equals("201")) {
-          cwe.setText("Unsupported event code");
-        } else if (cwe.getIdentifier().equals("202")) {
-          cwe.setText("Unsupported processing ID");
-        } else if (cwe.getIdentifier().equals("203")) {
-          cwe.setText("Unsupported version ID");
-        } else if (cwe.getIdentifier().equals("204")) {
-          cwe.setText("Unknown key identifier");
-        } else if (cwe.getIdentifier().equals("205")) {
-          cwe.setText("Duplicate key identifier");
-        } else if (cwe.getIdentifier().equals("206")) {
-          cwe.setText("Application record locked");
-        } else if (cwe.getIdentifier().equals("207")) {
-          cwe.setText("Application internal error");
-        }
+      AckERRCode code = AckERRCode.getFromString(cwe.getIdentifier());
+      if (code == null) {
+        code = AckERRCode.CODE_0_MESSAGE_ACCEPTED;
       }
+      cwe.setNameOfCodingSystem(AckERRCode.TABLE);
+      cwe.setText(code.text);
     }
     printCodedWithExceptions(ack, cwe);
   }
 
-  public static void makeERRSegment(StringBuilder ack, Reportable reportable, boolean debug) {
+  public static String makeERRSegment(Reportable reportable, boolean debug) {
+    StringBuilder err = new StringBuilder();
     CodedWithExceptions hl7ErrorCode = reportable.getHl7ErrorCode();
 
-    ack.append("ERR||");
-    ack.append(printErr3(reportable));
+    err.append("ERR||");
+    err.append(printErr3(reportable));
     // 2 Error Location
-    ack.append("|");
+    err.append("|");
     // 3 HL7 Error Code
     if (hl7ErrorCode == null) {
       hl7ErrorCode = new CodedWithExceptions();
       hl7ErrorCode.setIdentifier("0");
     }
-    HL7Util.appendErrorCode(ack, reportable.getHl7ErrorCode());
-    ack.append("|");
+    HL7Util.appendErrorCode(err, reportable.getHl7ErrorCode());
+    err.append("|");
     // 4 Severity
     SeverityLevel level = reportable.getSeverity();
-    ack.append(level != null ? (level.getCode().equals("A") ? "I" : level.getCode()) : "E");
+    err.append(level != null ? (level.getCode().equals("A") ? "I" : level.getCode()) : "E");
 
-    ack.append("|");
+    err.append("|");
     // 5 Application Error Code
-    appendAppErrorCode(ack, reportable);
-    ack.append("|");
+    appendAppErrorCode(err, reportable);
+    err.append("|");
     // 6 Application Error Parameter
-    ack.append("|");
+    err.append("|");
     // 7 Diagnostic Information
-    if (debug && reportable.getDiagnosticMessage() != null)
-    {
-      ack.append(escapeHL7Chars(reportable.getDiagnosticMessage()));
+    if (debug && reportable.getDiagnosticMessage() != null) {
+      err.append(escapeHL7Chars(reportable.getDiagnosticMessage()));
     }
     // 8 User Message
-    ack.append("|");
-    ack.append(escapeHL7Chars(reportable.getReportedMessage()));
-    ack.append("|\r");
+    err.append("|");
+    err.append(escapeHL7Chars(reportable.getReportedMessage()));
+    if (reportable.getSource() != ReportableSource.DQA) {
+      err.append(escapeHL7Chars(" (reported by " + reportable.getSource() + ")"));
+    }
+    err.append("|\r");
+    return err.toString();
   }
 
   public static void appendAppErrorCode(StringBuilder ack, Reportable reportable) {
     if (reportable != null) {
       CodedWithExceptions cwe = reportable.getApplicationErrorCode();
       if (cwe != null) {
-        if (cwe.hasIdentifier()) {
+        if (StringUtils.isNotBlank(cwe.getIdentifier())) {
           if (cwe.getIdentifier().startsWith("DQA")) {
             cwe.setAlternateIdentifier(cwe.getIdentifier());
             cwe.setAlternateText(cwe.getText());
@@ -224,7 +203,7 @@ public class HL7Util {
             cwe.setNameOfCodingSystem("");
           }
         }
-        if (cwe.hasIdentifier()) {
+        if (StringUtils.isNotBlank(cwe.getIdentifier())) {
           if (cwe.getText() == null || cwe.getText().equals("")) {
             cwe.setNameOfCodingSystem("HL70533");
             if (cwe.getIdentifier().equals("1")) {
@@ -254,17 +233,17 @@ public class HL7Util {
 
   private static void printCodedWithExceptions(StringBuilder ack, CodedWithExceptions cwe) {
     if (cwe != null) {
-      if (cwe.hasIdentifier()) {
+      if (StringUtils.isNotBlank(cwe.getIdentifier())) {
         ack.append(cwe.getIdentifier());
         ack.append("^");
         ack.append(cwe.getText());
         ack.append("^");
         ack.append(cwe.getNameOfCodingSystem());
-        if (cwe.hasAlternateIdentifier()) {
+        if (StringUtils.isNotBlank(cwe.getAlternateIdentifier())) {
           ack.append("^");
         }
       }
-      if (cwe.hasAlternateIdentifier()) {
+      if (StringUtils.isNotBlank(cwe.getAlternateIdentifier())) {
         ack.append(cwe.getAlternateIdentifier());
         ack.append("^");
         ack.append(cwe.getAlternateText());
@@ -278,35 +257,35 @@ public class HL7Util {
     StringBuilder ack = new StringBuilder();
     boolean repeating = false;
     if (reportable.getHl7LocationList() != null) {
-      for (ErrorLocation errorLocation : reportable.getHl7LocationList()) {
-        if (errorLocation.hasSegmentId()) {
+      for (Hl7Location hl7Location : reportable.getHl7LocationList()) {
+        if (hl7Location.hasSegmentId()) {
           if (repeating) {
             ack.append("~");
           }
           repeating = true;
-          ack.append(errorLocation.getSegmentId());
+          ack.append(hl7Location.getSegmentId());
           ack.append("^");
-          if (errorLocation.getSegmentSequence() == 0) {
+          if (hl7Location.getSegmentSequence() == 0) {
             ack.append(1);
           } else {
-            ack.append(errorLocation.getSegmentSequence());
+            ack.append(hl7Location.getSegmentSequence());
           }
 
-          if (errorLocation.hasFieldPosition()) {
+          if (hl7Location.hasFieldPosition()) {
             ack.append("^");
-            ack.append(errorLocation.getFieldPosition());
+            ack.append(hl7Location.getFieldPosition());
             ack.append("^");
-            if (errorLocation.getFieldRepetition() == 0) {
+            if (hl7Location.getFieldRepetition() == 0) {
               ack.append(1);
             } else {
-              ack.append(errorLocation.getFieldRepetition());
+              ack.append(hl7Location.getFieldRepetition());
             }
-            if (errorLocation.hasComponentNumber()) {
+            if (hl7Location.hasComponentNumber()) {
               ack.append("^");
-              ack.append(errorLocation.getComponentNumber());
-              if (errorLocation.hasSubComponentNumber()) {
+              ack.append(hl7Location.getComponentNumber());
+              if (hl7Location.hasSubComponentNumber()) {
                 ack.append("^");
-                ack.append(errorLocation.getSubComponentNumber());
+                ack.append(hl7Location.getSubComponentNumber());
               }
             }
           }
@@ -316,12 +295,8 @@ public class HL7Util {
     return ack.toString();
   }
 
-  public static void makeERRSegment(StringBuilder ack, String severity, String hl7ErrorCode,
-      String textMessage, Reportable reportable) {
-
-    if (severity.equals("E") && StringUtils.isBlank(hl7ErrorCode)) {
-      hl7ErrorCode = "102";
-    }
+  public static String makeERRSegment(String severity, String textMessage, Reportable reportable) {
+    StringBuilder ack = new StringBuilder();
     ack.append("ERR||");
     // 2 Error Location
     ack.append(reportable.getHl7LocationList() != null && reportable.getHl7LocationList().size() > 0
@@ -343,38 +318,6 @@ public class HL7Util {
     // 8 User Message
     ack.append(escapeHL7Chars(textMessage));
     ack.append("|\r");
-
+    return ack.toString();
   }
-
-  public static String escapeHL7Chars(String s) {
-    if (s == null) {
-      return "";
-    }
-    StringBuilder sb = new StringBuilder();
-    for (char c : s.toCharArray()) {
-      if (c >= ' ') {
-        switch (c) {
-          case '~':
-            sb.append("\\R\\");
-            break;
-          case '\\':
-            sb.append("\\E\\");
-            break;
-          case '|':
-            sb.append("\\F\\");
-            break;
-          case '^':
-            sb.append("\\S\\");
-            break;
-          case '&':
-            sb.append("\\T\\");
-            break;
-          default:
-            sb.append(c);
-        }
-      }
-    }
-    return sb.toString();
-  }
-
 }
