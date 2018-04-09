@@ -88,7 +88,6 @@ public enum HL7NokParser {
 
     DqaNextOfKin nextOfKin = new DqaNextOfKin();
     nextOfKin.setPositionId(ordinal);
-    nextOfKin.setMessageLineNumber(nk1Idx + 1);
     nextOfKin.setFields(fieldInfo);
     return nextOfKin;
   }

@@ -7,6 +7,8 @@
  */
 package org.immregistries.dqa.hl7util.builder;
 
+import static org.immregistries.dqa.vxu.parse.HL7ParsingUtil.escapeHL7Chars;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import org.apache.commons.lang3.StringUtils;
@@ -130,7 +132,7 @@ public class HL7Util {
     // + "|\r");
     ack.append("MSA|" + ackType + "|" + ackData.getProcessingControlId() + "|\r");
 
-    makeERRSegment(ack, severityLevel, message, reportable);
+    ack.append(makeERRSegment(severityLevel, message, reportable));
 
     return ack.toString();
 
@@ -148,41 +150,43 @@ public class HL7Util {
     printCodedWithExceptions(ack, cwe);
   }
 
-  public static void makeERRSegment(StringBuilder ack, Reportable reportable, boolean debug) {
+  public static String makeERRSegment(Reportable reportable, boolean debug) {
+    StringBuilder err = new StringBuilder();
     CodedWithExceptions hl7ErrorCode = reportable.getHl7ErrorCode();
 
-    ack.append("ERR||");
-    ack.append(printErr3(reportable));
+    err.append("ERR||");
+    err.append(printErr3(reportable));
     // 2 Error Location
-    ack.append("|");
+    err.append("|");
     // 3 HL7 Error Code
     if (hl7ErrorCode == null) {
       hl7ErrorCode = new CodedWithExceptions();
       hl7ErrorCode.setIdentifier("0");
     }
-    HL7Util.appendErrorCode(ack, reportable.getHl7ErrorCode());
-    ack.append("|");
+    HL7Util.appendErrorCode(err, reportable.getHl7ErrorCode());
+    err.append("|");
     // 4 Severity
     SeverityLevel level = reportable.getSeverity();
-    ack.append(level != null ? (level.getCode().equals("A") ? "I" : level.getCode()) : "E");
+    err.append(level != null ? (level.getCode().equals("A") ? "I" : level.getCode()) : "E");
 
-    ack.append("|");
+    err.append("|");
     // 5 Application Error Code
-    appendAppErrorCode(ack, reportable);
-    ack.append("|");
+    appendAppErrorCode(err, reportable);
+    err.append("|");
     // 6 Application Error Parameter
-    ack.append("|");
+    err.append("|");
     // 7 Diagnostic Information
     if (debug && reportable.getDiagnosticMessage() != null) {
-      ack.append(escapeHL7Chars(reportable.getDiagnosticMessage()));
+      err.append(escapeHL7Chars(reportable.getDiagnosticMessage()));
     }
     // 8 User Message
-    ack.append("|");
-    ack.append(escapeHL7Chars(reportable.getReportedMessage()));
+    err.append("|");
+    err.append(escapeHL7Chars(reportable.getReportedMessage()));
     if (reportable.getSource() != ReportableSource.DQA) {
-      ack.append(escapeHL7Chars(" (reported by " + reportable.getSource() + ")"));
+      err.append(escapeHL7Chars(" (reported by " + reportable.getSource() + ")"));
     }
-    ack.append("|\r");
+    err.append("|\r");
+    return err.toString();
   }
 
   public static void appendAppErrorCode(StringBuilder ack, Reportable reportable) {
@@ -291,8 +295,8 @@ public class HL7Util {
     return ack.toString();
   }
 
-  public static void makeERRSegment(StringBuilder ack, String severity, String textMessage,
-      Reportable reportable) {
+  public static String makeERRSegment(String severity, String textMessage, Reportable reportable) {
+    StringBuilder ack = new StringBuilder();
     ack.append("ERR||");
     // 2 Error Location
     ack.append(reportable.getHl7LocationList() != null && reportable.getHl7LocationList().size() > 0
@@ -314,37 +318,6 @@ public class HL7Util {
     // 8 User Message
     ack.append(escapeHL7Chars(textMessage));
     ack.append("|\r");
+    return ack.toString();
   }
-
-  public static String escapeHL7Chars(String s) {
-    if (s == null) {
-      return "";
-    }
-    StringBuilder sb = new StringBuilder();
-    for (char c : s.toCharArray()) {
-      if (c >= ' ') {
-        switch (c) {
-          case '~':
-            sb.append("\\R\\");
-            break;
-          case '\\':
-            sb.append("\\E\\");
-            break;
-          case '|':
-            sb.append("\\F\\");
-            break;
-          case '^':
-            sb.append("\\S\\");
-            break;
-          case '&':
-            sb.append("\\T\\");
-            break;
-          default:
-            sb.append(c);
-        }
-      }
-    }
-    return sb.toString();
-  }
-
 }

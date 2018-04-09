@@ -8,9 +8,6 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-
-import org.immregistries.dqa.hl7util.parser.MessageParser;
-import org.immregistries.dqa.hl7util.parser.MessageParserHL7;
 import org.junit.Test;
 
 public class MessageParserApplicationTest {

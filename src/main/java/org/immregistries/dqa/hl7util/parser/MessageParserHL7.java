@@ -51,7 +51,7 @@ public class MessageParserHL7 implements MessageParser {
      * Repetition Separator - ~ - 2
      * Escape Character - \ - 3
      */
-    if (!StringUtils.isEmpty(hl7MessageText) && hl7MessageText.length() > 8) {
+    if (StringUtils.isNotBlank(hl7MessageText) && hl7MessageText.length() > 8) {
 //			MSH-1
       String msh1fieldSeparator = hl7MessageText.substring(3, 4);
       this.fieldSeparator = msh1fieldSeparator;
@@ -236,7 +236,7 @@ public class MessageParserHL7 implements MessageParser {
   protected List<HL7MessagePart> mapFieldValue(HL7MessagePart parentLoc) {
     List<HL7MessagePart> dataList = new ArrayList<HL7MessagePart>();
     //Don't need to map it if it's an empty value.  Either null or empty string.
-    if (StringUtils.isEmpty(parentLoc.getValue())) {
+    if (StringUtils.isBlank(parentLoc.getValue())) {
       return dataList;
     }
 
@@ -353,7 +353,7 @@ public class MessageParserHL7 implements MessageParser {
   }
 
   protected String[] splitFields(String segment) {
-    if (StringUtils.isEmpty(segment)) {
+    if (StringUtils.isBlank(segment)) {
       return new String[]{};
     }
 

@@ -229,7 +229,6 @@ public class HL7MessageMap {
 
     String segment = this.getSegmentNameFromLocator(location);
     List<Integer> segList = this.getIndexesForSegmentName(segment);
-    System.out.println("segment indexes: " + segList);
 
     if (segList != null) {
       int last = segList.size();
@@ -816,6 +815,9 @@ public class HL7MessageMap {
    * @return
    */
   public int getSegmentOrdinalFromAbsoluteIndex(int absoluteSegmentIndex) {
+    if (absoluteSegmentIndex <=0) {
+      return -1;
+    }
     List<String> segList = this.getMessageSegments();
     String seg = segList.get(absoluteSegmentIndex - 1);
     LOGGER.trace("getSegmentOrdinalFromAbsoluteIndex Segment[" + seg + "]");

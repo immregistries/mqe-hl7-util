@@ -10,6 +10,7 @@ import static org.immregistries.dqa.vxu.VxuField.OBSERVATION_VALUE_TYPE;
 import static org.immregistries.dqa.vxu.VxuField.VACCINATION_ACTION_CODE;
 import static org.immregistries.dqa.vxu.VxuField.VACCINATION_ADMINISTERED_AMOUNT;
 import static org.immregistries.dqa.vxu.VxuField.VACCINATION_ADMINISTERED_UNIT;
+import static org.immregistries.dqa.vxu.VxuField.VACCINATION_ADMIN_CODE;
 import static org.immregistries.dqa.vxu.VxuField.VACCINATION_ADMIN_DATE;
 import static org.immregistries.dqa.vxu.VxuField.VACCINATION_ADMIN_DATE_END;
 import static org.immregistries.dqa.vxu.VxuField.VACCINATION_BODY_ROUTE;
@@ -147,6 +148,7 @@ public enum HL7VaccinationParser {
         , VACCINATION_REFUSAL_REASON
         , VACCINATION_COMPLETION_STATUS
         , VACCINATION_ACTION_CODE
+        , VACCINATION_ADMIN_CODE
         , VACCINATION_SYSTEM_ENTRY_TIME
     ));
 

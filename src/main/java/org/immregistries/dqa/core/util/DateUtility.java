@@ -58,7 +58,7 @@ public enum DateUtility {
 
   public DateTime parseDateTime(String dateString) {
 
-    if (StringUtils.isEmpty(dateString)) {
+    if (StringUtils.isBlank(dateString)) {
       return null;
     }
 
@@ -85,6 +85,10 @@ public enum DateUtility {
   //	This puts a dateTime object to the DQA's expected String format.
   public String toString(DateTime input) {
     return input.toString(dtf1);
+  }
+  //	This puts a dateTime object to the DQA's expected String format.
+  public String toTzString(DateTime input) {
+    return input.toString(tz2);
   }
 
   public String toString(Date input) {
@@ -133,8 +137,8 @@ public enum DateUtility {
    * This effectively truncates the time part of the date sent in and compares the Calendar Date
    * itself. So in order to be After, it has to be a different date altogether.
    *
-   * @param dFirst the date that should be after the other date
-   * @param dSecond the date that should be before.
+   * @param isThisDate the date that should be after the other date
+   * @param afterThis the date that should be before.
    */
   public boolean isAfterDate(Date isThisDate, Date afterThis) {
     //NOTE:  You can't just call the isBeforeDate method and invert the answer.

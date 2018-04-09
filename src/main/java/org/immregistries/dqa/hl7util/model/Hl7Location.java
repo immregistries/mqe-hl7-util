@@ -1,5 +1,7 @@
 package org.immregistries.dqa.hl7util.model;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import org.apache.commons.lang3.StringUtils;
 
 public class Hl7Location {
@@ -20,10 +22,18 @@ public class Hl7Location {
     this.line = line;
   }
 
+  private final Pattern p = Pattern.compile("^(MSH|PID|MSA|PD1)");
+  boolean expectOneSegmentId() {
+    return p.matcher(this.segmentId).find();
+  }
+
   @Override
   public String toString() {
     String s = segmentId;
-    if (segmentSequence > 1) {
+    boolean expectSingleSegment = this.expectOneSegmentId();
+    if ((expectSingleSegment && segmentSequence > 1)
+        || (!expectSingleSegment && segmentSequence >= 1)
+        ) {
       s += "[" + segmentSequence + "]";
     }
     if (fieldPosition > 0) {
@@ -93,12 +103,22 @@ public class Hl7Location {
     // default
   }
 
+  public Hl7Location(String hl7Reference, int position) {
+    this(hl7Reference);
+    this.segmentSequence = position;
+  }
+
   public Hl7Location(String hl7Reference, int index, int position) {
     this(hl7Reference);
     this.line = index;
     this.segmentSequence = position;
   }
 
+
+  /**
+   * Expected format: SEG-
+   * @param hl7Reference
+   */
   public Hl7Location(String hl7Reference) {
     if (!StringUtils.isBlank(hl7Reference)) {
       int pos = hl7Reference.indexOf("-");
@@ -107,6 +127,16 @@ public class Hl7Location {
         return;
       }
       segmentId = hl7Reference.substring(0, pos);
+      if (segmentId.length() > 3) {
+        //find the segment sequence number
+        Matcher m = sequencePattern.matcher(segmentId);
+        if (m.find()) {
+          segmentId = m.group(1);
+          segmentSequence = new Integer(m.group(2));
+        }
+      }
+
+
       if ((pos + 1) <= hl7Reference.length()) {
         hl7Reference = hl7Reference.substring(pos + 1);
         if (hl7Reference.length() > 0) {
@@ -127,6 +157,8 @@ public class Hl7Location {
       }
     }
   }
+
+  private Pattern sequencePattern = Pattern.compile("(\\w\\w\\w)\\[(\\d+)\\]");
 
   public String getSegmentId() {
     return segmentId;

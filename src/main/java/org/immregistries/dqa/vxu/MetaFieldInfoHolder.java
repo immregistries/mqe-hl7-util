@@ -1,5 +1,6 @@
 package org.immregistries.dqa.vxu;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -8,16 +9,8 @@ import org.immregistries.dqa.hl7util.model.MetaFieldInfo;
 public abstract class MetaFieldInfoHolder implements MetaFieldInfoData {
 
   private Map<VxuField, MetaFieldInfo> metaFieldInfoMap = new HashMap<>();
+  private List<DetectionInfo> detectionList = new ArrayList<>();
   private int positionId = 0;
-  private int messageLineNumber = 0;
-
-  public int getMessageLineNumber() {
-    return messageLineNumber;
-  }
-
-  public void setMessageLineNumber(int messageLineNumber) {
-    this.messageLineNumber = messageLineNumber;
-  }
 
   public final int getPositionId() {
     return this.positionId;
@@ -25,6 +18,10 @@ public abstract class MetaFieldInfoHolder implements MetaFieldInfoData {
 
   public final void setPositionId(int positionId) {
     this.positionId = positionId;
+  }
+
+  public List<DetectionInfo> getDetectionList() {
+    return detectionList;
   }
 
   public Map<VxuField, MetaFieldInfo> getMetaFieldInfoMap() {

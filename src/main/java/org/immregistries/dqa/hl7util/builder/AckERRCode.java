@@ -47,4 +47,8 @@ public enum AckERRCode {
     cwe.setNameOfCodingSystem(AckERRCode.TABLE);
     return cwe;
   }
+
+  public String getIdentifier() {
+    return this.identifier;
+  }
 }

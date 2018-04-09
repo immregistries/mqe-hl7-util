@@ -40,23 +40,23 @@ public enum AckBuilder {
     ack.append("MSA|" + ackCode.getCode() + "|" + controlId + "|\r");
     for (Reportable r : ackDataIn.getReportables()) {
       if (r.getSeverity() == SeverityLevel.ERROR) {
-        HL7Util.makeERRSegment(ack, r, PROCESSING_ID_DEBUG.equals(processingId));
+        ack.append(HL7Util.makeERRSegment(r, PROCESSING_ID_DEBUG.equals(processingId)));
       }
     }
     for (Reportable r : ackDataIn.getReportables()) {
       if (r.getSeverity() == SeverityLevel.WARN) {
-        HL7Util.makeERRSegment(ack, r, PROCESSING_ID_DEBUG.equals(processingId));
+        ack.append(HL7Util.makeERRSegment(r, PROCESSING_ID_DEBUG.equals(processingId)));
       }
     }
     for (Reportable r : ackDataIn.getReportables()) {
       if (r.getSeverity() == SeverityLevel.INFO) {
-        HL7Util.makeERRSegment(ack, r, PROCESSING_ID_DEBUG.equals(processingId));
+        ack.append(HL7Util.makeERRSegment(r, PROCESSING_ID_DEBUG.equals(processingId)));
       }
     }
     if (PROCESSING_ID_DEBUG.equals(processingId)) {
       for (Reportable r : ackDataIn.getReportables()) {
         if (r.getSeverity() == SeverityLevel.ACCEPT) {
-          HL7Util.makeERRSegment(ack, r, PROCESSING_ID_DEBUG.equals(processingId));
+          ack.append(HL7Util.makeERRSegment(r, PROCESSING_ID_DEBUG.equals(processingId)));
         }
       }
     }

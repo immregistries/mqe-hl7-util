@@ -2,6 +2,7 @@ package org.immregistries.dqa.vxu.parse;
 
 import static org.junit.Assert.assertEquals;
 
+import java.util.List;
 import org.immregistries.dqa.hl7util.model.MetaFieldInfo;
 import org.immregistries.dqa.hl7util.parser.HL7MessageMap;
 import org.immregistries.dqa.hl7util.parser.MessageParserHL7;
@@ -9,8 +10,6 @@ import org.immregistries.dqa.vxu.DqaPatient;
 import org.immregistries.dqa.vxu.DqaPatientAddress;
 import org.immregistries.dqa.vxu.VxuField;
 import org.junit.Test;
-
-import java.util.List;
 
 public class HL7PatientParserTester {
   private MessageParserHL7 rootParser = new MessageParserHL7();

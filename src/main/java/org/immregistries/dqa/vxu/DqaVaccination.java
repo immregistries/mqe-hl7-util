@@ -660,7 +660,7 @@ public class DqaVaccination extends MetaFieldInfoHolder {
   @Override
   protected void setFieldFromMetaFieldInfo(MetaFieldInfo metaFieldInfo) {
     String value = metaFieldInfo.getValue();
-    if (StringUtils.isNotEmpty(value)) {
+    if (StringUtils.isNotBlank(value)) {
       switch (metaFieldInfo.getVxuField()) {
         case VACCINATION_ACTION_CODE:
           action = value;
