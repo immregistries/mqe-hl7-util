@@ -7,7 +7,7 @@ import org.immregistries.dqa.hl7util.model.MetaFieldInfo;
 import org.immregistries.dqa.hl7util.parser.HL7MessageMap;
 import org.immregistries.dqa.hl7util.parser.MessageParserHL7;
 import org.immregistries.dqa.vxu.DqaPatient;
-import org.immregistries.dqa.vxu.DqaPatientAddress;
+import org.immregistries.dqa.vxu.DqaAddress;
 import org.immregistries.dqa.vxu.VxuField;
 import org.junit.Test;
 
@@ -45,7 +45,7 @@ public class HL7PatientParserTester {
   @Test
   public void testAddressParse() {
     DqaPatient patient = pParser.getPatient(map);
-    List<DqaPatientAddress> pa = patient.getPatientAddressList();
+    List<DqaAddress> pa = patient.getPatientAddressList();
     assertEquals(3,pa.size());
   }
 
@@ -67,7 +67,7 @@ public class HL7PatientParserTester {
     assertEquals("Warwick", patient.getResponsibleParty().getAddress().getCity());
     assertEquals("MA", patient.getResponsibleParty().getAddress().getStateCode());
     assertEquals("02452", patient.getResponsibleParty().getAddress().getZip());
-    assertEquals("USA", patient.getResponsibleParty().getAddress().getCountry());
+    assertEquals("USA", patient.getResponsibleParty().getAddress().getCountryCode());
   }
 
 
