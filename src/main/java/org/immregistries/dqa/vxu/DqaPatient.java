@@ -15,7 +15,7 @@ public class DqaPatient extends MetaFieldInfoHolder {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(DqaPatient.class);
 
-  private List<DqaPatientAddress> patientAddressList = new ArrayList<DqaPatientAddress>();
+  private List<DqaAddress> patientAddressList = new ArrayList<DqaAddress>();
 
   private Name alias = new Name();
 
@@ -81,11 +81,11 @@ public class DqaPatient extends MetaFieldInfoHolder {
     return patientImmunityList;
   }
 
-  public List<DqaPatientAddress> getPatientAddressList() {
+  public List<DqaAddress> getPatientAddressList() {
     return patientAddressList;
   }
 
-  public DqaPatientAddress getPatientAddress() {
+  public DqaAddress getPatientAddress() {
     return getAddress(1);
   }
 
@@ -639,10 +639,10 @@ public class DqaPatient extends MetaFieldInfoHolder {
   }
 
 
-  private DqaPatientAddress getAddress(int pos) {
+  private DqaAddress getAddress(int pos) {
     pos--;
     while (patientAddressList.size() <= pos) {
-      DqaPatientAddress pa = new DqaPatientAddress();
+      DqaAddress pa = new DqaAddress();
       patientAddressList.add(pa);
     }
     return patientAddressList.get(pos);

@@ -40,7 +40,7 @@ public class MessageGenerator {
 
     String testMessageFormat =
         "MSH|^~\\&||1255-60-20|MCIR|MDCH|%s||VXU^V04^VXU_V04|3WzJ-A.01.01.2aF|T|2.5.1|"
-            + "\nPID|||3WzJ-A.01.01%s^^^AIRA-TEST^MR||%s^%s^^^^^L|%s^%s|%d%02d01|%s||2076-8^Native Hawaiian or Other Pacific Islander^HL70005|81 Page Pl^^GR^MI^49544^USA^P||^PRN^PH^^^616^9245843|||||||||2135-2^Hispanic or Latino^HL70005|Birth Place PID-23|||"
+            + "\nPID|||3WzJ-A.01.01%s^^^AIRA-TEST^MR||%s^%s^^^^^L|%s^%s|%d%02d01|%s||2076-8^Native Hawaiian or Other Pacific Islander^HL70005|417 Bridge St NW^^Grand Rapids^MI^49544^USA^P||^PRN^PH^^^616^9245843|||||||||2135-2^Hispanic or Latino^HL70005|Birth Place PID-23|||"
             + "\nPD1|||||||||||02^Reminder/Recall - any method^HL70215|||||A|20170301|20170301|"
             + "\nNK1|1|%s^%s^^^^^L|MTH^Mother^HL70063|81 Page Pl^^GR^MI^49544^USA^P|^PRN^PH^^^616^9245843|"
             + "\nORC|RE||V51L2.3^AIRA|||||||I-23432^Burden^Donna^A^^^^^NIST-AA-1||57422^RADON^NICHOLAS^^^^^^NIST-AA-1^L|"

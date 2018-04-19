@@ -45,7 +45,7 @@ public class HL7NokParserTester {
     assertEquals("Warwick", nok.getAddress().getCity());
     assertEquals("MA", nok.getAddress().getStateCode());
     assertEquals("02452", nok.getAddress().getZip());
-    assertEquals("USA", nok.getAddress().getCountry());
+    assertEquals("USA", nok.getAddress().getCountryCode());
     assertEquals("(111)555-3333", nok.getPhoneNumber());
   }
 
@@ -59,7 +59,7 @@ public class HL7NokParserTester {
     assertEquals("Warwick", nok.getAddress().getCity());
     assertEquals("MA", nok.getAddress().getStateCode());
     assertEquals("02452", nok.getAddress().getZip());
-    assertEquals("USA", nok.getAddress().getCountry());
+    assertEquals("USA", nok.getAddress().getCountryCode());
     assertEquals("(111)555-3333", nok.getPhoneNumber());
   }
 
@@ -74,7 +74,7 @@ public class HL7NokParserTester {
     assertEquals("Warwicks", nok.getAddress().getCity());
     assertEquals("MI", nok.getAddress().getStateCode());
     assertEquals("48864", nok.getAddress().getZip());
-    assertEquals("USA", nok.getAddress().getCountry());
+    assertEquals("USA", nok.getAddress().getCountryCode());
     assertEquals("(111)555-2222", nok.getPhoneNumber());
   }
 
@@ -89,7 +89,7 @@ public class HL7NokParserTester {
     assertEquals("Warwicks", nok.getAddress().getCity());
     assertEquals("MI", nok.getAddress().getStateCode());
     assertEquals("48864", nok.getAddress().getZip());
-    assertEquals("USA", nok.getAddress().getCountry());
+    assertEquals("USA", nok.getAddress().getCountryCode());
     assertEquals("(111)555-1111", nok.getPhoneNumber());
   }
 

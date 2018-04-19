@@ -4,20 +4,94 @@ public class DqaAddress {
 
   @Override
   public String toString() {
-    return "Address {street=" + street + ", street2=" + street2 + ", city="
-        + city + ", state=" + state + ", zip=" + zip + ", country="
-        + country + ", countyParish=" + countyParish + ", type=" + type
-        + "}";
+    return "DqaAddress{" +
+        "street='" + street + '\'' +
+        ", street2='" + street2 + '\'' +
+        ", city='" + city + '\'' +
+        ", stateCode='" + stateCode + '\'' +
+        ", zip='" + zip + '\'' +
+        ", country='" + country + '\'' +
+        ", countyParish='" + countyParish + '\'' +
+        ", type='" + type + '\'' +
+        ", cleansingResultCode='" + cleansingResultCode + '\'' +
+        ", lattitude=" + lattitude +
+        ", longitude=" + longitude +
+        ", clean=" + clean +
+        ", cleansingAttempted=" + cleansingAttempted +
+        '}';
   }
 
   private String street = "";
   private String street2 = "";
   private String city = "";
-  private String state = "";
+  private String stateCode = "";
   private String zip = "";
   private String country = "";
   private String countyParish = "";
   private String type = "";// new CodedEntity(CodesetType.ADDRESS_TYPE);
+  private String cleansingResultCode;
+  private double lattitude;
+  private double longitude;
+  private boolean clean = false;
+  private boolean cleansingAttempted;
+
+  public DqaAddress() {
+  }
+
+  public DqaAddress(DqaAddress d) {
+    this.street = d.street;
+    this.street2 = d.street2;
+    this.city = d.city;
+    this.stateCode = d.stateCode;
+    this.zip = d.zip;
+    this.country = d.country;
+    this.countyParish = d.countyParish;
+    this.type = d.type;
+    this.cleansingResultCode = d.cleansingResultCode;
+    this.clean = d.clean;
+    this.lattitude = d.lattitude;
+    this.longitude = d.longitude;
+  }
+
+  public String getCleansingResultCode() {
+    return cleansingResultCode;
+  }
+
+  public void setCleansingResultCode(String cleansingResultCode) {
+    this.cleansingResultCode = cleansingResultCode;
+  }
+
+  public boolean isCleansingAttempted() {
+    return cleansingAttempted;
+  }
+
+  public void setCleansingAttempted(boolean cleansingAttempted) {
+    this.cleansingAttempted = cleansingAttempted;
+  }
+
+  public double getLattitude() {
+    return lattitude;
+  }
+
+  public void setLatitude(double lattitude) {
+    this.lattitude = lattitude;
+  }
+
+  public double getLongitude() {
+    return longitude;
+  }
+
+  public void setLongitude(double longitude) {
+    this.longitude = longitude;
+  }
+
+  public boolean isClean() {
+    return clean;
+  }
+
+  public void setClean(boolean clean) {
+    this.clean = clean;
+  }
 
   public String getStreet() {
     return street;
@@ -43,16 +117,12 @@ public class DqaAddress {
     this.city = city;
   }
 
-  public String getState() {
-    return state;
-  }
-
   public String getStateCode() {
-    return state;
+    return stateCode;
   }
 
   public void setStateCode(String stateCode) {
-    this.state = stateCode;
+    this.stateCode = stateCode;
   }
 
   public String getZip() {
@@ -63,20 +133,12 @@ public class DqaAddress {
     this.zip = zip;
   }
 
-  public String getCountry() {
-    return country;
-  }
-
   public String getCountryCode() {
     return country;
   }
 
   public void setCountryCode(String countryCode) {
     this.country = countryCode;
-  }
-
-  public String getCountyParish() {
-    return countyParish;
   }
 
   public void setCountyParishCode(String countyParishCode) {

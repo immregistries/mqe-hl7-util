@@ -4,14 +4,12 @@
 //import static org.junit.Assert.assertNotNull;
 //
 //import java.util.List;
-//
 //import org.immregistries.dqa.core.TestMessageGenerator;
 //import org.immregistries.dqa.vxu.DqaMessageReceived;
 //import org.immregistries.dqa.vxu.DqaVaccination;
-//import org.immregistries.dqa.vxu.hl7.Observation;
 //import org.immregistries.dqa.vxu.PatientImmunity;
+//import org.immregistries.dqa.vxu.hl7.Observation;
 //import org.immregistries.dqa.vxu.parse.HL7MessageParser;
-//import org.immregistries.dqa.vxu.transform.MessageTransformer;
 //import org.junit.Test;
 //
 //public class MessageTransformerTest {
