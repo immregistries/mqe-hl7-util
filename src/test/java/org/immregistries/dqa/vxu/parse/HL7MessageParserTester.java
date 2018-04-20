@@ -6,7 +6,7 @@ import org.immregistries.dqa.hl7util.parser.HL7MessageMap;
 import org.immregistries.dqa.hl7util.parser.MessageParserHL7;
 import org.immregistries.dqa.vxu.DqaMessageReceived;
 import org.immregistries.dqa.vxu.DqaPatient;
-import org.immregistries.dqa.vxu.DqaPatientAddress;
+import org.immregistries.dqa.vxu.DqaAddress;
 import org.immregistries.dqa.vxu.DqaVaccination;
 import org.immregistries.dqa.vxu.VxuField;
 import org.junit.Test;
@@ -69,21 +69,21 @@ public class HL7MessageParserTester {
     assertEquals(3, patient.getPatientAddressList().size());
 
     {
-      DqaPatientAddress a1 = patient.getPatientAddress();
+      DqaAddress a1 = patient.getPatientAddress();
       assertEquals("32 Prescott Street Ave", a1.getStreet());
       assertEquals("Apt 2", a1.getStreet2());
       assertEquals("Warwick", a1.getCity());
-      assertEquals("MA", a1.getState());
+      assertEquals("MA", a1.getStateCode());
       assertEquals("02452", a1.getZip());
       assertEquals("USA", a1.getCountryCode());
       assertEquals("MA0001", a1.getCountyParishCode());
     }
     {
-      DqaPatientAddress a2 = patient.getPatientAddressList().get(1);
+      DqaAddress a2 = patient.getPatientAddressList().get(1);
       assertEquals("123 E Main Street", a2.getStreet());
       assertEquals("", a2.getStreet2());
       assertEquals("Anytown", a2.getCity());
-      assertEquals("AZ", a2.getState());
+      assertEquals("AZ", a2.getStateCode());
       assertEquals("85203", a2.getZip());
       assertEquals("MEX", a2.getCountryCode());
       assertEquals("", a2.getCountyParishCode());
