@@ -15,4 +15,10 @@ public class HL7QuickParserTest {
 		String date = quick.getMsh7MessageDate(MSH);
 		assertEquals("Should match and find", "20140619191115", date);
 	}
+
+	@Test
+	public void testMSH4() {
+		String date = quick.getMsh4Sender(MSH);
+		assertEquals("Should match and find", "1337-44-01", date);
+	}
 }
