@@ -10,7 +10,7 @@ public enum HL7ParsingUtil {
 
   public DqaAddress getAddressFromOrdinal(HL7MessageMap map, String locator,
       int ordinal, int fieldrep) {
-    int index = map.getAbsoluteIndexForLocationOrdinal(locator, ordinal);
+    int index = map.getLineNumberForSegmentSequenceInLoc(locator, ordinal);
     return getAddressFromIndex(map, locator, index, fieldrep);
   }
 
@@ -41,9 +41,9 @@ public enum HL7ParsingUtil {
     DqaPhoneNumber ph = new DqaPhoneNumber();
 
     //These aren't often set. But we should capture them if they are.
-    String telUseCode = map.getAtIndex(fieldLocator + "-2", segIdx, 1);
-    String telEquipCode = map.getAtIndex(fieldLocator + "-3", segIdx, 1);
-    String email = map.getAtIndex(fieldLocator + "-4", segIdx, 1);
+    String telUseCode = map.getAtLine(fieldLocator + "-2", segIdx, 1);
+    String telEquipCode = map.getAtLine(fieldLocator + "-3", segIdx, 1);
+    String email = map.getAtLine(fieldLocator + "-4", segIdx, 1);
 
     ph.setTelEquipCode(telEquipCode);
     ph.setTelUseCode(telUseCode);
@@ -51,17 +51,17 @@ public enum HL7ParsingUtil {
 
     //As of version 2.3, the number should not be present in the first field.  it is deprecated.
     //		we will check the current positions first.
-    String localNumber = map.getAtIndex(fieldLocator + "-7", segIdx, 1);
+    String localNumber = map.getAtLine(fieldLocator + "-7", segIdx, 1);
 
     if (localNumber != null) {
       ph.setLocalNumber(localNumber);
 
-      String areaCode = map.getAtIndex(fieldLocator + "-6", segIdx, 1);
+      String areaCode = map.getAtLine(fieldLocator + "-6", segIdx, 1);
       ph.setAreaCode(areaCode);
 
     } else {
       //This is what was originally happening.
-      String phone = map.getAtIndex(fieldLocator, segIdx, 1);
+      String phone = map.getAtLine(fieldLocator, segIdx, 1);
       ph.setNumber(phone);
     }
 
@@ -70,24 +70,24 @@ public enum HL7ParsingUtil {
 
   public Id getId(HL7MessageMap map, String field, int segIdx, int fieldRep) {
     Id ce = new Id();
-    ce.setNumber(map.getAtIndex(field + "-1", segIdx, fieldRep));
-    ce.setAssigningAuthorityCode(map.getAtIndex(field + "-4", segIdx,
+    ce.setNumber(map.getAtLine(field + "-1", segIdx, fieldRep));
+    ce.setAssigningAuthorityCode(map.getAtLine(field + "-4", segIdx,
         fieldRep));
-    ce.setTypeCode(map.getAtIndex(field + "-5", segIdx, fieldRep));
+    ce.setTypeCode(map.getAtLine(field + "-5", segIdx, fieldRep));
     return ce;
   }
 
   public DqaAddress getAddressFromIndex(HL7MessageMap map, String locator, int segmentIndex,
       int fieldRep) {
     DqaAddress address = new DqaAddress();
-    address.setStreet(map.getAtIndex(locator + "-1", segmentIndex, fieldRep));
-    address.setStreet2(map.getAtIndex(locator + "-2", segmentIndex, fieldRep));
-    address.setCity(map.getAtIndex(locator + "-3", segmentIndex, fieldRep));
-    address.setStateCode(map.getAtIndex(locator + "-4", segmentIndex, fieldRep));
-    address.setZip(map.getAtIndex(locator + "-5", segmentIndex, fieldRep));
-    address.setCountryCode(map.getAtIndex(locator + "-6", segmentIndex, fieldRep));
-    address.setTypeCode(map.getAtIndex(locator + "-7", segmentIndex, fieldRep));
-    address.setCountyParishCode(map.getAtIndex(locator + "-8", segmentIndex, fieldRep));
+    address.setStreet(map.getAtLine(locator + "-1", segmentIndex, fieldRep));
+    address.setStreet2(map.getAtLine(locator + "-2", segmentIndex, fieldRep));
+    address.setCity(map.getAtLine(locator + "-3", segmentIndex, fieldRep));
+    address.setStateCode(map.getAtLine(locator + "-4", segmentIndex, fieldRep));
+    address.setZip(map.getAtLine(locator + "-5", segmentIndex, fieldRep));
+    address.setCountryCode(map.getAtLine(locator + "-6", segmentIndex, fieldRep));
+    address.setTypeCode(map.getAtLine(locator + "-7", segmentIndex, fieldRep));
+    address.setCountyParishCode(map.getAtLine(locator + "-8", segmentIndex, fieldRep));
     return address;
   }
 

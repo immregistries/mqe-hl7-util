@@ -58,14 +58,14 @@ public enum HL7NokParser {
    * with 1), and gets that 1st,2nd, etc next of kin object </p>
    *
    * @param map containing all of the data for a VXU message.
-   * @param ordinal the ordinal position of the NK1 you're interested in.
+   * @param segSequence the ordinal position of the NK1 you're interested in.
    * @return a next of kin object populated with data from the map.
    */
-  protected DqaNextOfKin getNextOfKin(HL7MessageMap map, int ordinal) {
-
-    int nk1Idx = map.getAbsoluteIndexForSegment("NK1", ordinal);
+  protected DqaNextOfKin getNextOfKin(HL7MessageMap map, int segSequence) {
+    int line = map.getLineFromSequence("NK1", segSequence);
+//    int nk1Idx = map.getLineNumberForSegmentSequence("NK1", ordinal);
     MetaParser mp = new MetaParser(map);
-    List<MetaFieldInfo> fieldInfo = mp.mapValues(nk1Idx,
+    List<MetaFieldInfo> fieldInfo = mp.mapValues(line,
         NEXT_OF_KIN_PHONE
         , NEXT_OF_KIN_PHONE_AREA_CODE
         , NEXT_OF_KIN_PHONE_LOCAL_NUMBER
@@ -87,7 +87,7 @@ public enum HL7NokParser {
         , NEXT_OF_KIN_PRIMARY_LANGUAGE);
 
     DqaNextOfKin nextOfKin = new DqaNextOfKin();
-    nextOfKin.setPositionId(ordinal);
+    nextOfKin.setPositionId(segSequence);
     nextOfKin.setFields(fieldInfo);
     return nextOfKin;
   }

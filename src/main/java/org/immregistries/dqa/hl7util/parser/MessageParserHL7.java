@@ -2,7 +2,9 @@ package org.immregistries.dqa.hl7util.parser;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.apache.commons.lang3.StringUtils;
@@ -69,9 +71,17 @@ public class MessageParserHL7 implements MessageParser {
     this.setDelimitersFromMessage(message);
     String[] segments = this.splitSegments(message);
     List<HL7MessagePart> dataList = new ArrayList<HL7MessagePart>();
-    int idx = 0;
+    int line = 1;//1 based lines.
+    Map<String, Integer> segSequence = new HashMap<>();
     for (String segment : segments) {
-      dataList.addAll(mapSegment(segment, idx++));
+      String segName = segment.substring(0,3);
+      Integer segSeqCnt = segSequence.get(segName);
+      if (segSeqCnt == null) {
+        segSeqCnt = 0;
+      }
+      segSeqCnt += 1;
+      segSequence.put(segName, segSeqCnt);
+      dataList.addAll(mapSegment(segment, line++, segSeqCnt));
     }
     return dataList;
   }
@@ -91,14 +101,13 @@ public class MessageParserHL7 implements MessageParser {
    */
   public HL7MessageMap getMessageMapFromPartList(List<HL7MessagePart> list) {
     HL7MessageMap map = new HL7MessageMap();
-    for (HL7MessagePart eavPart : list) {
-      map.put(eavPart.getLocationCd(), eavPart.getSegmentIndex(), eavPart.getFieldRepetition(),
-          eavPart.getValue());
+    for (HL7MessagePart messagePart : list) {
+      map.put(messagePart.getLocationCd(), messagePart.getSegmentSeq(),  messagePart.getSegmentIndex(), messagePart.getFieldRepetition(), messagePart.getValue());
     }
     return map;
   }
 
-  protected List<HL7MessagePart> mapSegment(String segment, int segmentIndex) {
+  protected List<HL7MessagePart> mapSegment(String segment, int line, int segSeq) {
     List<HL7MessagePart> dataList = new ArrayList<HL7MessagePart>();
 
     String[] fields = splitFields(segment);
@@ -107,7 +116,8 @@ public class MessageParserHL7 implements MessageParser {
 
     String segName = this.getSegmentName(segment);
 
-    HL7MessagePart seg = new HL7MessagePart(segmentIndex, segName);
+    HL7MessagePart seg = new HL7MessagePart(line, segName);
+    seg.setSegmentSeq(segSeq);
 
 //		LOGGER.info("Number Of Fields in segment " + segName + " is " + fields.length);
     for (String field : fields) {
@@ -230,6 +240,7 @@ public class MessageParserHL7 implements MessageParser {
     loc.setSegmentIndex(part.getSegmentIndex());
     loc.setFieldRepetition(part.getFieldRepetition());
     loc.setLocationCd(part.getLocationCd());
+    loc.setSegmentSeq(part.getSegmentSeq());
     return loc;
   }
 

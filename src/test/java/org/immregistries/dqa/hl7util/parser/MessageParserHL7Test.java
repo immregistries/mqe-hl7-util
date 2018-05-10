@@ -5,6 +5,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
@@ -363,7 +364,7 @@ public class MessageParserHL7Test {
 	@Test
 	public void testMapSegment() {
 		String segment = "MSH|^~\\&|ECW|1337-44-01|MCIR|MDCH|20140619191115||VXU^V04|61731|P|2.3.1|||AL";
-		List<HL7MessagePart> dataList = mpp.mapSegment(segment, 0);
+		List<HL7MessagePart> dataList = mpp.mapSegment(segment, 0, 1);
 		assertEquals("Message Should have 14 fields including the segment name and field separator", 14, dataList.size());//since there's no repetitions, it's just a straight calculation. 
 	}
 	
@@ -439,7 +440,39 @@ public class MessageParserHL7Test {
 		for (HL7MessagePart part : list) {
 			assertTrue("no loc code should be longer than 20.  This one:[" + part.getLocationCd() + "]", 20 > part.getLocationCd().length());
 		}
-				
 	}
-	
+
+	@Test
+	public void testSegSeqIndex() {
+		List<HL7MessagePart> list = mpp.getMessagePartList(EXAMPLE_VXU);
+		for (HL7MessagePart p : list) {
+			String seg = p.getLocationCd().substring(0,3);
+			switch (seg) {
+				case "MSH":
+					assertSeqIdx(1,1,p);
+					break;
+				case "PID":
+					assertSeqIdx(2,1,p);
+					break;
+				case "NK1":
+					assertSeqIdx(3,1,p);
+					break;
+        case "RXA":
+          assertTrue("RXA idx should be one of 4,5,7 " + p, Arrays.asList(5,6,8).contains(p.getSegmentIndex()));
+          assertTrue("RXA seq should be one of 1,2,3 " + p, Arrays.asList(1,2,3).contains(p.getSegmentSeq()));
+          break;
+        case "OBX":
+          assertSeqIdx(9,1,p);
+          break;
+        case "RXR":
+          assertSeqIdx(7,1,p);
+          break;
+			}
+		}
+	}
+
+	public void assertSeqIdx(int line, int seq, HL7MessagePart p) {
+		assertEquals("Expected seg idx for: " + p, line, p.getSegmentIndex());
+		assertEquals("Expected seg seq for: " + p, seq, p.getSegmentSeq());
+	}
 }
