@@ -95,7 +95,7 @@ public class MetaParser {
   }
 
   String getValue(Hl7Location hl7Location) {
-    return map.get(hl7Location);
+    return map.getValue(hl7Location);
   }
 
   private Hl7Location getLocationfor(VxuField vxuField, int line) {
@@ -103,7 +103,7 @@ public class MetaParser {
   }
 
   private Hl7Location getLocationfor(String vxuFieldRef, int line) {
-    int segmentSequence = map.getSegmentSequenceFromLineNumber(line);
+    int segmentSequence = map.getSequenceFromLine(line);
     return new Hl7Location(vxuFieldRef, line, segmentSequence);
   }
 
@@ -130,7 +130,7 @@ public class MetaParser {
     return mfiList;
   }
 
-  List<MetaFieldInfo> mapRepetitions(int lineNumber, VxuField vxuField) {
+  private List<MetaFieldInfo> mapRepetitions(int lineNumber, VxuField vxuField) {
     int fieldCount = 0;
 
     Hl7Location location = new Hl7Location(vxuField.getHl7Locator(), lineNumber);
@@ -148,7 +148,7 @@ public class MetaParser {
   }
 
   private MetaFieldInfo createMetaField(VxuField vxuField, Hl7Location hl7Location) {
-    String value = map.get(hl7Location);
+    String value = map.getValue(hl7Location);
     MetaFieldInfo meta = new MetaFieldInfo();
     meta.setVxuField(vxuField);
     meta.setValue(value);

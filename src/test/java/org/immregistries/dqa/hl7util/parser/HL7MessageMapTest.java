@@ -3,7 +3,6 @@ package org.immregistries.dqa.hl7util.parser;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -120,24 +119,16 @@ public class HL7MessageMapTest {
   }
 
   @Test
-  public void testRandomThings() {
-    String routeCode = map.getAtOrdinal("RXR-1", 1, 1);
-    assertEquals("IM", routeCode);
-    String rt = map.getAtOrdinal("RXR-2", 1, 1);
-    assertEquals("RT", rt);
-  }
-
-  @Test
   public void listToMap() {
 //		This should return the first value at that address.  so it's implied that you want the first everything. This is a shortcut. 
-    String msh3 = map.get("MSH-3");
+    String msh3 = map.getValue("MSH-3");
     assertEquals("msh3", "ECW", msh3);
 //		Should be the same as the first MSH, third field, first repetition, first component, first sub-component: 
-    String msh_1_3_111 = map.get("MSH[1]-3[1].1.1");
+    String msh_1_3_111 = map.getValue("MSH[1]-3[1].1.1");
     assertEquals("MSH[1]-3[1].1.1 should be the same as MSH-3", "ECW", msh_1_3_111);
 //		Should be able to get a very specific one too... As exact as this: 
 //		This would be the third RXA segment, third field, second component, sixth sub-component.   
-    String rxa_3_3_226 = map.get("RXA[3]-3[2].2.6");
+    String rxa_3_3_226 = map.getValue("RXA[3]-3[2].2.6");
     assertEquals(
         "RXA[3]-3[2].2.6 is the second repetition of field 3 in the third RXA... which is null, becuase repetition two doesn't exist.",
         null, rxa_3_3_226);
@@ -148,7 +139,7 @@ public class HL7MessageMapTest {
 //		Should be able to give just enough to get what I want:
 //		second RXA segment, third field, third component, and either the value, or the first sub-component, 
 //		which are arguably the same thing.   
-    String rxa254 = map.get("RXA[2]-5.4");
+    String rxa254 = map.getValue("RXA[2]-5.4");
     assertEquals("rxa253", "90633", rxa254);
 
 //		I also need to know how many segments there are...
@@ -171,34 +162,34 @@ public class HL7MessageMapTest {
 
   @Test
   public void testGettingValues() {
-    String msh = map.get("MSH");
+    String msh = map.getValue("MSH");
     assertEquals("MSH", "MSH", msh);
 
-    String msh1 = map.get("MSH[1]");
+    String msh1 = map.getValue("MSH[1]");
     assertEquals("MSH[1]", "MSH", msh1);
 
-    String msh1x = map.getAtLine("MSH", 1, 1);
+    String msh1x = map.getValue("MSH", 1, 1);
     assertEquals("MSH", msh, msh1x);
 
-    String rxa52 = map.get("RXA-5.2");
+    String rxa52 = map.getValue("RXA-5.2");
     assertEquals("RXA-5.2", "Hepatitis A ped/adol", rxa52);
 
-    String rxa_2_52 = map.get("RXA[2]-5.2");
+    String rxa_2_52 = map.getValue("RXA[2]-5.2");
     assertEquals("RXA[2]-5.2", "Awesome Immunization", rxa_2_52);
 
-    String rxa_2_52x = map.getAtLine("RXA-5.2", 7, 1);
+    String rxa_2_52x = map.getValue("RXA-5.2", 7, 1);
     assertEquals("rxa_2_52x", rxa_2_52x, rxa_2_52);
 
-    String pid5_2_2 = map.get("PID-5[2]-2");
+    String pid5_2_2 = map.getValue("PID-5[2]-2");
     assertEquals("PID-5[2]-2", "AWESOMENAME2", pid5_2_2);
 
-    String pid5_2_2x = map.getAtLine("PID-5.2", 1, 2);
+    String pid5_2_2x = map.getValue("PID-5.2", 1, 2);
     assertEquals("pid5_2_2x", pid5_2_2, pid5_2_2x);
 
-    String pid5_2_1 = map.get("PID-5[2]-1");
+    String pid5_2_1 = map.getValue("PID-5[2]-1");
     assertEquals("PID-5[2]-1", "COOLNAME", pid5_2_1);
 
-    String pid55 = map.get("PID-55");
+    String pid55 = map.getValue("PID-55");
     assertEquals("undefined location PID-55", null, pid55);
   }
 
@@ -216,7 +207,7 @@ public class HL7MessageMapTest {
   @Test
   public void testCrazyAmpersand() {
 //		RXA-16?
-    String rxa16 = map.get("RXA-17-2");
+    String rxa16 = map.getValue("RXA-17-2");
     assertEquals("RXA-17-2 - MSD^Merck &Co.^MVX", "Merck &Co.", rxa16);
   }
 
@@ -238,8 +229,8 @@ public class HL7MessageMapTest {
   }
 
   @Test
-  public void testAbsoluteGet() {
-    String value = map.getAtLine("OBX-5", 5, 1);
+  public void testLineGet() {
+    String value = map.getValue("OBX-5", 5, 1);
     assertEquals("vfc obx", "V02", value);
   }
 
@@ -264,13 +255,13 @@ public class HL7MessageMapTest {
   }
 
   @Test
-  public void testRelativeAndAbsoluteIndexing() {
+  public void testIndexing() {
     int line = 5;//lines are one based.
     int sequence = 1;
     //should get 1 as the relative index of absolute index 5.
-    int calculateSequence = map.getSegmentSequenceFromLineNumber(line);
+    int calculateSequence = map.getSequenceFromLine(line);
     //should get 4 as the absolute index of relative index 1.
-    int calculateLine = map.getLineNumberForSegmentSequenceInLoc("RXA", sequence);
+    int calculateLine = map.getLineFromSequence("RXA", sequence);
     assertEquals("sequence from line", sequence, calculateSequence);
     assertEquals("line from sequence", line, calculateLine);
   }
@@ -287,89 +278,75 @@ public class HL7MessageMapTest {
 
 
   @Test
-  public void testAbsoluteSegmentIndex() {
+  public void testSegmentIndex() {
     //First test getting it from the segment.
-    int line = map.getLineNumberForSegmentSequence("OBX", 3);
+    int line = map.getLineFromSequence("OBX", 3);
     assertEquals("Third OBX is in line ", 12, line);
 
-    line = map.getLineNumberForSegmentSequence("OBX", 2);
+    line = map.getLineFromSequence("OBX", 2);
     assertEquals("second OBX is in in line ", 9, line);
 
-    line = map.getLineNumberForSegmentSequence("RXA", 1);
+    line = map.getLineFromSequence("RXA", 1);
     assertEquals("first RXA ", 5, line);
 
-    line = map.getLineNumberForSegmentSequenceInLoc("OBX-3", 3);
+    line = map.getLineFromSequence("OBX-3", 3);
     assertEquals("Third OBX is in line ", 12, line);
 
-    line = map.getLineNumberForSegmentSequenceInLoc("OBX-3", 2);
+    line = map.getLineFromSequence("OBX-3", 2);
     assertEquals("second OBX is in line ", 9, line);
 
-    line = map.getLineNumberForSegmentSequenceInLoc("OBX-3.1", 2);
+    line = map.getLineFromSequence("OBX-3.1", 2);
     assertEquals("second OBX is in line ", 9, line);
 
-    line = map.getLineNumberForSegmentSequenceInLoc("OBX-3.1", 2);
+    line = map.getLineFromSequence("OBX-3.1", 2);
     assertEquals("second OBX is in line ", 9, line);
 
   }
-
-  @Test
-  public void generateLocatorForIndexTest() {
-    String locator = map.generateLocatorForIndex("OBX-3", 1, 2);
-    assertEquals("OBX[1]-3[2].1.1", locator);
-    locator = map.generateLocatorForIndex("OBX-3.1", 1, 2);
-    assertEquals("OBX[1]-3[2].1.1", locator);
-    locator = map.generateLocatorForIndex("OBX-3.1", 1, 2);
-    assertEquals("OBX[1]-3[2].1.1", locator);
-    locator = map.generateLocatorForIndex("OBX-3.2.4", 1, 9);
-    assertEquals("OBX[1]-3[9].2.4", locator);
-    locator = map.generateLocatorForIndex("OBX-3.2.4", 1, 9);
-    assertEquals("OBX[1]-3[9].2.4", locator);
-  }
-
-  @Test
-  public void testFindAllSegmentRepsWithValues() {
-    //Only the second RXA has an RXA-2 value.
-    List<Integer> resultList = map
-        .findAllIndexesForSegmentWithValues(new String[]{"X", "Y"}, "RXA-2");
-    assertEquals("Should have one entry in the list", 1, resultList.size());
-    System.out.println("resultList: " + resultList);
-    assertTrue("Indexes should hold the value 2. ", resultList.contains(new Integer(2)));
-
-    resultList = map.findAllIndexesForSegmentWithValues(new String[]{"64994-7"}, "OBX-3");
-    assertEquals("OBX-3 64994-7", 3, resultList.size());
-
-    resultList.removeAll(Arrays.asList(new Integer[]{1, 2, 3}));
-    assertEquals("the result list should have 1,2,3", 0, resultList.size());
-
-    resultList = map.findAllSegmentRepsWithValuesWithinRange(new String[]{"X"}, "RXA-2", 3, 3, 1);
-    assertEquals("shouldn't find any", 0, resultList.size());
-
-    resultList = map.findAllSegmentRepsWithValuesWithinRange(new String[]{"X"}, "RXA-2", 2, 3, 1);
-    assertTrue("Should have 2", resultList.contains(new Integer(2)));
-    assertEquals("Should only have one entry", 1, resultList.size());
-
-    resultList = map.findAllSegmentRepsWithValuesWithinRange(new String[]{"X"}, "RXA-2", 1, 2, 1);
-    assertTrue("Should have 2 (starting with 1)", resultList.contains(new Integer(2)));
-    assertEquals("Should only have one entry (starting with 1)", 1, resultList.size());
-
-    resultList = map.findAllSegmentRepsWithValuesWithinRange(new String[]{"X"}, "RXA-2", 2, 4, 1);
-    assertTrue("Should have 2 (2-4)", resultList.contains(new Integer(2)));
-    assertEquals("Should only have one entry (2-4)", 1, resultList.size());
-
-  }
+//
+//  @Test
+//  public void testFindAllSegmentRepsWithValues() {
+//    //Only the second RXA has an RXA-2 value.
+//    List<Integer> resultList = map
+//        .findAllIndexesForSegmentWithValues(new String[]{"X", "Y"}, "RXA-2");
+//    assertEquals("Should have one entry in the list", 1, resultList.size());
+//    System.out.println("resultList: " + resultList);
+//    assertTrue("Indexes should hold the value 2. ", resultList.contains(new Integer(2)));
+//
+//    resultList = map.findAllIndexesForSegmentWithValues(new String[]{"64994-7"}, "OBX-3");
+//    assertEquals("OBX-3 64994-7", 3, resultList.size());
+//
+//    resultList.removeAll(Arrays.asList(new Integer[]{1, 2, 3}));
+//    assertEquals("the result list should have 1,2,3", 0, resultList.size());
+//
+//    resultList = map.findAllSegmentRepsWithValuesWithinRange(new String[]{"X"}, "RXA-2", 3, 3, 1);
+//    assertEquals("shouldn't find any", 0, resultList.size());
+//
+//    resultList = map.findAllSegmentRepsWithValuesWithinRange(new String[]{"X"}, "RXA-2", 2, 3, 1);
+//    assertTrue("Should have 2", resultList.contains(new Integer(2)));
+//    assertEquals("Should only have one entry", 1, resultList.size());
+//
+//    resultList = map.findAllSegmentRepsWithValuesWithinRange(new String[]{"X"}, "RXA-2", 1, 2, 1);
+//    assertTrue("Should have 2 (starting with 1)", resultList.contains(new Integer(2)));
+//    assertEquals("Should only have one entry (starting with 1)", 1, resultList.size());
+//
+//    resultList = map.findAllSegmentRepsWithValuesWithinRange(new String[]{"X"}, "RXA-2", 2, 4, 1);
+//    assertTrue("Should have 2 (2-4)", resultList.contains(new Integer(2)));
+//    assertEquals("Should only have one entry (2-4)", 1, resultList.size());
+//
+//  }
 
   @Test
   public void testGetSegmentName() {
-    String seg = map.getSegmentAtLine(5);
+    String seg = map.getSegIdAtLine(5);
     assertEquals("rxa at 5", "RXA", seg);
 
-    seg = map.getSegmentAtLine(6);
+    seg = map.getSegIdAtLine(6);
     assertEquals("OBX at 6", "OBX", seg);
 
-    seg = map.getSegmentAtLine(1);
+    seg = map.getSegIdAtLine(1);
     assertEquals("MSH at 1", "MSH", seg);
 
-    seg = map.getSegmentAtLine(3);
+    seg = map.getSegIdAtLine(3);
     assertEquals("Nk1 at 3", "NK1", seg);
   }
 

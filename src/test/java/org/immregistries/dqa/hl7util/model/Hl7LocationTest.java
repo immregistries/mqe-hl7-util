@@ -235,4 +235,40 @@ public class Hl7LocationTest {
   }
 
 
+  @Test
+  public void generateLocatorForIndexTest() {
+    Hl7Location locator = new Hl7Location("OBX-3");
+    locator.setFieldRepetition(2);
+    assertEquals("OBX[1]-3[2].1.1", locator.toString());
+
+    locator = new Hl7Location("OBX-3.1");
+    locator.setFieldRepetition(2);
+    assertEquals("OBX[1]-3[2].1.1", locator.toString());
+
+    locator = new Hl7Location("OBX-3.1");
+    locator.setFieldRepetition(2);
+    assertEquals("OBX[1]-3[2].1.1", locator.toString());
+
+    locator = new Hl7Location("OBX-3.2.4");
+    locator.setFieldRepetition(9);
+    assertEquals("OBX[1]-3[9].2.4", locator.toString());
+
+    locator = new Hl7Location("OBX-3.2.4");
+    locator.setFieldRepetition(9);
+    assertEquals("OBX[1]-3[9].2.4", locator.toString());
+
+    locator = new Hl7Location("OBX-3.2.4");
+    locator.setFieldRepetition(3);
+    assertEquals("OBX[1]-3[3].2.4", locator.toString());
+
+    locator = new Hl7Location("OBX-3.2.4", 5, 11);
+    locator.setFieldRepetition(9);
+    assertEquals("OBX[11]-3[9].2.4", locator.toString());
+
+    locator = new Hl7Location("OBX-3.2.4", 5, 9);
+    locator.setFieldRepetition(3);
+    assertEquals("OBX[9]-3[3].2.4", locator.toString());
+  }
+
+
 }

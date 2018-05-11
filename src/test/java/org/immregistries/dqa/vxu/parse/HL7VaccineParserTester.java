@@ -108,13 +108,13 @@ public class HL7VaccineParserTester {
 		assertEquals("value", "20160413", o.getValue());
 	}
 	
-	@Test
-	public void testVfcProblems() {
-		String message = VFC_BREAKER;
-		HL7MessageMap messageMap = rootParser.getMessagePartMap(message);
-		List<Integer> obxIdxList = new ArrayList<Integer>(); 
-		String vfc = vParser.getShotVFCCode(messageMap, 13, obxIdxList);
-		assertEquals("Should not find a vfc code",  "V00", vfc);
-	}
+//	@Test
+//	public void testVfcProblems() {
+//		String message = VFC_BREAKER;
+//		HL7MessageMap messageMap = rootParser.getMessagePartMap(message);
+//		List<Integer> obxIdxList = new ArrayList<Integer>();
+//		String vfc = vParser.getShotVFCCode(messageMap, 13, obxIdxList);
+//		assertEquals("Should not find a vfc code",  "V00", vfc);
+//	}
 
 }

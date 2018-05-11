@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.apache.commons.lang3.StringUtils;
+import org.immregistries.dqa.hl7util.model.Hl7Location;
 import org.immregistries.dqa.hl7util.parser.model.HL7MessagePart;
 import org.immregistries.dqa.hl7util.parser.profile.generator.FieldComplexity;
 import org.immregistries.dqa.hl7util.parser.profile.generator.MessageProfileReader;
@@ -102,7 +103,12 @@ public class MessageParserHL7 implements MessageParser {
   public HL7MessageMap getMessageMapFromPartList(List<HL7MessagePart> list) {
     HL7MessageMap map = new HL7MessageMap();
     for (HL7MessagePart messagePart : list) {
-      map.put(messagePart.getLocationCd(), messagePart.getSegmentSeq(),  messagePart.getSegmentIndex(), messagePart.getFieldRepetition(), messagePart.getValue());
+      Hl7Location loc = new Hl7Location(messagePart.getLocationCd());
+      loc.setSegmentSequence(messagePart.getSegmentSeq());
+      loc.setLine(messagePart.getSegmentIndex());
+      loc.setFieldRepetition(messagePart.getFieldRepetition());
+
+      map.put(loc, messagePart.getValue());
     }
     return map;
   }

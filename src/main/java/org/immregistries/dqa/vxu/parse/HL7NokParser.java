@@ -63,7 +63,7 @@ public enum HL7NokParser {
    */
   protected DqaNextOfKin getNextOfKin(HL7MessageMap map, int segSequence) {
     int line = map.getLineFromSequence("NK1", segSequence);
-//    int nk1Idx = map.getLineNumberForSegmentSequence("NK1", ordinal);
+//    int nk1Idx = map.getLineFromSequence("NK1", ordinal);
     MetaParser mp = new MetaParser(map);
     List<MetaFieldInfo> fieldInfo = mp.mapValues(line,
         NEXT_OF_KIN_PHONE

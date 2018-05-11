@@ -3,14 +3,8 @@ package org.immregistries.dqa.hl7util.parser;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-import java.util.Arrays;
-import java.util.LinkedHashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
 import org.immregistries.dqa.hl7util.model.Hl7Location;
 import org.immregistries.dqa.hl7util.test.MessageGenerator;
-import org.junit.Before;
 import org.junit.Test;
 
 //@RunWith(SpringJUnit4ClassRunner.class)
@@ -29,7 +23,7 @@ public class MessageAssemblerTest {
     //let's map it...
     HL7MessageMap map = mpp.getMessagePartMap(message);
     map.put(new Hl7Location("PID-5-1"), "bob");
-    String newName = map.get("PID-5-1");
+    String newName = map.getValue("PID-5-1");
     assertEquals("Should be bob", "bob", newName);
   }
 
@@ -41,7 +35,7 @@ public class MessageAssemblerTest {
     map.put(new Hl7Location("PID[1]-5-1"), "bob");
     map.put(new Hl7Location("PID[2]-5-1"), "george");
     map.put(new Hl7Location("PID[3]-5-1"), "phillip");
-    String newName = map.get("PID-5-1");
+    String newName = map.getValue("PID-5-1");
     assertEquals("Should be bob", "bob", newName);
   }
 
