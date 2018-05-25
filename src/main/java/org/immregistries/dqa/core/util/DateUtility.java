@@ -174,7 +174,7 @@ public enum DateUtility {
     return thisDt.isBefore(boundaryDt);
   }
 
-  public int yearsBetween(Date start, Date end) {
+  public int getYearsBetween(Date start, Date end) {
     if (start == null || end == null) {
       return -1;
     }
