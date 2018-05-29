@@ -239,6 +239,30 @@ public enum VxuField {
     this.hl7Field = hl7Field;
   }
 
+  public static VxuField getByType(CodesetType t) {
+    if (t == null) {
+      return NONE;
+    }
+
+    for (VxuField f : VxuField.values()) {
+      if (t == f.getCodesetType()) {
+        return f;
+      }
+    }
+    return NONE;
+  }
+
+  public static VxuField getByName(String name) {
+    if (name != null) {
+      for (VxuField f : VxuField.values()) {
+        if (name.equals(f.toString())) {
+          return f;
+        }
+      }
+    }
+    return NONE;
+  }
+
   public String getFieldDescription() {
     return fieldDescription;
   }

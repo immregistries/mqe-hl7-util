@@ -1,10 +1,11 @@
 package org.immregistries.dqa.hl7util.model;
 
+import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.apache.commons.lang3.StringUtils;
 
-public class Hl7Location {
+public class Hl7Location implements Comparable<Hl7Location> {
 
   private int line = 0;
   private String segmentId = "";
@@ -27,8 +28,20 @@ public class Hl7Location {
     return p.matcher(this.segmentId).find();
   }
 
-  @Override
-  public String toString() {
+  public String getFieldLoc() {
+    return segmentId + (segmentSequence > 1 ? "[" + segmentSequence + "]" : "") + (fieldPosition > 0 ?  "-" + fieldPosition : "");
+  }
+
+  /*
+  No field repetitions, or segment indexes.
+   */
+  public String getBaseReference() {
+    return segmentId + "-" + fieldPosition
+        + (componentNumber > 0 ? "." + componentNumber
+        + (subComponentNumber > 0 ? "." + subComponentNumber : ""): "");
+  }
+
+  public String getAbbreviated() {
     String s = segmentId;
     boolean expectSingleSegment = this.expectOneSegmentId();
     if ((expectSingleSegment && segmentSequence > 1)
@@ -51,36 +64,39 @@ public class Hl7Location {
     return s;
   }
 
-  public String getMessageMapLocator() {
-    String messageMapLocator = segmentId;
-    messageMapLocator += "[" + (line - 1) + "]-";
-    messageMapLocator += fieldPosition == 0 ? 1 : fieldPosition;
-    if (fieldRepetition > 0) {
-      messageMapLocator += "~" + fieldRepetition;
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
     }
-    if (componentNumber == 0) {
-      messageMapLocator += "-1";
-    } else {
-      messageMapLocator += "-" + componentNumber;
+    if (o == null || getClass() != o.getClass()) {
+      return false;
     }
-    if (subComponentNumber == 0) {
-      messageMapLocator += "-1";
-    } else {
-      messageMapLocator += "-" + subComponentNumber;
-    }
-
-    return messageMapLocator;
+    Hl7Location that = (Hl7Location) o;
+    return line == that.line &&
+        segmentSequence == that.segmentSequence &&
+        fieldPosition == that.fieldPosition &&
+        fieldRepetition == that.fieldRepetition &&
+        componentNumber == that.componentNumber &&
+        subComponentNumber == that.subComponentNumber &&
+        Objects.equals(segmentId, that.segmentId);
   }
 
-  public String getMessageMapLocatorFieldOnly() {
-    String messageMapLocator = segmentId;
-    messageMapLocator += "[" + (line - 1) + "]-";
-    messageMapLocator += fieldPosition == 0 ? 1 : fieldPosition;
-    if (fieldRepetition > 1) {
-      messageMapLocator += "~" + fieldRepetition;
-    }
+  @Override
+  public int hashCode() {
 
-    return messageMapLocator;
+    return Objects
+        .hash(line, segmentId, segmentSequence, fieldPosition, fieldRepetition, componentNumber,
+            subComponentNumber);
+  }
+
+  @Override
+  public String toString() {
+    return segmentId + "[" + (segmentSequence) + "]"
+        + "-" + fieldPosition
+        +  "[" + fieldRepetition + "]"
+        + "." + componentNumber
+        + "." + subComponentNumber;
   }
 
   public boolean hasSegmentId() {
@@ -103,62 +119,56 @@ public class Hl7Location {
     // default
   }
 
-  public Hl7Location(String hl7Reference, int position) {
-    this(hl7Reference);
-    this.segmentSequence = position;
-  }
-
-  public Hl7Location(String hl7Reference, int index, int position) {
-    this(hl7Reference);
-    this.line = index;
-    this.segmentSequence = position;
-  }
-
 
   /**
-   * Expected format: SEG-
+   * this regex can be seen and tested at
+     https://regex101.com/r/i8Jujl/7
+   *
+   */
+  private static final String regex = "(\\w\\w\\w)\\[?(\\d*)]?-?(\\d*)[\\[~]?(\\d*)]?[.-]?(\\d*)[.-]?(\\d*)";
+  private static final Pattern pattern = Pattern.compile(regex);
+  /**
+   * Expected format: segment[sequence]-field[fieldrep].component.subcomponent
    * @param hl7Reference
    */
+  public Hl7Location(String hl7Reference, int lineNumber) {
+    this(hl7Reference);
+    this.line = lineNumber;
+  }
+
+  public Hl7Location(String hl7Reference, int lineNumber, int segmentSequence) {
+    this(hl7Reference);
+    this.line = lineNumber;
+    this.segmentSequence = segmentSequence;
+  }
+
   public Hl7Location(String hl7Reference) {
-    if (!StringUtils.isBlank(hl7Reference)) {
-      int pos = hl7Reference.indexOf("-");
-      if (pos == -1) {
-        segmentId = hl7Reference;
-        return;
-      }
-      segmentId = hl7Reference.substring(0, pos);
-      if (segmentId.length() > 3) {
-        //find the segment sequence number
-        Matcher m = sequencePattern.matcher(segmentId);
-        if (m.find()) {
-          segmentId = m.group(1);
-          segmentSequence = new Integer(m.group(2));
-        }
-      }
+    if (StringUtils.isNotBlank(hl7Reference)) {
+      Matcher matcher = pattern.matcher(hl7Reference);
+      if (matcher.find()) {
+        //got it!
+        String segment = matcher.group(1);
+        String segIndex = matcher.group(2);
+        String field = matcher.group(3);
+        String fieldRep = matcher.group(4);
+        String component = matcher.group(5);
+        String subcomponent = matcher.group(6);
 
+        this.segmentId = segment;
+        this.segmentSequence = StringUtils.isNumeric(segIndex) ? Integer.parseInt(segIndex) : 1;
+        this.fieldPosition = StringUtils.isNumeric(field) ? Integer.parseInt(field) : 0;
+        this.fieldRepetition = StringUtils.isNumeric(fieldRep) ? Integer.parseInt(fieldRep) : 1;
+        this.componentNumber = StringUtils.isNumeric(component) ? Integer.parseInt(component) : 1;
+        this.subComponentNumber =
+            StringUtils.isNumeric(subcomponent) ? Integer.parseInt(subcomponent) : 1;
 
-      if ((pos + 1) <= hl7Reference.length()) {
-        hl7Reference = hl7Reference.substring(pos + 1);
-        if (hl7Reference.length() > 0) {
-          pos = hl7Reference.indexOf(".");
-          try {
-            if (pos == -1) {
-              fieldPosition = Integer.parseInt(hl7Reference);
-            } else {
-              fieldPosition = Integer.parseInt(hl7Reference.substring(0, pos));
-              if ((pos + 1) < hl7Reference.length()) {
-                componentNumber = Integer.parseInt(hl7Reference.substring(pos + 1));
-              }
-            }
-          } catch (NumberFormatException nfe) {
-            // ignore
-          }
-        }
+      } else {
+        //don't got it!
+        throw new RuntimeException(
+            "Can't find any HL7 information in location provided : " + hl7Reference);
       }
     }
   }
-
-  private Pattern sequencePattern = Pattern.compile("(\\w\\w\\w)\\[(\\d+)\\]");
 
   public String getSegmentId() {
     return segmentId;
@@ -206,5 +216,42 @@ public class Hl7Location {
 
   public void setSubComponentNumber(int subComponentNumber) {
     this.subComponentNumber = subComponentNumber;
+  }
+
+  @Override
+  public int compareTo(Hl7Location o) {
+    if (o==null) {
+      return 1;
+    }
+
+    if (!this.segmentId.equals(o.segmentId)) {
+      return this.segmentId.compareTo(o.segmentId);
+    }
+
+//    if (this.line != o.line) {
+//      return Integer.compare(this.line, o.line);
+//    }
+
+    if (this.segmentSequence != o.segmentSequence) {
+      return Integer.compare(this.segmentSequence, o.segmentSequence);
+    }
+
+    if (this.fieldPosition != o.fieldPosition) {
+      return Integer.compare(this.fieldPosition, o.fieldPosition);
+    }
+
+    if (this.fieldRepetition != o.fieldRepetition) {
+      return Integer.compare(this.fieldRepetition, o.fieldRepetition);
+    }
+
+    if (this.componentNumber != o.componentNumber) {
+      return Integer.compare(this.componentNumber, o.componentNumber);
+    }
+
+    if (this.subComponentNumber != o.subComponentNumber) {
+      return Integer.compare(this.subComponentNumber, o.subComponentNumber);
+    }
+
+    return 0;
   }
 }

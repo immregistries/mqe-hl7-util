@@ -25,11 +25,11 @@ public class MetaFieldInfo {
     this.hl7Location = hl7Location;
   }
 
-  public MetaFieldInfo(String valueIn, VxuField fieldIn, int positionIdIn,
-      int absoluteSegmentIndexIn) {
+  public MetaFieldInfo(String valueIn, VxuField fieldIn, int segmentSequence,
+      int lineNumber) {
     Hl7Location hl7Location = new Hl7Location(fieldIn.getHl7Locator());
-    hl7Location.setSegmentSequence(positionIdIn);
-    hl7Location.setLine(absoluteSegmentIndexIn + 1);
+    hl7Location.setSegmentSequence(segmentSequence);
+    hl7Location.setLine(lineNumber);
     this.setVxuField(fieldIn);
     this.setValue(valueIn);
     this.setHl7Location(hl7Location);

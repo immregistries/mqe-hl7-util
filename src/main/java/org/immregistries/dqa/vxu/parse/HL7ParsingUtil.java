@@ -8,10 +8,9 @@ import org.immregistries.dqa.vxu.hl7.Id;
 public enum HL7ParsingUtil {
   INSTANCE;
 
-  public DqaAddress getAddressFromOrdinal(HL7MessageMap map, String locator,
-      int ordinal, int fieldrep) {
-    int index = map.getAbsoluteIndexForLocationOrdinal(locator, ordinal);
-    return getAddressFromIndex(map, locator, index, fieldrep);
+  public DqaAddress getAddressFor(HL7MessageMap map, String locator, int seq, int fieldrep) {
+    int index = map.getLineFromSequence(locator, seq);
+    return getAddressFromLine(map, locator, index, fieldrep);
   }
 
   /*  Values from value set HL7 0201 for tel-use-code (component 2)
@@ -37,13 +36,13 @@ public enum HL7ParsingUtil {
    * TDD Telecommunications Device for the Deaf
    * TTY Teletypewriter
    */
-  public DqaPhoneNumber getPhoneAt(HL7MessageMap map, String fieldLocator, int segIdx) {
+  public DqaPhoneNumber getPhoneAt(HL7MessageMap map, String fieldLocator, int line) {
     DqaPhoneNumber ph = new DqaPhoneNumber();
 
     //These aren't often set. But we should capture them if they are.
-    String telUseCode = map.getAtIndex(fieldLocator + "-2", segIdx, 1);
-    String telEquipCode = map.getAtIndex(fieldLocator + "-3", segIdx, 1);
-    String email = map.getAtIndex(fieldLocator + "-4", segIdx, 1);
+    String telUseCode = map.getValue(fieldLocator + "-2", line, 1);
+    String telEquipCode = map.getValue(fieldLocator + "-3", line, 1);
+    String email = map.getValue(fieldLocator + "-4", line, 1);
 
     ph.setTelEquipCode(telEquipCode);
     ph.setTelUseCode(telUseCode);
@@ -51,43 +50,43 @@ public enum HL7ParsingUtil {
 
     //As of version 2.3, the number should not be present in the first field.  it is deprecated.
     //		we will check the current positions first.
-    String localNumber = map.getAtIndex(fieldLocator + "-7", segIdx, 1);
+    String localNumber = map.getValue(fieldLocator + "-7", line, 1);
 
     if (localNumber != null) {
       ph.setLocalNumber(localNumber);
 
-      String areaCode = map.getAtIndex(fieldLocator + "-6", segIdx, 1);
+      String areaCode = map.getValue(fieldLocator + "-6", line, 1);
       ph.setAreaCode(areaCode);
 
     } else {
       //This is what was originally happening.
-      String phone = map.getAtIndex(fieldLocator, segIdx, 1);
+      String phone = map.getValue(fieldLocator, line, 1);
       ph.setNumber(phone);
     }
 
     return ph;
   }
 
-  public Id getId(HL7MessageMap map, String field, int segIdx, int fieldRep) {
+  public Id getId(HL7MessageMap map, String field, int line, int fieldRep) {
     Id ce = new Id();
-    ce.setNumber(map.getAtIndex(field + "-1", segIdx, fieldRep));
-    ce.setAssigningAuthorityCode(map.getAtIndex(field + "-4", segIdx,
+    ce.setNumber(map.getValue(field + "-1", line, fieldRep));
+    ce.setAssigningAuthorityCode(map.getValue(field + "-4", line,
         fieldRep));
-    ce.setTypeCode(map.getAtIndex(field + "-5", segIdx, fieldRep));
+    ce.setTypeCode(map.getValue(field + "-5", line, fieldRep));
     return ce;
   }
 
-  public DqaAddress getAddressFromIndex(HL7MessageMap map, String locator, int segmentIndex,
+  public DqaAddress getAddressFromLine(HL7MessageMap map, String locator, int line,
       int fieldRep) {
     DqaAddress address = new DqaAddress();
-    address.setStreet(map.getAtIndex(locator + "-1", segmentIndex, fieldRep));
-    address.setStreet2(map.getAtIndex(locator + "-2", segmentIndex, fieldRep));
-    address.setCity(map.getAtIndex(locator + "-3", segmentIndex, fieldRep));
-    address.setStateCode(map.getAtIndex(locator + "-4", segmentIndex, fieldRep));
-    address.setZip(map.getAtIndex(locator + "-5", segmentIndex, fieldRep));
-    address.setCountryCode(map.getAtIndex(locator + "-6", segmentIndex, fieldRep));
-    address.setTypeCode(map.getAtIndex(locator + "-7", segmentIndex, fieldRep));
-    address.setCountyParishCode(map.getAtIndex(locator + "-8", segmentIndex, fieldRep));
+    address.setStreet(map.getValue(locator + "-1", line, fieldRep));
+    address.setStreet2(map.getValue(locator + "-2", line, fieldRep));
+    address.setCity(map.getValue(locator + "-3", line, fieldRep));
+    address.setStateCode(map.getValue(locator + "-4", line, fieldRep));
+    address.setZip(map.getValue(locator + "-5", line, fieldRep));
+    address.setCountryCode(map.getValue(locator + "-6", line, fieldRep));
+    address.setTypeCode(map.getValue(locator + "-7", line, fieldRep));
+    address.setCountyParishCode(map.getValue(locator + "-8", line, fieldRep));
     return address;
   }
 
