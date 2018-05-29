@@ -11,6 +11,19 @@ import org.junit.Test;
 
 public class DateUtilityTest {
 	DateUtility datr = DateUtility.INSTANCE;
+
+	@Test
+	public void testGetAgeFromDates() {
+		Date today = new Date();
+		today.setYear(2018);
+		today.setMinutes(1);
+		Date yesterYear = new Date();
+		yesterYear.setYear(2000);
+		yesterYear.setMinutes(0);
+		int age = datr.getYearsBetween(yesterYear, today);
+
+		assertEquals("should be 18 years between", 18, age);
+	}
 	
 	@Test
 	public void testStringParsing() {

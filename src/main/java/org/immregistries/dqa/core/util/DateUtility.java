@@ -174,6 +174,17 @@ public enum DateUtility {
     return thisDt.isBefore(boundaryDt);
   }
 
+  public int getYearsBetween(Date start, Date end) {
+    if (start == null || end == null) {
+      return -1;
+    }
+
+    DateTime startDt = new DateTime(start);
+    DateTime endDt = new DateTime(end);
+
+    return getYearsBetween(startDt, endDt);
+  }
+
   public int monthsBetween(Date dateOne, Date dateTwo) {
     LocalDate d1 = new LocalDate(dateOne);
     LocalDate d2 = new LocalDate(dateTwo);
