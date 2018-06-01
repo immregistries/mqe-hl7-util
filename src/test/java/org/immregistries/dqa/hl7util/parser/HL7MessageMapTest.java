@@ -3,11 +3,11 @@ package org.immregistries.dqa.hl7util.parser;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import org.immregistries.dqa.hl7util.model.Hl7Location;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -36,18 +36,18 @@ public class HL7MessageMapTest {
 
   static {
 
-    SEG_MAP.put("MSH.1", MSH); //0
-    SEG_MAP.put("PID.1", PID); //1
-    SEG_MAP.put("NK1.1", NK1); //2
-    SEG_MAP.put("ORC.1", ORC); //3
-    SEG_MAP.put("RXA.1", RXA); //4
-    SEG_MAP.put("OBX.1", OBX); //5
-    SEG_MAP.put("ORC.2", ORC); //6
-    SEG_MAP.put("RXA.2", RXA2);//7
-    SEG_MAP.put("OBX.2", OBX); //8
-    SEG_MAP.put("RXR.1", RXR); //9
-    SEG_MAP.put("RXA.3", RXA3);//10
-    SEG_MAP.put("OBX.3", OBX); //11
+    SEG_MAP.put("MSH-1", MSH); //1
+    SEG_MAP.put("PID-1", PID); //2
+    SEG_MAP.put("NK1-1", NK1); //3
+    SEG_MAP.put("ORC-1", ORC); //4
+    SEG_MAP.put("RXA-1", RXA); //5
+    SEG_MAP.put("OBX-1", OBX); //6
+    SEG_MAP.put("ORC-2", ORC); //7
+    SEG_MAP.put("RXA-2", RXA2);//8
+    SEG_MAP.put("OBX-2", OBX); //9
+    SEG_MAP.put("RXR-1", RXR); //10
+    SEG_MAP.put("RXA-3", RXA3);//11
+    SEG_MAP.put("OBX-3", OBX); //12
 
     StringBuffer sb = new StringBuffer();
     for (String seg : SEG_MAP.values()) {
@@ -63,61 +63,83 @@ public class HL7MessageMapTest {
 
   public HL7MessageMap map;
 
+  private static final String IMMUNITY_MSG =
+            "MSH|^~\\&|Test EHR Application|X68||NIST Test Iz Reg|20120701082240-0500||VXU^V04^VXU_V04|NIST-IZ-001.00|P|2.5.1|||ER|AL|||||Z22^CDCPHINVS\r"
+          + "PID|1||D26376273^^^NIST MPI^MR||Snow^Madelynn^Ainsley^Jr^^^L~S^M^A^^^^A|Lam^Morgan^^^^^M|20070706|F||2076-8^Native Hawaiian or Other Pacific Islander^CDCREC|32 Prescott Street Ave^Apt 2^Warwick^MA^02452^USA^L^^MA0001~123 E Main Street^^Anytown^AZ^85203^MEX^M~^^^^^^BDL^^TY8888||^PRN^PH^^^657^5558563|||||||||2186-5^non Hispanic or Latino^CDCREC|Hospital|Y|2||||20161010|Y\r"
+          + "PD1|||Primary Facility^^^^^PF^^^^567||||||||02^Reminder/Recall - any method^HL70215|||||A|20120701|20120701\r"
+          + "NK1|1|Lam^Morgan^^^^^L|MTH^Mother^HL70063|32 Prescott Street Ave^^Warwick^MA^02452^USA^L|^PRN^PH^^^657^5558563\r"
+          + "ORC|RE||IZ-783274^NDA|||||||I-23432^Burden^Donna^A^^^^^NIST-AA-1^^^^PRN||57422^RADON^NICHOLAS^^^^^^NIST-AA-1^L^^^MD\r"
+          + "RXA|0|1|20120814|20120815|33332-0010-01^Influenza, seasonal, injectable, preservative free^NDC|0.5|mL^MilliLiter [SI Volume Units]^UCUM||00^New immunization record^NIP001|7832-1^Lemon^Mike^A^^^^^NIST-AA-1^^^^PRN|^^^X68||||Z0860BB|20121104|CSL^CSL Behring^MVX|||CP|A\r"
+          + "RXR|C28161^Intramuscular^NCIT|LD^Left Arm^HL70163\r"
+          + "OBX|1|CE|64994-7^Vaccine funding program eligibility category^LN|1|V05^VFC eligible - Federally Qualified Health Center Patient (under-insured)^HL70064||||||F|||20120701|||VXC40^Eligibility captured at the immunization level^CDCPHINVS\r"
+          + "OBX|2|CE|30956-7^vaccine type^LN|2|88^Influenza, unspecified formulation^CVX||||||F\r"
+          + "OBX|3|TS|29768-9^Date vaccine information statement published^LN|2|20120702||||||F\r"
+          + "OBX|4|TS|29769-7^Date vaccine information statement presented^LN|2|20120814||||||F\r"
+          + "ORC|RE||IZ-783275^NDA|||||||I-23432^Burden^Donna^A^^^^^NIST-AA-1^^^^PRN||57422^RADON^NICHOLAS^^^^^^NIST-AA-1^L^^^MD\r"
+          + "RXA|0|1|20120814||03^MMR^CVX|0.5|mL^MilliLiter [SI Volume Units]^UCUM||01^^NIP001|||||||||||CP|A\r"
+          + "ORC|RE||IZ-783276^NDA|||||||I-23432^Burden^Donna^A^^^^^NIST-AA-1^^^^PRN||57422^RADON^NICHOLAS^^^^^^NIST-AA-1^L^^^MD\r"
+          + "RXA|0|1|20120814||33332-0010-01^Influenza, seasonal, injectable, preservative free^NDC^09^^CVX|0.5|mL^MilliLiter [SI Volume Units]^UCUM||00^New immunization record^NIP001|7832-1^Lemon^Mike^A^^^^^NIST-AA-1^^^^PRN|^^^X68||||Z0860BB|20121104|CSL^CSL Behring^MVX|||CP|A\r"
+          + "RXR|C28161^Intramuscular^NCIT|LD^Left Arm^HL70163\r"
+          + "OBX|1|CE|64994-7^Vaccine funding program eligibility category^LN|1|V05^VFC eligible - Federally Qualified Health Center Patient (under-insured)^HL70064||||||F|||20120701|||VXC40^Eligibility captured at the immunization level^CDCPHINVS\r"
+          + "OBX|2|CE|30956-7^vaccine type^LN|2|88^Influenza, unspecified formulation^CVX||||||F\r"
+          + "OBX|3|TS|29768-9^Date vaccine information statement published^LN|2|20120702||||||F\r"
+          + "OBX|4|TS|29769-7^Date vaccine information statement presented^LN|2|20120814||||||F\r"
+          + "ORC|RE||IZ-783277^NDA|||||||I-23432^Burden^Donna^A^^^^^NIST-AA-1^^^^PRN||57422^RADON^NICHOLAS^^^^^^NIST-AA-1^L^^^MD\r"
+          + "RXA|0|1|20120814||09^^CVX^33332-0010-01^Influenza, seasonal, injectable, preservative free^NDC|0.5|mL^MilliLiter [SI Volume Units]^UCUM||00^New immunization record^NIP001|7832-1^Lemon^Mike^A^^^^^NIST-AA-1^^^^PRN|^^^X68||||Z0860BB|20121104|CSL^CSL Behring^MVX|||CP|A\r"
+          + "RXR|C28161^Intramuscular^NCIT|LD^Left Arm^HL70163\r"
+          + "OBX|1|CE|64994-7^Vaccine funding program eligibility category^LN|1|V05^VFC eligible - Federally Qualified Health Center Patient (under-insured)^HL70064||||||F|||20120701|||VXC40^Eligibility captured at the immunization level^CDCPHINVS\r"
+          + "OBX|2|CE|30956-7^vaccine type^LN|2|88^Influenza, unspecified formulation^CVX||||||F\r"
+          + "OBX|3|TS|29768-9^Date vaccine information statement published^LN|2|20120702||||||F\r"
+          + "OBX|4|TS|29769-7^Date vaccine information statement presented^LN|2|20120814||||||F\r";
+
+  private HL7MessageMap bigMap;
+
   @Before
   public void setup() {
     map = mpp.getMessagePartMap(EXAMPLE_VXU);
+    bigMap = mpp.getMessagePartMap(IMMUNITY_MSG);
   }
 
   @Test
   public void testFieldRepCounter() {
     //This should exist.
-    String field = "PID-5";
-    int count = map.getFieldRepCountFor(field);
+    Hl7Location loc = new Hl7Location( "PID-5");
+    int count = map.getFieldRepCountFor(loc);
     assertEquals("should be 2", 2, count);
 
-    field = "PID[1]-5";
-    count = map.getFieldRepCountFor(field);
+    loc = new Hl7Location( "PID[1]-5");
+    count = map.getFieldRepCountFor(loc);
     assertEquals("should be 2", 2, count);
 
     //This doesn't exist.  Answer should be zero.
-    field = "PID[2]-5";
-    count = map.getFieldRepCountFor(field);
+    loc = new Hl7Location( "PID[2]-5");
+    count = map.getFieldRepCountFor(loc);
     assertEquals("should be 0", 0, count);
 
   }
 
   @Test
-  public void testRandomThings() {
-    String routeCode = map.getAtOrdinal("RXR-1", 1, 1);
-    assertEquals("IM", routeCode);
-    routeCode = map.getAtOrdinal("RXR-1-1", 1, 1);
-    assertEquals("IM", routeCode);
-    routeCode = map.getAtOrdinal("RXR-1.1", 1, 1);
-    assertEquals("IM", routeCode);
-  }
-
-  @Test
   public void listToMap() {
 //		This should return the first value at that address.  so it's implied that you want the first everything. This is a shortcut. 
-    String msh3 = map.get("MSH-3");
+    String msh3 = map.getValue("MSH-3");
     assertEquals("msh3", "ECW", msh3);
 //		Should be the same as the first MSH, third field, first repetition, first component, first sub-component: 
-    String msh_1_3_111 = map.get("MSH[0]-3~1-1-1");
-    assertEquals("MSH[1]-3~1-1-1 should be the same as MSH-3", "ECW", msh_1_3_111);
+    String msh_1_3_111 = map.getValue("MSH[1]-3[1].1.1");
+    assertEquals("MSH[1]-3[1].1.1 should be the same as MSH-3", "ECW", msh_1_3_111);
 //		Should be able to get a very specific one too... As exact as this: 
 //		This would be the third RXA segment, third field, second component, sixth sub-component.   
-    String rxa_3_3_226 = map.get("RXA[4]-3~2-2-6");
+    String rxa_3_3_226 = map.getValue("RXA[3]-3[2].2.6");
     assertEquals(
-        "RXA[4]-3~2-2-6 is the second repetition of field 3 in the third RXA... which is null, becuase repetition two doesn't exist.",
+        "RXA[3]-3[2].2.6 is the second repetition of field 3 in the third RXA... which is null, becuase repetition two doesn't exist.",
         null, rxa_3_3_226);
 //		But how would i know there's a repetition of the field???  I don't know how.  
-//		Maybe what I really want is to get a list of all the RXA[3]-3-2-6 values...  
+//		Maybe what I really want is to get a list of all the RXA[3].3.2-6 values...  
 //		on a CVX/CPT entry, you might want to pick out the CVX and only use that???
 
 //		Should be able to give just enough to get what I want:
 //		second RXA segment, third field, third component, and either the value, or the first sub-component, 
 //		which are arguably the same thing.   
-    String rxa254 = map.get("RXA[7]-5-4");
+    String rxa254 = map.getValue("RXA[2]-5.4");
     assertEquals("rxa253", "90633", rxa254);
 
 //		I also need to know how many segments there are...
@@ -137,122 +159,38 @@ public class HL7MessageMapTest {
     System.out.println(map.toString());
   }
 
-  @Test
-  public void testLocators() {
-
-    String msh3 = map.fillInComponentAndSubComponent("MSH-3");
-    assertEquals("msh3", "MSH-3-1-1", msh3);
-
-    String msh31 = map.addFieldRepIfMIssing(msh3);
-    assertEquals("msh3 plus field rep", "MSH-3~1-1-1", msh31);
-
-    String msh301 = map.addFieldRepIfMIssing("MSH[0]-1");
-    assertEquals("addFieldRepIfMIssing(\"MSH[0]-1\")", "MSH[0]-1~1", msh301);
-
-    String msh311 = map.addSegmentIndexIfMissing(msh31);
-    assertEquals("msh3 plus segIndex", "MSH[0]-3~1-1-1", msh311);
-
-    String msh311x = map.makeLocatorString("MSH-3", 0, 1);
-    assertEquals("msh3 both ways", msh311, msh311x);
-
-    String rxa3 = map.addSegmentIndexIfMissing("RXA-3");
-    assertEquals("RXA-3", "RXA[4]-3", rxa3);
-
-  }
-
-  @Test
-  public void testGetFieldRep() {
-    String locator = "MSH-3-1-1";
-    int rep = map.getFieldRep(locator);
-    assertEquals(locator, 1, rep);
-
-    locator = "MSH-3~2-1-1";
-    rep = map.getFieldRep(locator);
-    assertEquals(locator, 2, rep);
-
-    locator = "PID[2]-3~2-1-1";
-    rep = map.getFieldRep(locator);
-    assertEquals(locator, 2, rep);
-
-    locator = "PID[2]-3-1-1";
-    rep = map.getFieldRep(locator);
-    assertEquals(locator, 1, rep);
-
-    locator = "PID[2]-3";
-    rep = map.getFieldRep(locator);
-    assertEquals(locator, 1, rep);
-
-    locator = "PID[2]";
-    rep = map.getFieldRep(locator);
-    assertEquals(locator, 1, rep);
-  }
-
-  @Test
-  public void testGetFieldLocator() {
-    String locator = "MSH-3-1-1";
-    String loc = map.getFieldLocator(locator);
-    assertEquals(locator, "MSH-3", loc);
-
-    locator = "PID-3-1-1";
-    loc = map.getFieldLocator(locator);
-    assertEquals(locator, "PID-3", loc);
-
-    locator = "PID[1]-1-1-1";
-    loc = map.getFieldLocator(locator);
-    assertEquals(locator, "PID[1]-1", loc);
-
-    locator = "NK1-3";
-    loc = map.getFieldLocator(locator);
-    assertEquals(locator, "NK1-3", loc);
-
-    locator = "NK1[2]-3~2-1-1";
-    loc = map.getFieldLocator(locator);
-    assertEquals(locator, "NK1[2]-3", loc);
-  }
 
   @Test
   public void testGettingValues() {
-    String msh = map.get("MSH");
+    String msh = map.getValue("MSH");
     assertEquals("MSH", "MSH", msh);
 
-    String msh1 = map.get("MSH[0]");
-    assertEquals("MSH[0]", "MSH", msh1);
+    String msh1 = map.getValue("MSH[1]");
+    assertEquals("MSH[1]", "MSH", msh1);
 
-    String msh1x = map.getAtIndex("MSH", 0, 1);
+    String msh1x = map.getValue("MSH", 1, 1);
     assertEquals("MSH", msh, msh1x);
 
-    String rxa52 = map.get("RXA-5-2");
-    assertEquals("RXA-5-2", "Hepatitis A ped/adol", rxa52);
+    String rxa52 = map.getValue("RXA-5.2");
+    assertEquals("RXA-5.2", "Hepatitis A ped/adol", rxa52);
 
-    String rxa_2_52 = map.get("RXA[7]-5-2");
-    assertEquals("RXA[7]-5-2", "Awesome Immunization", rxa_2_52);
+    String rxa_2_52 = map.getValue("RXA[2]-5.2");
+    assertEquals("RXA[2]-5.2", "Awesome Immunization", rxa_2_52);
 
-    String rxa_2_52x = map.getAtIndex("RXA-5-2", 7, 1);
+    String rxa_2_52x = map.getValue("RXA-5.2", 7, 1);
     assertEquals("rxa_2_52x", rxa_2_52x, rxa_2_52);
 
-    String pid5_2_2 = map.get("PID-5~2-2");
-    assertEquals("PID-5~2-2", "AWESOMENAME2", pid5_2_2);
+    String pid5_2_2 = map.getValue("PID-5[2]-2");
+    assertEquals("PID-5[2]-2", "AWESOMENAME2", pid5_2_2);
 
-    String pid5_2_2x = map.getAtIndex("PID-5-2", 1, 2);
+    String pid5_2_2x = map.getValue("PID-5.2", 1, 2);
     assertEquals("pid5_2_2x", pid5_2_2, pid5_2_2x);
 
-    String pid5_2_1 = map.get("PID-5~2-1");
-    assertEquals("PID-5~2-1", "COOLNAME", pid5_2_1);
+    String pid5_2_1 = map.getValue("PID-5[2]-1");
+    assertEquals("PID-5[2]-1", "COOLNAME", pid5_2_1);
 
-    String pid55 = map.get("PID-55");
+    String pid55 = map.getValue("PID-55");
     assertEquals("undefined location PID-55", null, pid55);
-  }
-
-  @Test
-  public void testSegmentNameParser() {
-    String seg1 = "MSH-1";
-    String seg2 = "RXA[2]-5-2";
-    String seg3 = "RXA";
-
-    assertEquals("MSH-1", "MSH", map.getSegmentNameFromLocator(seg1));
-    assertEquals("RXA[2]-5-2", "RXA", map.getSegmentNameFromLocator(seg2));
-    assertEquals("RXA", "RXA", map.getSegmentNameFromLocator(seg3));
-
   }
 
   public void testSegmentCount() {
@@ -267,19 +205,10 @@ public class HL7MessageMapTest {
   }
 
   @Test
-  public void testGetSegmentIndexFromLocation() {
-    String loc = "RXR[1]-1~1-1-1";
-    int idx = map.getSegmentIndexFromLocation(loc);
-    assertEquals(loc, 1, idx);
-  }
-
-
-  @Test
   public void testCrazyAmpersand() {
 //		RXA-16?
-    String rxa16 = map.get("RXA-17-2");
+    String rxa16 = map.getValue("RXA-17-2");
     assertEquals("RXA-17-2 - MSD^Merck &Co.^MVX", "Merck &Co.", rxa16);
-
   }
 
   @Test
@@ -300,8 +229,8 @@ public class HL7MessageMapTest {
   }
 
   @Test
-  public void testAbsoluteGet() {
-    String value = map.getAtIndex("OBX-5", 5, 1);
+  public void testLineGet() {
+    String value = map.getValue("OBX-5", 5, 1);
     assertEquals("vfc obx", "V02", value);
   }
 
@@ -326,134 +255,123 @@ public class HL7MessageMapTest {
   }
 
   @Test
-  public void testRelativeAndAbsoluteIndexing() {
-    int absolute = 4;//Absolute indexes are zero based.
-    int relative = 1;
+  public void testIndexing() {
+    int line = 5;//lines are one based.
+    int sequence = 1;
     //should get 1 as the relative index of absolute index 5.
-    int calculateRelative = map.getSegmentOrdinalFromAbsoluteIndex(absolute);
-
+    int calculateSequence = map.getSequenceFromLine(line);
     //should get 4 as the absolute index of relative index 1.
-    int calculateAbsolute = map.getAbsoluteIndexForLocationOrdinal("RXA", relative);
+    int calculateLine = map.getLineFromSequence("RXA", sequence);
+    assertEquals("sequence from line", sequence, calculateSequence);
+    assertEquals("line from sequence", line, calculateLine);
+  }
 
-    assertEquals("Relative from absolute", relative, calculateRelative);
-    assertEquals("Absolute from relative", absolute, calculateAbsolute);
+  @Test
+  public void testThisToo() {
+    int seq = map.getSequenceFromLine("RXA", 5);
+    assertEquals(1,seq);
+
+    seq = bigMap.getSequenceFromLine("RXA", 13);
+    assertEquals(2,seq);
+
   }
 
 
   @Test
-  public void testAbsoluteSegmentIndex() {
+  public void testSegmentIndex() {
     //First test getting it from the segment.
-    int absolute = map.getAbsoluteIndexForSegment("OBX", 3);
-    assertEquals("Third OBX is in absolute index of...", 11, absolute);
+    int line = map.getLineFromSequence("OBX", 3);
+    assertEquals("Third OBX is in line ", 12, line);
 
-    absolute = map.getAbsoluteIndexForSegment("OBX", 2);
-    assertEquals("second OBX is in absolute index of...", 8, absolute);
+    line = map.getLineFromSequence("OBX", 2);
+    assertEquals("second OBX is in in line ", 9, line);
 
-    absolute = map.getAbsoluteIndexForSegment("RXA", 1);
-    assertEquals("first RXA..", 4, absolute);
+    line = map.getLineFromSequence("RXA", 1);
+    assertEquals("first RXA ", 5, line);
 
-    //From locator.
-    absolute = map.getAbsoluteIndexForLocationOrdinal("OBX-3", 3);
-    assertEquals("Third OBX is in absolute index of...", 11, absolute);
+    line = map.getLineFromSequence("OBX-3", 3);
+    assertEquals("Third OBX is in line ", 12, line);
 
-    absolute = map.getAbsoluteIndexForLocationOrdinal("OBX-3", 2);
-    assertEquals("second OBX is in absolute index of...", 8, absolute);
+    line = map.getLineFromSequence("OBX-3", 2);
+    assertEquals("second OBX is in line ", 9, line);
 
-    absolute = map.getAbsoluteIndexForLocationOrdinal("OBX-3.1", 2);
-    assertEquals("second OBX is in absolute index of...", 8, absolute);
+    line = map.getLineFromSequence("OBX-3.1", 2);
+    assertEquals("second OBX is in line ", 9, line);
 
-    absolute = map.getAbsoluteIndexForLocationOrdinal("OBX-3-1", 2);
-    assertEquals("second OBX is in absolute index of...", 8, absolute);
-
+    line = map.getLineFromSequence("OBX-3.1", 2);
+    assertEquals("second OBX is in line ", 9, line);
 
   }
-
-  @Test
-  public void generateLocatorForIndexTest() {
-    String locator = map.generateLocatorForIndex("OBX-3", 1, 2);
-    assertEquals("OBX[1]-3~2-1-1", locator);
-    locator = map.generateLocatorForIndex("OBX-3-1", 1, 2);
-    assertEquals("OBX[1]-3~2-1-1", locator);
-    locator = map.generateLocatorForIndex("OBX-3.1", 1, 2);
-    assertEquals("OBX[1]-3~2-1-1", locator);
-    locator = map.generateLocatorForIndex("OBX-3-2-4", 1, 9);
-    assertEquals("OBX[1]-3~9-2-4", locator);
-    locator = map.generateLocatorForIndex("OBX-3.2.4", 1, 9);
-    assertEquals("OBX[1]-3~9-2-4", locator);
-  }
-
-  @Test
-  public void testFindAllSegmentRepsWithValues() {
-    //Only the second RXA has an RXA-2 value.
-    List<Integer> resultList = map
-        .findAllIndexesForSegmentWithValues(new String[]{"X", "Y"}, "RXA-2", 1);
-    assertEquals("Should have one entry in the list", 1, resultList.size());
-    System.out.println("resultList: " + resultList);
-    assertTrue("Indexes should hold the value 2. ", resultList.contains(new Integer(2)));
-
-    resultList = map.findAllIndexesForSegmentWithValues(new String[]{"64994-7"}, "OBX-3", 1);
-    assertEquals("OBX-3 64994-7", 3, resultList.size());
-
-    resultList.removeAll(Arrays.asList(new Integer[]{1, 2, 3}));
-    assertEquals("the result list should have 1,2,3", 0, resultList.size());
-
-    resultList = map.findAllSegmentRepsWithValuesWithinRange(new String[]{"X"}, "RXA-2", 3, 3, 1);
-    assertEquals("shouldn't find any", 0, resultList.size());
-
-    resultList = map.findAllSegmentRepsWithValuesWithinRange(new String[]{"X"}, "RXA-2", 2, 3, 1);
-    assertTrue("Should have 2", resultList.contains(new Integer(2)));
-    assertEquals("Should only have one entry", 1, resultList.size());
-
-    resultList = map.findAllSegmentRepsWithValuesWithinRange(new String[]{"X"}, "RXA-2", 1, 2, 1);
-    assertTrue("Should have 2 (starting with 1)", resultList.contains(new Integer(2)));
-    assertEquals("Should only have one entry (starting with 1)", 1, resultList.size());
-
-    resultList = map.findAllSegmentRepsWithValuesWithinRange(new String[]{"X"}, "RXA-2", 2, 4, 1);
-    assertTrue("Should have 2 (2-4)", resultList.contains(new Integer(2)));
-    assertEquals("Should only have one entry (2-4)", 1, resultList.size());
-
-  }
+//
+//  @Test
+//  public void testFindAllSegmentRepsWithValues() {
+//    //Only the second RXA has an RXA-2 value.
+//    List<Integer> resultList = map
+//        .findAllIndexesForSegmentWithValues(new String[]{"X", "Y"}, "RXA-2");
+//    assertEquals("Should have one entry in the list", 1, resultList.size());
+//    System.out.println("resultList: " + resultList);
+//    assertTrue("Indexes should hold the value 2. ", resultList.contains(new Integer(2)));
+//
+//    resultList = map.findAllIndexesForSegmentWithValues(new String[]{"64994-7"}, "OBX-3");
+//    assertEquals("OBX-3 64994-7", 3, resultList.size());
+//
+//    resultList.removeAll(Arrays.asList(new Integer[]{1, 2, 3}));
+//    assertEquals("the result list should have 1,2,3", 0, resultList.size());
+//
+//    resultList = map.findAllSegmentRepsWithValuesWithinRange(new String[]{"X"}, "RXA-2", 3, 3, 1);
+//    assertEquals("shouldn't find any", 0, resultList.size());
+//
+//    resultList = map.findAllSegmentRepsWithValuesWithinRange(new String[]{"X"}, "RXA-2", 2, 3, 1);
+//    assertTrue("Should have 2", resultList.contains(new Integer(2)));
+//    assertEquals("Should only have one entry", 1, resultList.size());
+//
+//    resultList = map.findAllSegmentRepsWithValuesWithinRange(new String[]{"X"}, "RXA-2", 1, 2, 1);
+//    assertTrue("Should have 2 (starting with 1)", resultList.contains(new Integer(2)));
+//    assertEquals("Should only have one entry (starting with 1)", 1, resultList.size());
+//
+//    resultList = map.findAllSegmentRepsWithValuesWithinRange(new String[]{"X"}, "RXA-2", 2, 4, 1);
+//    assertTrue("Should have 2 (2-4)", resultList.contains(new Integer(2)));
+//    assertEquals("Should only have one entry (2-4)", 1, resultList.size());
+//
+//  }
 
   @Test
   public void testGetSegmentName() {
-    String seg = map.getSegmentAtAbsoluteIndex(5);
+    String seg = map.getSegIdAtLine(5);
     assertEquals("rxa at 5", "RXA", seg);
 
-    seg = map.getSegmentAtAbsoluteIndex(6);
+    seg = map.getSegIdAtLine(6);
     assertEquals("OBX at 6", "OBX", seg);
 
-    seg = map.getSegmentAtAbsoluteIndex(1);
+    seg = map.getSegIdAtLine(1);
     assertEquals("MSH at 1", "MSH", seg);
 
-    seg = map.getSegmentAtAbsoluteIndex(3);
+    seg = map.getSegIdAtLine(3);
     assertEquals("Nk1 at 3", "NK1", seg);
   }
 
   @Test
   public void testGetNextVaccinationStartingPoint() {
-    int start = map.getNextImmunizationStartingIndex(0);
-    assertEquals("First", 3, start);
+    int start = map.getNextImmunizationAfterLine(0);
+    assertEquals("First", 4, start);
 
-    int next = map.getNextImmunizationStartingIndex(start);
-    assertEquals("second", 6, next);
+    int next = map.getNextImmunizationAfterLine(start);
+    assertEquals("second", 7, next);
 
-    int third = map.getNextImmunizationStartingIndex(next);
-    assertEquals("third", 10, third);
-
-    int fourth = map.getNextImmunizationStartingIndex(third);
-    assertEquals("fourth", 12, fourth);
+    int third = map.getNextImmunizationAfterLine(next);
+    assertEquals("third", 11, third);
 
   }
 
   @Test
   public void testFindFieldRepWithValue() {
 
-    String loc = "PID-5-1";
+    String loc = "PID-5.1";
     String expected = "FIRSTNAME";
     int rep = map.findFieldRepWithValue(expected, loc, 1);
-    assertEquals(loc + expected, 1, rep);
+    assertEquals(loc +" "+ expected, 1, rep);
 
-    loc = "RXA-5-3";
+    loc = "RXA-5.3";
     expected = "CVX";
     rep = map.findFieldRepWithValue(expected, loc, 1);
     assertEquals(loc + expected, 1, rep);
@@ -463,12 +381,12 @@ public class HL7MessageMapTest {
     rep = map.findFieldRepWithValue(expected, loc, 1);
     assertEquals(loc + expected, 2, rep);
 
-    loc = "PID-5-1";
+    loc = "PID-5.1";
     expected = "COOLNAME";
     rep = map.findFieldRepWithValue(expected, loc, 1);
     assertEquals(loc + expected, 2, rep);
 
-    loc = "PID-5-1";
+    loc = "PID-5.1";
     expected = "NOTAVALUE";
     rep = map.findFieldRepWithValue(expected, loc, 1);
     assertEquals(loc + expected, 0, rep);
@@ -483,7 +401,7 @@ public class HL7MessageMapTest {
     rep = map.findFieldRepWithValue(expected, loc, 1);
     assertEquals(loc + expected, 0, rep);
 
-    loc = "PID-5-1";
+    loc = "PID-5.1";
     expected = null;
     rep = map.findFieldRepWithValue(expected, loc, 1);
     assertEquals(loc + expected, 0, rep);
@@ -492,79 +410,16 @@ public class HL7MessageMapTest {
 
   @Test
   public void testIndexTheFieldRep() {
+    this.checkReps("PID[1]-5" , 2);
+    this.checkReps("RXR[1]-1" , 1);
+    this.checkReps("RXR[99]-1", null);
+  }
 
+  private void checkReps(String field, Integer repsIN) {
     Map<String, Integer> fieldRepMap = map.fieldRepetitions;
-
-    String field = "PID[1]-5";
-    Integer reps = fieldRepMap.get(field);
-    assertEquals(field, new Integer(2), reps);
-
-    field = "RXR[9]-1";
-    reps = fieldRepMap.get(field);
-    assertEquals(field, new Integer(1), reps);
-
-    field = "RXR[99]-1";
-    reps = fieldRepMap.get(field);
-    assertEquals(field, null, reps);
-  }
-
-  @Test
-  public void testGetFieldRepFromLoc() {
-    String loc = "RXA[1]-5~3-1-1";
-    int rep = map.getFieldRep(loc);
-    assertEquals(loc, 3, rep);
-
-    loc = "RXA[1]-5~5-1-1";
-    rep = map.getFieldRep(loc);
-    assertEquals(loc, 5, rep);
-
-    loc = "RXA-5~9-1-1";
-    rep = map.getFieldRep(loc);
-    assertEquals(loc, 9, rep);
-
-    loc = "RXA-5~0-1-1";
-    rep = map.getFieldRep(loc);
-    assertEquals(loc, 0, rep);
-
-    loc = "RXA-5";
-    rep = map.getFieldRep(loc);
-    assertEquals(loc, 1, rep);
-
-    loc = "RXA";
-    rep = map.getFieldRep(loc);
-    assertEquals(loc, 1, rep);
-
-  }
-
-  @Test
-  public void testGetFieldLocFromLoc() {
-    String loc = "RXA[1]-5~3-1-1";
-    String fieldLoc = map.getFieldLocator(loc);
-    assertEquals(loc, "RXA[1]-5", fieldLoc);
-
-    loc = "RXA[1]-5~5-1-1";
-    fieldLoc = map.getFieldLocator(loc);
-    assertEquals(loc, "RXA[1]-5", fieldLoc);
-
-    loc = "RXA-5~9-1-1";
-    fieldLoc = map.getFieldLocator(loc);
-    assertEquals(loc, "RXA-5", fieldLoc);
-
-    loc = "RXA-5~0-1-1";
-    fieldLoc = map.getFieldLocator(loc);
-    assertEquals(loc, "RXA-5", fieldLoc);
-
-    loc = "RXA-5";
-    fieldLoc = map.getFieldLocator(loc);
-    assertEquals(loc, loc, fieldLoc);
-
-    loc = "RXA";
-    fieldLoc = map.getFieldLocator(loc);
-    assertEquals(loc, "RXA", fieldLoc);
-
-    loc = null;
-    fieldLoc = map.getFieldLocator(loc);
-    assertEquals(loc, null, fieldLoc);
-
+    Hl7Location l = new Hl7Location(field);
+    String fieldLoc = l.getFieldLoc();
+    Integer reps = fieldRepMap.get(fieldLoc);
+    assertEquals(field, repsIN, reps);
   }
 }

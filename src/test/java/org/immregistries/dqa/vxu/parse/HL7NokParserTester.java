@@ -18,11 +18,11 @@ public class HL7NokParserTester {
 
   private static final String NOKS_MSG =
       //@formatter:off
-          /* 0 */   "MSH|^~\\&|||||20160413161526-0400||VXU^V04^VXU_V04|2bK5-B.07.14.1Nx|P|2.5.1|\r"
-          /* 1 */ + "PID|||1^^^AIRA-TEST^MR||Lam^aaaaa^T^^^^L||20030415|M||2106-3^White^HL70005|215 Armstrong Cir^^Brethren^MI^49619^USA^P~215 Armstrong Cir^^Brethren^MI^49619^USA^P~^^^^^^BDL^^123||^PRN^PH^^^111^5554444|||||||||2186-5^not Hispanic or Latino^HL70005|\r"
-          /* 2 */ + "NK1|0|Lam^yyyyy^^^^^L|MTH^Mother^HL70063|32 Prescott Street Ave^^Warwick^MA^02452^USA^L|^PRN^PH^^^111^5553333\r"
-          /* 3 */ + "NK1|1|Lam^xxxxx^^^^^L|FTH^Father^HL70063|99 Prescott Street Ave^^Warwicks^MI^48864^USA^L|^PRN^PH^^^111^5552222\r"
-          /* 4 */ + "NK1|2|Lam^sssss^^^^^L|GRP^Grand Parent^HL70063|11 Prescott Street Ave^^Warwicks^MI^48864^USA^L|^PRN^PH^^^111^5551111\r"
+          /* 1 */   "MSH|^~\\&|||||20160413161526-0400||VXU^V04^VXU_V04|2bK5-B.07.14.1Nx|P|2.5.1|\r"
+          /* 2 */ + "PID|||1^^^AIRA-TEST^MR||Lam^aaaaa^T^^^^L||20030415|M||2106-3^White^HL70005|215 Armstrong Cir^^Brethren^MI^49619^USA^P[215] Armstrong Cir^^Brethren^MI^49619^USA^P~^^^^^^BDL^^123||^PRN^PH^^^111^5554444|||||||||2186-5^not Hispanic or Latino^HL70005|\r"
+          /* 3 */ + "NK1|0|Lam^yyyyy^^^^^L|MTH^Mother^HL70063|32 Prescott Street Ave^^Warwick^MA^02452^USA^L|^PRN^PH^^^111^5553333\r"
+          /* 4 */ + "NK1|1|Lam^xxxxx^^^^^L|FTH^Father^HL70063|99 Prescott Street Ave^^Warwicks^MI^48864^USA^L|^PRN^PH^^^111^5552222\r"
+          /* 5 */ + "NK1|2|Lam^sssss^^^^^L|GRP^Grand Parent^HL70063|11 Prescott Street Ave^^Warwicks^MI^48864^USA^L|^PRN^PH^^^111^5551111\r"
 ;
   //@formatter:on
   private HL7MessageMap map = mapParser.getMessagePartMap(NOKS_MSG);
@@ -99,35 +99,35 @@ public class HL7NokParserTester {
     DqaNextOfKin nok = noks.get(2);
     MetaFieldInfo mfi = nok.getMetaFieldInfo(VxuField.NEXT_OF_KIN_NAME_FIRST);
     assertEquals("sssss", mfi.getValue());
-    assertEquals("NK1[4]-2~1-2-1", mfi.getHl7Location().getMessageMapLocator());
+    assertEquals("NK1[3]-2[1].2.1", mfi.getHl7Location().toString());
     assertEquals(3, mfi.getHl7Location().getSegmentSequence());
     mfi = nok.getMetaFieldInfo(VxuField.NEXT_OF_KIN_RELATIONSHIP);
     assertEquals("GRP", mfi.getValue());
-    assertEquals("NK1[4]-3~1-1-1", mfi.getHl7Location().getMessageMapLocator());
+    assertEquals("NK1[3]-3[1].1.1", mfi.getHl7Location().toString());
     assertEquals(3, mfi.getHl7Location().getSegmentSequence());
     mfi = nok.getMetaFieldInfo(VxuField.NEXT_OF_KIN_NAME_LAST);
     assertEquals("Lam", mfi.getValue());
-    assertEquals("NK1[4]-2~1-1-1", mfi.getHl7Location().getMessageMapLocator());
+    assertEquals("NK1[3]-2[1].1.1", mfi.getHl7Location().toString());
     assertEquals(3, mfi.getHl7Location().getSegmentSequence());
     mfi = nok.getMetaFieldInfo(VxuField.NEXT_OF_KIN_ADDRESS_STREET);
     assertEquals("11 Prescott Street Ave", mfi.getValue());
-    assertEquals("NK1[4]-4~1-1-1", mfi.getHl7Location().getMessageMapLocator());
+    assertEquals("NK1[3]-4[1].1.1", mfi.getHl7Location().toString());
     assertEquals(3, mfi.getHl7Location().getSegmentSequence());
     mfi = nok.getMetaFieldInfo(VxuField.NEXT_OF_KIN_ADDRESS_CITY);
     assertEquals("Warwicks", mfi.getValue());
-    assertEquals("NK1[4]-4~1-3-1", mfi.getHl7Location().getMessageMapLocator());
+    assertEquals("NK1[3]-4[1].3.1", mfi.getHl7Location().toString());
     assertEquals(3, mfi.getHl7Location().getSegmentSequence());
     mfi = nok.getMetaFieldInfo(VxuField.NEXT_OF_KIN_ADDRESS_STATE);
     assertEquals("MI", mfi.getValue());
-    assertEquals("NK1[4]-4~1-4-1", mfi.getHl7Location().getMessageMapLocator());
+    assertEquals("NK1[3]-4[1].4.1", mfi.getHl7Location().toString());
     assertEquals(3, mfi.getHl7Location().getSegmentSequence());
     mfi = nok.getMetaFieldInfo(VxuField.NEXT_OF_KIN_ADDRESS_ZIP);
     assertEquals("48864", mfi.getValue());
-    assertEquals("NK1[4]-4~1-5-1", mfi.getHl7Location().getMessageMapLocator());
+    assertEquals("NK1[3]-4[1].5.1", mfi.getHl7Location().toString());
     assertEquals(3, mfi.getHl7Location().getSegmentSequence());
     mfi = nok.getMetaFieldInfo(VxuField.NEXT_OF_KIN_ADDRESS_COUNTRY);
     assertEquals("USA", mfi.getValue());
-    assertEquals("NK1[4]-4~1-6-1", mfi.getHl7Location().getMessageMapLocator());
+    assertEquals("NK1[3]-4[1].6.1", mfi.getHl7Location().toString());
     assertEquals(3, mfi.getHl7Location().getSegmentSequence());
   }
 }

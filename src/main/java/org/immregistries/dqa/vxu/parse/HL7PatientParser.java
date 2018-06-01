@@ -62,9 +62,6 @@ import static org.immregistries.dqa.vxu.VxuField.PATIENT_VFC_EFFECTIVE_DATE;
 import static org.immregistries.dqa.vxu.VxuField.PATIENT_VFC_STATUS;
 import static org.immregistries.dqa.vxu.VxuField.PATIENT_WIC_ID;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 import org.immregistries.dqa.hl7util.model.MetaFieldInfo;
 import org.immregistries.dqa.hl7util.parser.HL7MessageMap;
 import org.immregistries.dqa.vxu.DqaPatient;
@@ -79,16 +76,16 @@ public enum HL7PatientParser {
 
   public DqaPatient getPatient(HL7MessageMap map) {
     MetaParser mp = new MetaParser(map);
-    int index = map.getIndexForSegmentName("PID");
+    int line = map.getLineForSegmentName("PID");
     DqaPatient patient = new DqaPatient();
 
-    List<String> keyList = new ArrayList<>(map.getLocationValueMap().keySet());
-    Collections.sort(keyList);
+//    List<String> keyList = new ArrayList<>(map.getLocationValueMap().keySet());
+//    Collections.sort(keyList);
 
     patient.setFields(
         //TODO: this needs to build an address, and then set the address to the patient.
         //OTHERWISE it won't save more than one in the map.
-        mp.mapAllRepetitions(index,
+        mp.mapAllRepetitions(line,
             PATIENT_ADDRESS_STREET,
             PATIENT_ADDRESS_STREET2,
             PATIENT_ADDRESS_CITY,
@@ -98,7 +95,7 @@ public enum HL7PatientParser {
             PATIENT_ADDRESS_COUNTRY,
             PATIENT_ADDRESS_COUNTY));
 
-    patient.setFields(mp.mapValues(index,
+    patient.setFields(mp.mapValues(line,
         PATIENT_PHONE
         , PATIENT_PHONE_AREA_CODE
         , PATIENT_PHONE_LOCAL_NUMBER
@@ -133,28 +130,28 @@ public enum HL7PatientParser {
         , PATIENT_PROTECTION_INDICATOR
         , PATIENT_PUBLICITY_CODE));
 
-    patient.setField(mp.mapFieldWhere(index, PATIENT_EMAIL, "PID-13.2", "NET"));
-    patient.setField(mp.mapFieldWhere(index, PATIENT_REGISTRY_ID, "PID-3.5", "SR"));
-    patient.setField(mp.mapFieldWhere(index, PATIENT_MEDICAID_NUMBER, "PID-3.5", "MA"));
+    patient.setField(mp.mapFieldWhere(line, PATIENT_EMAIL, "PID-13.2", "NET"));
+    patient.setField(mp.mapFieldWhere(line, PATIENT_REGISTRY_ID, "PID-3.5", "SR"));
+    patient.setField(mp.mapFieldWhere(line, PATIENT_MEDICAID_NUMBER, "PID-3.5", "MA"));
 
-    MetaFieldInfo mfi = mp.mapFieldWhere(index, PATIENT_SUBMITTER_ID, "PID-3.5", "MR");
+    MetaFieldInfo mfi = mp.mapFieldWhere(line, PATIENT_SUBMITTER_ID, "PID-3.5", "MR");
     if (mfi != null) {//This means it found MR!
       patient.setField(mfi);
-      patient.setField(mp.mapFieldWhere(index, PATIENT_SUBMITTER_ID_AUTHORITY, "PID-3.5", "MR"));
-      patient.setField(mp.mapFieldWhere(index, PATIENT_SUBMITTER_ID_TYPE_CODE, "PID-3.5", "MR"));
+      patient.setField(mp.mapFieldWhere(line, PATIENT_SUBMITTER_ID_AUTHORITY, "PID-3.5", "MR"));
+      patient.setField(mp.mapFieldWhere(line, PATIENT_SUBMITTER_ID_TYPE_CODE, "PID-3.5", "MR"));
     } else {
-      patient.setField(mp.mapFieldWhere(index, PATIENT_SUBMITTER_ID, "PID-3.5", "PI"));
-      patient.setField(mp.mapFieldWhere(index, PATIENT_SUBMITTER_ID_AUTHORITY, "PID-3.5", "PI"));
-      patient.setField(mp.mapFieldWhere(index, PATIENT_SUBMITTER_ID_TYPE_CODE, "PID-3.5", "PI"));
+      patient.setField(mp.mapFieldWhere(line, PATIENT_SUBMITTER_ID, "PID-3.5", "PI"));
+      patient.setField(mp.mapFieldWhere(line, PATIENT_SUBMITTER_ID_AUTHORITY, "PID-3.5", "PI"));
+      patient.setField(mp.mapFieldWhere(line, PATIENT_SUBMITTER_ID_TYPE_CODE, "PID-3.5", "PI"));
     }
 
-    patient.setField(mp.mapFieldWhere(index, PATIENT_SSN, "PID-3.5", "SS"));
-    patient.setField(mp.mapFieldWhere(index, PATIENT_WIC_ID, "PID-3.5", "WC"));
-    patient.setField(mp.mapFieldWhere(index, PATIENT_BIRTH_COUNTY, "PID-11.7", "BDL"));
+    patient.setField(mp.mapFieldWhere(line, PATIENT_SSN, "PID-3.5", "SS"));
+    patient.setField(mp.mapFieldWhere(line, PATIENT_WIC_ID, "PID-3.5", "WC"));
+    patient.setField(mp.mapFieldWhere(line, PATIENT_BIRTH_COUNTY, "PID-11.7", "BDL"));
 
-    int responsibleIndex = map
+    int responsibleLine = map
         .findFirstSegmentWhereFieldHas("NK1-3.1", NokRelationship.getResponsibleCodes());
-    patient.setFields(mp.mapValues(responsibleIndex
+    patient.setFields(mp.mapValues(responsibleLine
         , PATIENT_GUARDIAN_NAME_FIRST
         , PATIENT_GUARDIAN_NAME_MIDDLE
         , PATIENT_GUARDIAN_NAME_LAST

@@ -4,6 +4,8 @@ public class HL7MessagePart {
 
   private int segmentIdx = -1;
 
+  private int segmentSeq = -1;
+
   private int fieldRepetitionNbr = -1;
 
   private String valueTx;
@@ -14,8 +16,8 @@ public class HL7MessagePart {
 
   }
 
-  public HL7MessagePart(int segIdx, String segName) {
-    this.segmentIdx = segIdx;
+  public HL7MessagePart(int line, String segName) {
+    this.segmentIdx = line;
     this.locationCd = segName;
 //		if (locationCd.length() > 20) System.out.println(locationCd);
   }
@@ -24,6 +26,14 @@ public class HL7MessagePart {
     this(segIdx, segName);
     this.locationCd = locationCd + "-" + fieldNum;
 //		if (locationCd.length() > 20) System.out.println(locationCd);
+  }
+
+  public int getSegmentSeq() {
+    return segmentSeq;
+  }
+
+  public void setSegmentSeq(int segmentSeq) {
+    this.segmentSeq = segmentSeq;
   }
 
   /**
@@ -62,15 +72,15 @@ public class HL7MessagePart {
     this.locationCd = location;
   }
 
-
-  /* (non-Javadoc)
-   * @see java.lang.Object#toString()
-   */
   @Override
   public String toString() {
-    return "HL7MessageEAV [segmentIndex=" + segmentIdx
-        + ", fieldRepetition=" + fieldRepetitionNbr + ", value=" + valueTx
-        + ", locationCd=" + locationCd + "]";
+    return "HL7MessagePart{" +
+        "segmentIdx=" + segmentIdx +
+        ", segmentSeq=" + segmentSeq +
+        ", fieldRepetitionNbr=" + fieldRepetitionNbr +
+        ", valueTx='" + valueTx + '\'' +
+        ", locationCd='" + locationCd + '\'' +
+        '}';
   }
 
   /* (non-Javadoc)

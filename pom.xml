@@ -6,7 +6,7 @@
 
   <groupId>org.immregistries</groupId>
   <artifactId>dqa-hl7-utility</artifactId>
-  <version>2018.4</version>
+  <version>2018.5-BETA</version>
   <packaging>jar</packaging>
 
   <name>HL7 Utility Package for DQA</name>
@@ -16,7 +16,6 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven.compiler.target>1.7</maven.compiler.target>
     <maven.compiler.source>1.7</maven.compiler.source>
-
   </properties>
 
   <dependencies>

@@ -2,6 +2,7 @@ package org.immregistries.dqa.vxu.parse;
 
 import java.util.ArrayList;
 import java.util.List;
+import org.apache.commons.lang3.StringUtils;
 import org.immregistries.dqa.hl7util.model.Hl7Location;
 import org.immregistries.dqa.hl7util.model.MetaFieldInfo;
 import org.immregistries.dqa.hl7util.parser.HL7MessageMap;
@@ -16,24 +17,26 @@ public class MetaParser {
   }
 
 
-  public List<MetaFieldInfo> mapValues(int segmentIndex, VxuField... vxuField) {
+  List<MetaFieldInfo> mapValues(int line, VxuField... vxuField) {
     List<MetaFieldInfo> mfiList = new ArrayList<>();
     for (VxuField field : vxuField) {
-      mfiList.add(mapValue(segmentIndex, field));
+      if (field.getHl7Locator() != null) {
+        mfiList.add(mapValue(line, field));
+      }
     }
     return mfiList;
   }
 
-  MetaFieldInfo mapValue(int absoluteSegmentIndex, VxuField vxuField) {
-    if (absoluteSegmentIndex < 0) {
-      return new MetaFieldInfo(null, vxuField, -1, absoluteSegmentIndex);
+  private MetaFieldInfo mapValue(int line, VxuField vxuField) {
+    if (line < 0 || StringUtils.isBlank(vxuField.getHl7Locator())) {
+      return new MetaFieldInfo(null, vxuField, -1, line);
     }
 
-    int positionId = map.getSegmentOrdinalFromAbsoluteIndex(absoluteSegmentIndex + 1);
-    Hl7Location hl7Location = new Hl7Location(vxuField.getHl7Locator(),
-        absoluteSegmentIndex + 1, positionId);
+    Hl7Location hl7Location = new Hl7Location(vxuField.getHl7Locator(), line);
+    int sequence = map.getSequenceFromLine(hl7Location.getSegmentId(), line);
+    hl7Location.setSegmentSequence(sequence);
     String value = this.getValue(hl7Location);
-    return new MetaFieldInfo(value, vxuField, positionId, absoluteSegmentIndex);
+    return new MetaFieldInfo(value, vxuField, sequence, line);
   }
 
   /**
@@ -46,14 +49,14 @@ public class MetaParser {
    * @return a single MetaFieldInfo object, with the value specified for the first code table found,
    * searching in the order presented in the array sent in.
    */
-  public MetaFieldInfo mapCodedValue(int absoluteSegmentIndex, VxuField vxuField,
+  public MetaFieldInfo mapCodedValue(int lineNumber, VxuField vxuField,
       String... searchForCodeTables) {
     //If no code table is sent in to search for, then don't even try.
     if (searchForCodeTables == null || searchForCodeTables.length < 1) {
       return null;
     }
 
-    Hl7Location hl7Location = getLocationfor(vxuField, absoluteSegmentIndex);
+    Hl7Location hl7Location = getLocationfor(vxuField, lineNumber);
     hl7Location.setComponentNumber(1);
     String value = getValue(hl7Location);
     hl7Location.setComponentNumber(3);
@@ -92,40 +95,26 @@ public class MetaParser {
   }
 
   String getValue(Hl7Location hl7Location) {
-    return map.getAtLocation(hl7Location);
+    return map.getValue(hl7Location);
   }
 
-  public MetaFieldInfo mapValueForTypes(int absoluteSegmentIndex, VxuField vxuField,
-      String selectHL7Ref, String... searchForCodeTypes) {
-    for (String type : searchForCodeTypes) {
-      MetaFieldInfo mfi = mapFieldWhere(absoluteSegmentIndex, vxuField, selectHL7Ref, type);
-      if (mfi != null) {
-        return mfi;
-      }
-    }
-    return null;
+  private Hl7Location getLocationfor(VxuField vxuField, int line) {
+    return getLocationfor(vxuField.getHl7Locator(), line);
   }
 
-  Hl7Location getLocationfor(VxuField vxuField, int index) {
-    int positionId = map.getSegmentOrdinalFromAbsoluteIndex(index);
-    return getLocationfor(vxuField.getHl7Locator(), index);
+  private Hl7Location getLocationfor(String vxuFieldRef, int line) {
+    int segmentSequence = map.getSequenceFromLine(line);
+    return new Hl7Location(vxuFieldRef, line, segmentSequence);
   }
 
-  Hl7Location getLocationfor(String vxuFieldRef, int index) {
-    int positionId = map.getSegmentOrdinalFromAbsoluteIndex(index);
-    return new Hl7Location(vxuFieldRef, index + 1, positionId);
-  }
-
-  MetaFieldInfo mapFieldWhere(int absoluteSegmentIndex, VxuField vxuField, String selectHL7Ref,
+  MetaFieldInfo mapFieldWhere(int lineNumber, VxuField vxuField, String selectHL7Ref,
       String searchForCodeType) {
 
-    Hl7Location hl7Location = getLocationfor(selectHL7Ref, absoluteSegmentIndex);
-    selectHL7Ref = hl7Location.getMessageMapLocator();
-    int fieldRep = map
-        .findFieldRepWithValue(searchForCodeType, selectHL7Ref, hl7Location.getSegmentSequence());
+    Hl7Location hl7Location = getLocationfor(selectHL7Ref, lineNumber);
+    int fieldRep = map.findFieldRepWithValue(searchForCodeType, selectHL7Ref, hl7Location.getSegmentSequence());
 
     if (fieldRep > 0) {
-      Hl7Location loc = getLocationfor(vxuField, absoluteSegmentIndex);
+      Hl7Location loc = getLocationfor(vxuField, lineNumber);
       loc.setFieldRepetition(fieldRep);
       return createMetaField(vxuField, loc);
     }
@@ -133,23 +122,25 @@ public class MetaParser {
     return null;
   }
 
-  public List<MetaFieldInfo> mapAllRepetitions(int absoluteSegmentIndex, VxuField... vxuFields) {
+  List<MetaFieldInfo> mapAllRepetitions(int lineNumber, VxuField... vxuFields) {
     List<MetaFieldInfo> mfiList = new ArrayList<>();
     for (VxuField field : vxuFields) {
-      mfiList.addAll(mapRepetitions(absoluteSegmentIndex, field));
+      mfiList.addAll(mapRepetitions(lineNumber, field));
     }
     return mfiList;
   }
 
-  public List<MetaFieldInfo> mapRepetitions(int absoluteSegmentIndex, VxuField vxuField) {
+  private List<MetaFieldInfo> mapRepetitions(int lineNumber, VxuField vxuField) {
     int fieldCount = 0;
 
-    Hl7Location location = getLocationfor(vxuField, absoluteSegmentIndex);
-    fieldCount = map.getFieldRepCountFor(location.getMessageMapLocatorFieldOnly());
+    Hl7Location location = new Hl7Location(vxuField.getHl7Locator(), lineNumber);
+    location.setSegmentSequence(map.getSequenceFromLine(location.getSegmentId(), lineNumber));
+    fieldCount = map.getFieldRepCountFor(location);
 
     List<MetaFieldInfo> metaFieldInfoList = new ArrayList<>();
+
     for (int i = 1; i <= fieldCount; i++) {
-      Hl7Location el = getLocationfor(vxuField, absoluteSegmentIndex);
+      Hl7Location el = new Hl7Location(location.toString());
       el.setFieldRepetition(i);
       metaFieldInfoList.add(createMetaField(vxuField, el));
     }
@@ -157,9 +148,7 @@ public class MetaParser {
   }
 
   private MetaFieldInfo createMetaField(VxuField vxuField, Hl7Location hl7Location) {
-    String value;
-    String mapLocator = hl7Location.getMessageMapLocator();
-    value = map.get(mapLocator);
+    String value = map.getValue(hl7Location);
     MetaFieldInfo meta = new MetaFieldInfo();
     meta.setVxuField(vxuField);
     meta.setValue(value);

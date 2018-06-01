@@ -1,11 +1,12 @@
 package org.immregistries.dqa.hl7util.parser;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 import org.apache.commons.collections4.list.TreeList;
+import org.apache.commons.lang3.StringUtils;
 import org.immregistries.dqa.hl7util.model.Hl7Location;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,38 +15,26 @@ public class HL7MessageMap {
 
   protected static final Logger LOGGER = LoggerFactory.getLogger(HL7MessageMap.class);
 
-  private Map<String, String> locationValueMap = new HashMap<String, String>();
-
-  public Map<String, String> getLocationValueMap() {
-    return locationValueMap;
-  }
+  private Map<Hl7Location, String> locationValueMap = new TreeMap<>();
 
   /**
-   * This is a map of the segments, and their absolute indexes. So what we have here is:
-   * <li>1. in the keySet, a list of all the segments.
-   * <li>2. the absolute indexes of the message segments stored in the Integer
-   * <li>3. The ordinal for the segment, based on where the index lives in the list. This is in
-   * relation to all other segments of this type. <br />
+   * This is a map of the segments, and their lines. It contains:
+   * <li>1. a list of all the segments.
+   * <li>2. a list of segment line numbers
+   * <li>3. the sequence of the segments
+   * <br />
    * <p>
-   * <strong>Item number three requires a little extra explanation. </strong>
-   * <li>Ordinal is in relation to other segments of the same type in the message. So if there are 3
-   * OBX segments in a message, the ordinal positions will be 1, 2, and 3. But the absolute
-   * positions might be 5, 8, and 10.
-   * <li>If there are more than one of any type of segment, the order in which they appear in the
-   * list will be the ordinal position.
-   * <li>Going between ordinal and absolute is easy. The absolute position is stored in the Integer.
-   * The ordinal position is derived from the position in the list.
+   * <li>Going between sequence and line is easy. The line is stored in the Integer.
+   * The Sequence is derived from the position in the list.
    */
   private Map<String, List<Integer>> segmentIndexes = new HashMap<String, List<Integer>>();
-
   /**
    * This is a map of fields and repetitions. It does not contain components/subcomponents. the
    * locations in the key will contain: seg[absSegIdx]-fld
    */
-  Map<String, Integer> fieldRepetitions = new HashMap<String, Integer>();
+  Map<String, Integer> fieldRepetitions = new HashMap<>();
 
   private List<String> segmentMessageOrder = null;
-
 
   /**
    * The basic assumption is that this method will fill in any details you don't. The minimum
@@ -62,7 +51,7 @@ public class HL7MessageMap {
    *
    * <p>
    * If you do send something in, and it includes the segment number, it is expected that this is an
-   * index, not an ordinal.
+   * index, not an segment sequence.
    *
    * So here are what will be auto-filled in:
    * <ul>
@@ -75,38 +64,18 @@ public class HL7MessageMap {
    * @param location
    * @return
    */
-  public String get(String location) {
-    location = this.fillInLocation(location);
+  public String getValue(String location) {
+    Hl7Location locH7 = new Hl7Location(location);
+    return this.getValue(locH7);
+  }
 
-    // int idx = this.getSegmentIndexFromLocation(location);
-    //
-    // if (idx <= 0) {
-    // return null;
-    // }
-
-    // Gets the segment name...
-    // String seg = this.getSegmentNameFromLocator(location);
-    // Get a list of segment indexes...
-    // List<Integer> locs = segmentIndexes.get(seg);
-
-    // if (locs != null && locs.size() >= idx) {
-    // int absoluteIdx = locs.get(idx-1);
-    // String absoluteLocator = this.replaceSegIndexWith(location, absoluteIdx);
-    String value = locationValueMap.get(location);
+  public String getValue(Hl7Location hl7Location) {
+    String value = locationValueMap.get(hl7Location);
     LOGGER.trace("HL7MessageMap.get result: " + value);
     return value;
-    // }
-
-    // return null;
   }
-
-  // public String ordinalToAbsoluteLocator(String ordinalLocation) {
-  // //this means the segment number is an ordinal, rather than an index.
-  //
-  // }
-
   /**
-   * This assumes an absolute index for the segment.
+   * This assumes a line number for the segment.
    * <p>
    * For example, if there are two RXA segments, in absolute positions 7 and 11 , it would be
    * correct to send in either 7 or 11.
@@ -114,157 +83,41 @@ public class HL7MessageMap {
    * In the previous example sending in a 1 or 2 would be incorrect.
    *
    * @param locationCd
-   * @param segmentIndex
+   * @param lineNumber
    * @param fieldRepetition
    * @return
    */
-  public String getAtIndex(String locationCd, int segmentIndex, int fieldRepetition) {
-    String locator = generateLocatorForIndex(locationCd, segmentIndex, fieldRepetition);
-    return this.get(locator);
+  public String getValue(String locationCd, int lineNumber, int fieldRepetition) {
+    Hl7Location loc = new Hl7Location(locationCd);
+    int seq = this.getSequenceFromLine(lineNumber);
+    loc.setSegmentSequence(seq);
+    loc.setLine(lineNumber);
+    loc.setFieldRepetition(fieldRepetition);
+    return this.getValue(loc);
   }
 
-  public String getAtLocation(Hl7Location hl7Location) {
-    String locator = hl7Location.getMessageMapLocator();
-    return this.get(locator);
-  }
-
-  /**
-   * This assumes an absolute index for the segment, and it assumes you want the first field
-   * repetition.
-   * <p>
-   * For example, if there are two RXA segments, in absolute positions 7 and 11 , it would be
-   * correct to send in either 7 or 11.
-   * <p>
-   * In the previous example sending in a 1 or 2 would be incorrect.
-   *
-   * @param locationCd
-   * @param absoluteSegmentIndex
-   * @return
-   */
-  public String getAtIndex(String locationCd, int absoluteSegmentIndex) {
-    return getAtIndex(locationCd, absoluteSegmentIndex, 1);
-  }
-
-
-  /**
-   * <p>
-   * The intention of this method is to be able to request the nth iteration of a specific segment
-   * to find the given location.
-   * <p>
-   * For example, if there are two RXA segments, in absolute positions 7 and 11 , it would be
-   * correct to send in either 1 or 2.
-   * <p>
-   * In the previous example sending in a 7 or 11 would be incorrect.
-   *
-   * @param locationCd
-   * @param ordinal
-   * @param fieldRepetition
-   * @return
-   */
-  public String getAtOrdinal(String locationCd, int ordinal, int fieldRepetition) {
-    int absoluteSegIdx = getAbsoluteIndexForLocationOrdinal(locationCd, ordinal);
-    return this.getAtIndex(locationCd, absoluteSegIdx, fieldRepetition);
-  }
-
-  /**
-   * This assumes an absolute segment index coming in.
-   *
-   * @param locationCd
-   * @param segmentIndex
-   * @param fieldRepetition
-   * @return
-   */
-  protected String generateLocatorForIndex(String locationCd, int segmentIndex,
-      int fieldRepetition) {
-    String locator = replaceFieldRepWith(locationCd, fieldRepetition);
-    locator = replaceSegIndexWith(locator, segmentIndex);
-    locator = fillInComponentAndSubComponent(locator);
-    return locator;
-  }
-
-
-  /**
-   * This returns the segment index (absolute index) where the value resides.
-   *
-   * @param targetValue
-   * @param location
-   * @param fieldRep
-   * @return
-   */
-  public int findSegmentIndexWithValue(String targetValue, String location, int fieldRep) {
-
-    if (targetValue == null) {
-      return 0;
-    }
-
-    String segName = this.getSegmentNameFromLocator(location);
-    List<Integer> idxList = this.segmentIndexes.get(segName);
-
-    int i = 1;
-
-    String value = this.getAtIndex(location, i, fieldRep);
-
-    while (value != null) {
-
-      if (targetValue.equals(value)) {
-        return i;
-      }
-
-      value = this.getAtIndex(location, ++i, fieldRep);
-    }
-
-    return 0;
-  }
-
-  /**
-   * Returns a list of Segment INDEXES of segments which hold this value.
-   *
-   * @param targetValues
-   * @param location
-   * @param fieldRep
-   * @return
-   */
-  public List<Integer> findAllIndexesForSegmentWithValues(String[] targetValues, String location,
-      int fieldRep) {
-
-    String segment = this.getSegmentNameFromLocator(location);
-    List<Integer> segList = this.getIndexesForSegmentName(segment);
-
-    if (segList != null) {
-      int last = segList.size();
-      return findAllSegmentRepsWithValuesWithinRange(targetValues, location, 1, last, fieldRep);
-    } else {
-      return new ArrayList<Integer>();
-    }
-  }
-
-  public int getIndexForSegmentName(String segName) {
-    List<Integer> indexList = getIndexesForSegmentName(segName);
+  public int getLineForSegmentName(String segName) {
+    List<Integer> indexList = getLinesForSegmentName(segName);
     if (indexList.size() > 0) {
       return indexList.get(0);
     }
     return -1;
   }
 
-  public String unifyLocatorFormat(String location) {
-    //HL7 format uses a dot...  like NK1-15.1
-    //This will reformat to this format of NK1-15-1
-    if (location.contains(".")) {
-      return location.replaceAll("\\.", "-");
-    }
-    return location;
-  }
-
   public int findFirstSegmentWhereFieldHas(String location, String... searchCodes) {
     if (location == null || location.length() < 3) {
       return -1;
     }
-//    String standardizedLoc = unifyLocatorFormat(location);
-    String seg = this.getSegmentNameFromLocator(location);
-    List<Integer> segs = this.getIndexesForSegmentName(seg);
+
+    Hl7Location loc = new Hl7Location(location);
+    List<Integer> segs = this.getLinesForSegmentName(loc.getSegmentId());
+    int seq = 1;
     for (Integer i : segs) {
       //find rel code:
-      String value = this.getAtIndex(location, i);
+      loc.setLine(i);
+      loc.setSegmentSequence(seq++);
+
+      String value = this.getValue(loc);
       if (Arrays.asList(searchCodes).contains(value)) {
         return i;
       }
@@ -272,48 +125,12 @@ public class HL7MessageMap {
     return -1;
   }
 
-  public List<Integer> getIndexesForSegmentName(String segName) {
+  private List<Integer> getLinesForSegmentName(String segName) {
     List<Integer> indexes = this.segmentIndexes.get(segName);
     if (indexes == null) {
       return new TreeList<>();
     }
     return indexes;
-  }
-
-  /**
-   * Returns a list of segment ORDINALS of segments which hold this value.
-   * <p>
-   * Example - for RXA, a value of 1 would mean the first RXA in the message.
-   *
-   * @param targetValues
-   * @param location
-   * @param fieldRep
-   * @return
-   */
-  public List<Integer> findAllSegmentRepsWithValuesWithinRange(String[] targetValues,
-      String location, int ordinalSegStart, int ordinalSegStop, int fieldRep) {
-
-    List<Integer> list = new ArrayList<Integer>();
-
-    if (targetValues == null || targetValues.length == 0) {
-      return list;
-    }
-
-    List<String> valueList = Arrays.asList(targetValues);
-
-    int currentOrdinal = ordinalSegStart;
-
-    while (currentOrdinal <= ordinalSegStop) {
-      String value = this.getAtOrdinal(location, currentOrdinal, fieldRep);
-      LOGGER.trace("checking segment " + currentOrdinal + " for values in " + location
-          + " current value: " + value);
-      if (valueList.contains(value)) {
-        list.add(currentOrdinal);
-      }
-      currentOrdinal++;
-    }
-
-    return list;
   }
 
   /**
@@ -338,33 +155,28 @@ public class HL7MessageMap {
    *
    * @param targetValue
    * @param location
-   * @param segmentOrdinal
+   * @param segmentSequence
    * @return
    */
-  public int findFieldRepWithValue(String targetValue, String location, int segmentOrdinal) {
+  public int findFieldRepWithValue(String targetValue, String location, int segmentSequence) {
 
     if (location == null) {
       return 0;
     }
 
     int i = 1;
-
-    int absSegIdx = this.getAbsoluteIndexForLocationOrdinal(location, segmentOrdinal);
-    String filledLocator = this.generateLocatorForIndex(location, absSegIdx, 1);
-
-    String fieldLoc = this.getFieldLocator(filledLocator);
-    // LOGGER.debug("Is the fieldLoc busted? " + fieldLoc + " or Is the fieldRep map busted??? " +
-    // this.fieldRepetitions);
-    Integer fieldReps = getFieldRepCountFor(fieldLoc);
+    Hl7Location loc = new Hl7Location(location);
+    loc.setSegmentSequence(segmentSequence);
+    int line = this.getLineFromSequence(loc.getSegmentId(), segmentSequence);
+    loc.setLine(line);
+    Integer fieldReps = getFieldRepCountFor(loc);
 
     if (fieldReps == null) {
       return 0;
     }
 
     while (i <= fieldReps) {
-      String value = this.getAtIndex(location, absSegIdx, i);
-      // LOGGER.debug("findFieldRepWithValue Found["+value+"] in " + location + " seg: " +
-      // ordinalSegmentIndex + " rep: " + i);
+      String value = this.getValue(location, line, i);
       if ((targetValue != null && targetValue.equalsIgnoreCase(value))
           || (value == null && targetValue == null)) {
         return i;
@@ -375,143 +187,85 @@ public class HL7MessageMap {
     return 0;
   }
 
-  /**
-   * This expects a fully formed field with index like this:
-   * <ul>
-   * <li><code>seg[absSegIdx]-fld</li>
-   * </ul>
-   * <br />
-   * if you need it to build your locator call the other overloaded version of this method. <br />
-   *
-   * @param fieldLoc
-   * @return
-   */
-  public Integer getFieldRepCountFor(String fieldLoc) {
-    String filledField = addSegmentIndexIfMissing(fieldLoc);
-    // LOGGER.debug("getFieldRepsForField field[" + fieldLoc + "] translated to [" + filledField +
-    // "]");
-    Integer i = this.fieldRepetitions.get(filledField);
-    // LOGGER.debug("Got: " + i);
-    if (i == null) {
-      return 0;
+  public Integer getFieldRepCountFor(Hl7Location loc) {
+    Integer i = this.fieldRepetitions.get(loc.getFieldLoc());
+    return (i == null ? Integer.valueOf(0) : i);
+  }
+
+  public String reassemble() {
+    StringBuilder sb = new StringBuilder();
+    Map<String, StringBuilder> lineMap = new HashMap<>();
+    String lastSpotIsaw = "";
+    for (Hl7Location l : locationValueMap.keySet()) {
+      String spot = l.getSegmentId() + l.getSegmentSequence();
+
+      if (!spot.equals(lastSpotIsaw)) {
+        lineMap.put(spot, sb);
+        sb = new StringBuilder();
+        sb.append(l.getSegmentId());
+        sb.append("|");
+        lastSpotIsaw = spot;
+      }
+
+      Integer f = l.getFieldPosition();
+      Integer pipes = StringUtils.countMatches(sb.toString(), "|");
+      if (pipes < f) {
+        for (int piper = 0 ; piper < f - pipes; piper++) {
+          sb.append("|");
+        }
+      }
+
+      String value = this.locationValueMap.get(l);
+      sb.append(value);
+//      List<Integer> i = segmentIndexes.get(l.getSegmentId());
+//      Integer x = i.get(l.getSegmentSequence() - 1);
     }
-    return i;
+    lineMap.put(lastSpotIsaw, sb);
+
+    StringBuilder all = new StringBuilder();
+    for (StringBuilder s : lineMap.values()) {
+      all.append(s.toString());
+      all.append("\r");
+    }
+    return all.toString();
   }
 
   /**
-   * This expects a field, and a segment index.
-   *
-   * @param location
-   * @param segIndex
-   * @return
+   * Takes a value and locator and puts it in the map.
+   * @param loc
+   * @param value
    */
-  public Integer getFieldRepCountFor(String location, int segIndex) {
-    String filledLocator = this.generateLocatorForIndex(location, segIndex, 1);
-    String fieldLoc = this.getFieldLocator(filledLocator);
-    return getFieldRepCountFor(fieldLoc);
+  public void put(Hl7Location loc, String value) {
+    indexTheLineSegment(loc);
+    indexTheFieldRep(loc);
+    locationValueMap.put(loc, value);
   }
 
-  public void put(String locator, String value) {
-    LOGGER.trace("Putting " + locator + " value " + value);
-    locator = fillInLocation(locator);
-    indexTheLocatorSegment(locator);
-    indexTheFieldRep(locator);
-    locationValueMap.put(locator, value);
-  }
-
-  public void indexTheFieldRep(String locator) {
-    String fieldLocator = this.getFieldLocator(locator);
-    Integer fieldRep = this.getFieldRep(locator);
-    Integer reps = fieldRepetitions.get(fieldLocator);
+  private void indexTheFieldRep(Hl7Location loc) {
+    Integer fieldRep = loc.getFieldRepetition();
+    Integer reps = fieldRepetitions.get(loc.getFieldLoc());
     if (reps == null || reps < fieldRep) {
-      fieldRepetitions.put(fieldLocator, fieldRep);
+      fieldRepetitions.put(loc.getFieldLoc(), fieldRep);
     }
   }
 
-  protected String replaceFieldRepWith(String locator, int fieldRep) {
-
-    if (!locator.contains("~")) {
-      locator = fillInLocation(locator);
-    }
-    String newFieldRep = locator.replaceFirst("\\~\\d+", "~" + fieldRep);
-    LOGGER.trace("Transformed " + locator + " to " + newFieldRep);
-    return newFieldRep;
-  }
-
-  protected String replaceSegIndexWith(String locator, int newIndex) {
-    if (!locator.contains("[")) {
-      locator = fillInLocation(locator);
-    }
-    String absoluteLocator = locator.replaceFirst("\\[\\d\\]", "[" + newIndex + "]");
-    LOGGER.trace("Transformed " + locator + " to " + absoluteLocator);
-    return absoluteLocator;
-  }
-
-  protected String getSegmentNameFromLocator(String locator) {
-    // possible values coming into here:
-    // MSH
-    // RXA[1]
-    // RXA-1
-    // RXA[2]-1
-    // RXA-2~2-1-1
-    // etc...
-    // So basically, either it's the only thing,
-    // or it's separated from the field by a dash,
-    // or it has the segment index in bracket.
-    if (locator != null) {
-      String[] nameParts = locator.split("[\\[\\-]");
-      return nameParts[0];
-    }
-
-    return null;
-
-  }
-
-
-  public void put(String locationCd, int segmentIndex, int fieldRepetition, String value) {
-
-    LOGGER.trace("Putting " + locationCd + " segIdx: " + segmentIndex + " fieldRep: "
-        + fieldRepetition + " value: " + value);
-    String properLocator = this.makeLocatorString(locationCd, segmentIndex, fieldRepetition);
-    LOGGER.trace("Normalized Locator: " + properLocator);
-    this.put(properLocator, value);
-  }
-
-  /**
-   * This is a little more complicated than it would have to be if the message was sent in raw.
-   * Because we're getting a locator rather than the raw message, we're going to put it together as
-   * we get it, which may be out of order. <br />
-   * <p>
-   * This is going to be more powerful in general, because the order its sent in will not matter.
-   *
-   * @param locator
-   */
-  protected void indexTheLocatorSegment(String locator) {
-    String seg = locator.split("\\[")[0];
-    List<Integer> segList = segmentIndexes.get(seg);
+  private void indexTheLineSegment(String segId, int segIdx) {
+    List<Integer> segList = segmentIndexes.get(segId);
     if (segList == null) {
       segList = new TreeList<Integer>();
-      segmentIndexes.put(seg, segList);
+      segmentIndexes.put(segId, segList);
     }
+    LOGGER.trace("SEG IDX: " + segIdx + " for " + segId);
 
-    Integer idx = this.getSegmentIndexFromLocation(locator);
-
-    LOGGER.trace("SEG IDX: " + idx + " for " + locator);
-
-    if (!segList.contains(idx)) {
-      segList.add(idx);
+    if (!segList.contains(segIdx)) {
+      segList.add(segIdx);
     }
-
-    LOGGER.trace("Ordinal of " + idx + " is " + (segList.indexOf(idx) + 1));
   }
 
-  protected Integer getSegmentIndexFromLocation(String locator) {
-    locator = this.addSegmentIndexIfMissing(locator);
-    LOGGER.trace("getSegmentIndexFromLocation(" + locator + ");");
-    int i1 = locator.indexOf("[");
-    int i2 = locator.indexOf("]");
-    String segIdx = locator.substring(i1 + 1, i2);
-    return Integer.valueOf(segIdx);
+  private void indexTheLineSegment(Hl7Location h7l) {
+    String seg = h7l.getSegmentId();
+    int idx = h7l.getLine();
+    this.indexTheLineSegment(seg, idx);
   }
 
   /**
@@ -532,152 +286,6 @@ public class HL7MessageMap {
     return segSpots.size();
   }
 
-  public String getLocatorString(String segmentName, int segIndex, int fieldNum, int fieldRep,
-      int component, int subComponent) {
-    return segmentName + "[" + segIndex + "]-" + fieldNum + "~" + fieldRep + "-" + component + "-"
-        + subComponent;
-  }
-
-  public String get(Hl7Location hl7Location) {
-    return this.get(hl7Location.getMessageMapLocator());
-  }
-
-  public String makeLocatorString(String basiclocation, int segIndex, int fieldRep) {
-    LOGGER.trace(
-        "Making " + basiclocation + " with segIndex: " + segIndex + " fieldRep: " + fieldRep);
-    String locator = basiclocation;
-    String[] locSplit = basiclocation.split("\\-");
-    String seg = locSplit[0];
-    String field = locSplit[1];
-
-    locator = locator.replace(seg, seg + "[" + segIndex + "]");
-    locator = locator.replaceFirst("-" + field, "-" + field + "~" + fieldRep);
-    locator = fillInComponentAndSubComponent(locator);
-
-    return locator;
-  }
-
-  protected String fillInLocation(String location) {
-    location = unifyLocatorFormat(location);
-    location = addSegmentIndexIfMissing(location);
-    location = addZeroFieldNumberIfMissing(location);
-    location = addFieldRepIfMIssing(location);
-    location = fillInComponentAndSubComponent(location);
-    return location;
-  }
-
-  protected String addSegmentIndexIfMissing(String locString) {
-    String segName = locString.split("\\-")[0];
-    if (!segName.contains("[")) {
-      // get the index of the first time the
-      // segment is represented.
-      List<Integer> segIdxList = this.segmentIndexes.get(segName);
-      if (segIdxList != null && segIdxList.size() > 0) {
-        Integer idx = segIdxList.get(0);
-        locString = locString.replace(segName, segName + "[" + idx + "]");
-      }
-    }
-    return locString;
-  }
-
-  /**
-   * THe intention of this method is to determine the field repetition from the locator.
-   *
-   * If there is no field repetition information, it will assume it's the first field rep.
-   *
-   * @param locString
-   * @return
-   */
-  protected Integer getFieldRep(String locString) {
-    // Start with something like PID-11~1-7
-    String[] parts = locString.split("\\~");
-    // Now have two array entries: {"PID-11", "1-7"}
-    if (parts.length < 2) {
-      // This means there was no ~, and hence, no field rep number. Implies this is the first rep.
-      return 1;
-    } else {
-      // This means it has a field rep. There should only be one, so only two parts. .
-      // {"PID-11", "1-7"}. The second part could potentially just be a number... or could be empty.
-      //
-      String[] partsII = parts[1].split("\\-");
-      Integer fieldRep = Integer.parseInt(partsII[0]);
-      return fieldRep;
-    }
-  }
-
-  /**
-   * Keep the segment, seg index, and field number. remove the field repetition, and
-   * component/subcomponent parts. return the result.
-   *
-   * @param locator
-   * @return
-   */
-  protected String getFieldLocator(String locator) {
-    if (locator == null) {
-      return locator;
-    }
-
-    if (locator.contains("~")) {
-      return locator.split("\\~")[0];
-    } else {
-      String[] parts = locator.split("\\-");
-      if (parts.length > 1) {
-        return parts[0] + "-" + parts[1];
-      }
-      ;
-    }
-    // If it gets here, that means it doesn't have a field rep or component information... So it
-    // already is how we want it to be.
-    return locator;
-  }
-
-  /**
-   * Puts a zero for the field number, if there's not one already supplied.
-   *
-   * @param locString
-   * @return
-   */
-  protected String addZeroFieldNumberIfMissing(String locString) {
-    String[] parts = locString.split("\\-");
-    if (parts.length < 2) {
-      // This means it doesn't even have a field number.
-      locString = locString + "-0";
-    }
-    return locString;
-  }
-
-
-  protected String addFieldRepIfMIssing(String locString) {
-    String[] parts = locString.split("\\~");
-    if (parts.length < 2) {
-      // This means it doesn't even have a field rep.
-      // This assumes this locator has a field number.
-      // Since there's no ~, we can assume the field number is going
-      // to be the second array entry in the split by -
-      // And we also assume it's the first rep, if there's no field rep info.
-      String[] locParts = locString.split("\\-");
-      if (locParts.length < 2) {
-        locString = locString + "-0~1";
-      } else {
-        String fieldNum = locParts[1];
-        locString = locString.replaceFirst("-" + fieldNum, "-" + fieldNum + "~1");
-      }
-    }
-
-    return locString;
-  }
-
-  protected String fillInComponentAndSubComponent(String locString) {
-    String[] locSplit = locString.split("\\-");
-    if (locSplit.length < 3) {
-      return locString + "-1-1";
-    } else if (locSplit.length < 4) {
-      return locString + "-1";
-    }
-    return locString;
-  }
-
-
   /*
    * (non-Javadoc)
    *
@@ -696,7 +304,7 @@ public class HL7MessageMap {
   public List<String> getMessageSegments() {
 
     if (this.segmentMessageOrder == null) {
-      // To reconstruct the original order of the message (with the absolute indexes) you need to go
+      // To reconstruct the original order of the message (with the line numbers) you need to go
       // trough the map, and put them in the right order... this might be better done as the map is
       // built. Let's see.
       int segCnt = 0;
@@ -712,7 +320,7 @@ public class HL7MessageMap {
       for (String segmentName : segmentIndexes.keySet()) {
         List<Integer> absolutePos = segmentIndexes.get(segmentName);
         for (Integer igr : absolutePos) {
-          messageOrigOrder[igr] = segmentName;
+          messageOrigOrder[igr-1] = segmentName;
         }
       }
 
@@ -722,175 +330,80 @@ public class HL7MessageMap {
     return this.segmentMessageOrder;
   }
 
-  /**
-   * @param location
-   * @param absSegmentIdx
-   * @param fieldRepetition
-   * @return
-   */
-  public String getFromAbsIndex(String location, int absSegmentIdx, int fieldRepetition) {
 
-    // int segOrdinal = getSegmentOrdinalFromAbsoluteIndex(absSegmentIdx);
-    // if (segOrdinal == -1) {
-    // LOGGER.warn("No segment at that index");
-    // return null;
-    // }
-
-    String value = this.getAtIndex(location, absSegmentIdx, fieldRepetition);
-    return value;
-  }
-
-  /**
-   * this is all one-based. So send in a 1 based ordinal segment . that means the first apperaance
-   * of a segment will get a ordinal of 1. <br />
-   * This method will return the absolute index that the segment appears for the segments ordinal.
-   *
-   * @param location
-   * @param ordinal
-   * @return
-   */
-  public int getAbsoluteIndexForLocationOrdinal(String location, int ordinal) {
-    String seg = this.getSegmentNameFromLocator(location);
-    LOGGER.trace("getAbsoluteIndexForLocation Segment[" + seg + "]");
-    return getAbsoluteIndexForSegment(seg, ordinal);
-    // minus one, because we're trying to maintain a 1 based index system.
-    // So we expect that what comes in will be a 1 based ordinal
-    // So the first RXA will have a ordinal of 1.
-
-    // THen we add one, because coming in, it was in a 0 based system... actually...
-    // Maybe I should just translate it to a 1 based system coming in.
-    // TODO: turn the stored absolute indexes into 1 based instead of 0 based.
-  }
-
-  /**
-   * This method takes a segment name, and an ordinal, and returns the index at which that segment
-   * appears in the message at that ordinal.
-   *
-   * For example, if there are two NK1 records like this:
-   * <ul>
-   * <li>MSH
-   * <li>PID
-   * <li>NK1
-   * <li>NK1
-   *
-   * if you send in a "2" to the method for NK1, the appropriate answer would be 4 since our indexes
-   * are 1 based.
-   *
-   * <br />
-   * If you send in an ordinal that does not exist in the message, like if you sent in a "3" for the
-   * previous example, you would see a -1 in return as an indicator that it doesn't exist.
-   *
-   * @param segmentName
-   * @param ordinal
-   * @return
-   */
-  public int getAbsoluteIndexForSegment(String segmentName, int ordinal) {
-    List<Integer> segList = segmentIndexes.get(segmentName);
-
-    // A little protective code:
-    if (segList == null || ordinal > segList.size()) {
-      // This means there's not a segment at that ordinal. Like there's not a second or third
-      // repetition...
+  public int getSequenceFromLine(int lineNumber) {
+    if (lineNumber <= 0) {
       return -1;
     }
-
-    return segList.get(ordinal - 1);
-
+    String seg = getSegIdAtLine(lineNumber);
+    return this.getSequenceFromLine(seg, lineNumber);
   }
 
-
-  /**
-   * A absolute index is assumed to be one based. That means the MSH should always be the first
-   * segment. <br />
-   * The way this works:
-   * <ol>
-   * <li>get the list of all the message segment names in order that they appear in the message.
-   * <li>find the segment name at the absolute index sent into the method. This is how you can tell
-   * which segment we're talking about.
-   * <li>For that segment, get the list of absolute indexes where it appears in the message.
-   * <li>determine where in the list of absolute indexes the index sent in falls. This is the
-   * ordinal.
-   *
-   * @param absoluteSegmentIndex
-   * @return
-   */
-  public int getSegmentOrdinalFromAbsoluteIndex(int absoluteSegmentIndex) {
-    if (absoluteSegmentIndex <=0) {
-      return -1;
+  public int getSequenceFromLine(String segId, int line) {
+    if (this.segmentIndexes.get(segId) != null &&
+        this.segmentIndexes.get(segId).contains(line)) {
+      return (this.segmentIndexes.get(segId).indexOf(line)) + 1;
     }
+    return 0;
+  }
+
+  String getSegIdAtLine(int line) {
     List<String> segList = this.getMessageSegments();
-    String seg = segList.get(absoluteSegmentIndex - 1);
-    LOGGER.trace("getSegmentOrdinalFromAbsoluteIndex Segment[" + seg + "]");
-
-    // Absolute index of
-    List<Integer> segRelList = segmentIndexes.get(seg);
-    LOGGER.trace("getSegmentOrdinalFromAbsoluteIndex indexes: " + segRelList);
-
-    // Segments are stored in a zero based way for "absolute" indexing.
-    int idx = absoluteSegmentIndex - 1;
-    LOGGER.trace("getSegmentOrdinalFromAbsoluteIndex absoluteIdx: " + absoluteSegmentIndex);
-    LOGGER.trace("getSegmentOrdinalFromAbsoluteIndex modified (0 base) absoluteIdx: " + idx);
-    int ordinal = -1;
-    if (segRelList.contains(idx)) {
-      // find the position of the
-      ordinal = segRelList.indexOf(idx) + 1;
-    }
-    LOGGER.trace("getSegmentOrdinalFromAbsoluteIndex ordinal: " + ordinal);
-    return ordinal;
+    return segList.get(line - 1);
   }
 
-
-  public String getSegmentAtAbsoluteIndex(int absoluteSegmentIndex) {
-    for (String segment : segmentIndexes.keySet()) {
-      List<Integer> seglist = segmentIndexes.get(segment);
-      if (seglist.contains(absoluteSegmentIndex - 1)) {
-        return segment;
-      }
+  public int getLineFromSequence(String segmentName, int segmentSequence) {
+    Hl7Location loc = new Hl7Location(segmentName);
+    List<Integer> segList = segmentIndexes.get(loc.getSegmentId());
+    if (segList == null || segmentSequence > segList.size()) {
+      return 0;
     }
-    return null;
+    return segList.get(segmentSequence - 1);
   }
-
-  // If I were going to make this "generic", I would put this next method into an extension
-  // of this class for ImmunizationMapping
 
   /**
    * This returns a zero based index for the start of the next immunization record.
    *
-   * @param startingPoint
+   * @param line
    * @return
    */
-  public int getNextImmunizationStartingIndex(int startingPoint) {
+  public int getNextImmunizationAfterLine(int line) {
     List<String> segList = this.getMessageSegments();
-
+    int startLine = line + 1;
     boolean orcCameFirst = false;
 
-    if (segList == null || segList.size() == 0) {
+    if (startLine < 1) {
+      startLine = 1;
+    }
+
+    if (segList == null || segList.size() == 0 || segList.size() < startLine) {
       return -1;
     }
 
     // See what the starting point is that was sent in.
-    String segAtIndex = segList.get(startingPoint);
-    LOGGER.trace("getNextImmunizationStartingIndex - segAtIndex: " + segAtIndex);
-    if ("ORC".equals(segAtIndex)) {
+    String startingSegmentId = segList.get(startLine-1);
+
+    LOGGER.trace("getNextImmunizationAfterLine - startingSegmentId: " + startingSegmentId);
+    if ("ORC".equals(startingSegmentId)) {
       orcCameFirst = true;
     }
 
-    LOGGER.trace("getNextImmunizationStartingIndex - orcCameFirst = " + orcCameFirst);
+    LOGGER.trace("getNextImmunizationAfterLine - orcCameFirst = " + orcCameFirst);
     // Loop through the segments. Every time you find a new ORC or RXA,
     // that's a new shot boundary.
 
     boolean foundRxa = false;
 
-    for (int i = startingPoint + 1; i < segList.size(); i++) {
-      String segName = segList.get(i);
-      LOGGER.trace("getNextImmunizationStartingIndex - Evaluating " + segName);
+    for (int thisLine = startLine + 1; thisLine < segList.size(); thisLine++) {
+      String segName = segList.get(thisLine - 1);
+      LOGGER.trace("getNextImmunizationAfterLine - Evaluating " + segName);
       if ("ORC".equals(segName)) {
-        return i;
+        return thisLine;
       } else if ("RXA".equals(segName)) {
         // The ORC segment should come first. If it's missing,
         // the RXA will have to serve as the boundary instead of ORC.
         if (!orcCameFirst || foundRxa) {
-          return i;
+          return thisLine;
         }
         // Finding a second rxa before an ORC would indicate a new vaccine.
         foundRxa = true;

@@ -35,11 +35,9 @@ public enum HL7MessageHeaderParser {
 
     MetaParser mp = new MetaParser(map);
 
-    int index = map.getIndexForSegmentName("MSH");
-
     DqaMessageHeader h = new DqaMessageHeader();
-    h.setFields(mp.mapValues(index,
-        MESSAGE_SENDING_APPLICATION
+    h.setFields(mp.mapValues(1,
+          MESSAGE_SENDING_APPLICATION
         , MESSAGE_SENDING_FACILITY
         , MESSAGE_RECEIVING_APPLICATION
         , MESSAGE_RECEIVING_FACILITY
