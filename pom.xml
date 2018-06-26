@@ -5,11 +5,11 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>org.immregistries</groupId>
-  <artifactId>dqa-hl7-utility</artifactId>
+  <artifactId>mqe-hl7-utility</artifactId>
   <version>2018.5-BETA</version>
   <packaging>jar</packaging>
 
-  <name>HL7 Utility Package for DQA</name>
+  <name>HL7 Utility Package for MQE</name>
   <description>Parses, Creates, etc.</description>
 
   <properties>
@@ -67,7 +67,7 @@
 
     <dependency>
       <groupId>org.immregistries</groupId>
-      <artifactId>dqa-codebase-client</artifactId>
+      <artifactId>codebase-client</artifactId>
       <version>2.1</version>
     </dependency>
 
