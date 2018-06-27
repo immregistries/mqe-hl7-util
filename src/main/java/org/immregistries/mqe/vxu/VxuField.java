@@ -7,7 +7,7 @@ import static org.immregistries.mqe.vxu.VxuObject.OBSERVATION;
 import static org.immregistries.mqe.vxu.VxuObject.PATIENT;
 import static org.immregistries.mqe.vxu.VxuObject.VACCINATION;
 
-import org.immregistries.mqe.codebase.client.reference.CodesetType;
+import org.immregistries.codebase.client.reference.CodesetType;
 
 public enum VxuField {
   /*

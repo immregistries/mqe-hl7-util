@@ -1,8 +1,8 @@
 package org.immregistries.mqe.hl7util.test;
 
 import java.util.Random;
-import org.immregistries.mqe.codebase.client.CodeMap;
-import org.immregistries.mqe.codebase.client.generated.Codebase;
+import org.immregistries.codebase.client.CodeMap;
+import org.immregistries.codebase.client.generated.Codebase;
 import org.immregistries.mqe.core.util.DateUtility;
 import org.immregistries.mqe.vxu.MqeAddress;
 import org.immregistries.mqe.vxu.MqeNextOfKin;
