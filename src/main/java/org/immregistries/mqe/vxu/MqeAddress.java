@@ -178,6 +178,10 @@ public class MqeAddress {
     return result;
   }
 
+  public boolean isEmpty() {
+    return this.equals(new MqeAddress());
+  }
+
   @Override
   public boolean equals(Object obj) {
     if (this == obj) {
