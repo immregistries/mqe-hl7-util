@@ -140,7 +140,7 @@ public class MetaParser {
     List<MetaFieldInfo> metaFieldInfoList = new ArrayList<>();
 
     for (int i = 1; i <= fieldCount; i++) {
-      Hl7Location el = new Hl7Location(location.toString());
+      Hl7Location el = new Hl7Location(location);
       el.setFieldRepetition(i);
       metaFieldInfoList.add(createMetaField(vxuField, el));
     }

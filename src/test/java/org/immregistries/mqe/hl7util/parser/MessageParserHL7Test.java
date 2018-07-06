@@ -353,11 +353,11 @@ public class MessageParserHL7Test {
 //			System.out.println(generatedInsert);
 //		}
 		
-		if (map.size() != 119) {
+		if (map.size() != 179) {
 			System.out.println(map);
 		}
 		
-		assertEquals("Map size should be 119.  There is an extra & in a field that shoudl be tagged as simple. That segment is repeated three times.  So if it's not coming through right, you'll see 122...", 119, fieldParts);
+		assertEquals("Map size should be 179.  There is an extra & in a field that shoudl be tagged as simple. That segment is repeated three times.  So if it's not coming through right, you'll see 180...", 179, fieldParts);
 	}
 	
 	//start with flat notation
@@ -365,7 +365,7 @@ public class MessageParserHL7Test {
 	public void testMapSegment() {
 		String segment = "MSH|^~\\&|ECW|1337-44-01|MCIR|MDCH|20140619191115||VXU^V04|61731|P|2.3.1|||AL";
 		List<HL7MessagePart> dataList = mpp.mapSegment(segment, 0, 1);
-		assertEquals("Message Should have 14 fields including the segment name and field separator", 14, dataList.size());//since there's no repetitions, it's just a straight calculation. 
+		assertEquals("Message Should have 17 fields including the segment name and field separator", 17, dataList.size());//since there's no repetitions, it's just a straight calculation.
 	}
 	
 	@Test

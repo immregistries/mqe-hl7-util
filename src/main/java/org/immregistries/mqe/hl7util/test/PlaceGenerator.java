@@ -11,7 +11,7 @@ import org.slf4j.LoggerFactory;
 public class PlaceGenerator {
 
   private static final Logger logger = LoggerFactory.getLogger(PlaceGenerator.class);
-  private NameGenerator ng = new NameGenerator();
+  private NameGenerator ng = NameGenerator.INSTANCE;
 
   public MqeAddress getRandomAddress() {
       String streetNumber = String.valueOf(new Integer((int) (Math.random() * 9999)));

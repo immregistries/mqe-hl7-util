@@ -35,14 +35,11 @@ import static org.immregistries.mqe.vxu.VxuField.VACCINATION_SYSTEM_ENTRY_TIME;
 
 import java.util.ArrayList;
 import java.util.List;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 import org.immregistries.mqe.hl7util.model.Hl7Location;
 import org.immregistries.mqe.hl7util.parser.HL7MessageMap;
 import org.immregistries.mqe.vxu.MqeVaccination;
-import org.immregistries.mqe.vxu.hl7.CodedEntity;
 import org.immregistries.mqe.vxu.hl7.Observation;
-import org.immregistries.mqe.vxu.hl7.OrganizationName;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -62,15 +59,16 @@ public enum HL7VaccinationParser {
     // Get the list of segments so you know the total length.
     int segmentListSize = map.getMessageSegments().size();
 
-    int startingPoint = map.getNextImmunizationAfterLine(0);
+    int startingPoint = map.getImmunizationBoundaryEnd(0) + 1;
+    int finishPoint = map.getImmunizationBoundaryEnd(startingPoint);
+    int positionId = 1;
 
-    int positionId = 0;
     while (startingPoint < segmentListSize) {
-      positionId++;
-      int finishPoint = map.getNextImmunizationAfterLine(startingPoint) - 1;
       MqeVaccination ts = getVaccination(map, startingPoint, finishPoint, positionId);
       shotList.add(ts);
-      startingPoint = finishPoint + 1;
+      positionId++;
+      startingPoint = finishPoint + 1;//next segment after the end.
+      finishPoint = map.getImmunizationBoundaryEnd(startingPoint);//the last line before the next one.
       // Theory: This will naturally finish the process to the end of the segments.
     }
 

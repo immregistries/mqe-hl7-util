@@ -44,7 +44,44 @@ public class Hl7LocationTest {
     Hl7Location two = new Hl7Location(location);
     two.setSegmentSequence(9);
     assertNotEquals(location + "should NOT be the same", one, two);
-    assertEquals(location + "compare should be -1", -1, one.compareTo(two));
+    assertEquals(one + "(line: " + one.getLine() + ") vs " + two + "(line: " + two.getLine() + ")  compare should be -1", -1, one.compareTo(two));
+
+    one = new Hl7Location(location);
+    two = new Hl7Location(location);
+    one.setLine(1);
+    two.setLine(2);
+    assertNotEquals(location + "should NOT be the same", one, two);
+    assertEquals(one + " (line: " + one.getLine() + ") vs " + two + " (line: " + two.getLine() + ") compare should be -1", -1, one.compareTo(two));
+
+    one = new Hl7Location(location);
+    two = new Hl7Location(location);
+    one.setFieldPosition(1);
+    two.setFieldPosition(2);
+    assertNotEquals(location + "should NOT be the same", one, two);
+    assertEquals( one + "(line: " + one.getLine() + ") vs " + two + "(line: " + two.getLine() + ")  compare should be -1", -1, one.compareTo(two));
+
+    one = new Hl7Location(location);
+    two = new Hl7Location(location);
+    one.setSubComponentNumber(1);
+    two.setSubComponentNumber(2);
+    assertNotEquals(location + "should NOT be the same", one, two);
+    assertEquals(one + " vs " + two + "compare should be -1", -1, one.compareTo(two));
+
+    one = new Hl7Location(location);
+    two = new Hl7Location(location);
+    one.setFieldRepetition(1);
+    two.setFieldRepetition(2);
+    assertNotEquals(one + " vs " + two + "should NOT be the same", one, two);
+    assertEquals(one + " vs " + two + "compare should be -1", -1, one.compareTo(two));
+
+    one = new Hl7Location(location);
+    two = new Hl7Location(location);
+    two.setFieldRepetition(2);
+    assertNotEquals(one + " vs " + two + "should NOT be the same", one, two);
+    assertEquals(one + " vs " + two + "compare should be -1", -1, one.compareTo(two));
+
+
+
   }
 
 
@@ -73,11 +110,11 @@ public class Hl7LocationTest {
   private void runEqualsSet(String location) {
     Hl7Location one = new Hl7Location(location);
     Hl7Location two = new Hl7Location(location);
-    assertEquals(location + "should be the same", one, two);
-    assertEquals(location + "compare should be zero", 0, one.compareTo(two));
+    assertEquals(one + " vs " + two + " should be the same", one, two);
+    assertEquals(one + " vs " + two + " compare 1v2 should be zero", 0, one.compareTo(two));
     Hl7Location three = new Hl7Location(location);
     three.setLine(5);
-    assertEquals(location + "compare should be zero", 0, three.compareTo(two));
+    assertEquals(two + " vs " + three + " compare 2v3 should be one, since the line is different", 1, three.compareTo(two));
   }
 
   @Test

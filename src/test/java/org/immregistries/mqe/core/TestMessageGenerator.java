@@ -50,7 +50,23 @@ public class TestMessageGenerator {
 			+"OBX|2|CE|30956-7^Vaccine Type^LN|2|85^Hepatitis A^CVX||||||F|\r"
 			+"OBX|3|TS|29768-9^Date vaccine information statement published^LN|2|20111025||||||F|\r"
 			+"OBX|4|TS|29769-7^Date vaccine information statement presented^LN|2|20160413||||||F|\r";
-		
+
+	public static final String LAST_SEG_RXA =
+    /*1*/     "MSH|^~\\&||1255-60-20|MCIR|MDCH|201860301131228-0500||VXU^V04^VXU_V04|3WzJ-A.01.01.2aF|T|2.5.1|"
+    /*2*/	+ "\rPID|||3WzJ-A.01.01-1797334094^^^AIRA-TEST^MR||Orna^Tahira^^^^^L|Aemilius^Reynolds|20180301|F||2076-8^Native Hawaiian or Other Pacific Islander^HL70005|81 Page Pl^^GR^MI^49544^USA^P||^PRN^PH^^^616^9245843|||||||||2135-2^Hispanic or Latino^HL70005|Birth Place PID-23|||"
+    /*3*/	+ "\nPD1|||||||||||02^Reminder/Recall - any method^HL70215|||||A|20170301|20170301|"
+    /*4*/	+ "\nNK1|1|Orna^Reynolds^^^^^L|MTH^Mother^HL70063|81 Page Pl^^GR^MI^49544^USA^P|^PRN^PH^^^616^9245843|"
+    /*5*/	+ "\nORC|RE||V51L2.3^AIRA|||||||I-23432^Burden^Donna^A^^^^^NIST-AA-1||57422^RADON^NICHOLAS^^^^^^NIST-AA-1^L|"
+    /*6*/	+ "\nRXA|0|1|20180601||21^Varicella^CVX|0.5|mL^milliliters^UCUM||00^Administered^NIP001||||||Y5841RR||MSD^Merck and Co^MVX||||A|"
+    /*7*/	+ "\nRXR|SC^^HL70162|RA^^HL70163|"
+    /*8*/	+ "\nOBX|1|CE|64994-7^Vaccine funding program eligibility category^LN|1|V02^VFC eligible - Medicaid/Medicaid Managed Care^HL70064||||||F|||20170301|||VXC40^Eligibility captured at the immunization level^CDCPHINVS|"
+    /*9*/	+ "\nOBX|2|CE|30956-7^Vaccine Type^LN|2|21^Varicella^CVX||||||F|"
+    /*10*/+ "\nOBX|3|TS|29768-9^Date vaccine information statement published^LN|2|20080313||||||F|"
+    /*11*/+ "\nOBX|4|TS|29769-7^Date vaccine information statement presented^LN|2|20170301||||||F|"
+    /*12*/+ "\nORC|RE||BQ61L11032.2^AIRA|||||||I-23432^Burden^Donna^A^^^^^NIST-AA-1||57422^RADON^NICHOLAS^^^^^^NIST-AA-1^L"
+    /*13*/+ "\nRXA|0|1|20180601||66019-0302-10^FluMistQuadrivalent^NDC|0.5|mL^milliliters^UCUM||00^Administered^NIP001||||||N3783EO||MED^^MVX|||CP|A"
+			;
+
 	static
 	{
 		SEG_MAP.put("MSH.1", MSH);

@@ -7,8 +7,8 @@ import java.io.InputStreamReader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class NameGenerator {
-
+public enum NameGenerator {
+  INSTANCE;
   private static final Logger logger = LoggerFactory.getLogger(NameGenerator.class);
   private static final String nameFile = "/nameList.txt";
 

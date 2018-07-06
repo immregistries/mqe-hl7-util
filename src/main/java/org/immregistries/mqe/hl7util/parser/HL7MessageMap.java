@@ -1,10 +1,12 @@
 package org.immregistries.mqe.hl7util.parser;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
+import java.util.TreeSet;
 import org.apache.commons.collections4.list.TreeList;
 import org.apache.commons.lang3.StringUtils;
 import org.immregistries.mqe.hl7util.model.Hl7Location;
@@ -66,6 +68,7 @@ public class HL7MessageMap {
    */
   public String getValue(String location) {
     Hl7Location locH7 = new Hl7Location(location);
+    locH7 = getLocWithLine(locH7);
     return this.getValue(locH7);
   }
 
@@ -193,41 +196,97 @@ public class HL7MessageMap {
   }
 
   public String reassemble() {
-    StringBuilder sb = new StringBuilder();
-    Map<String, StringBuilder> lineMap = new HashMap<>();
-    String lastSpotIsaw = "";
-    for (Hl7Location l : locationValueMap.keySet()) {
-      String spot = l.getSegmentId() + l.getSegmentSequence();
+    StringBuilder line = new StringBuilder();
+    Hl7Location prevLoc = new Hl7Location();
+    List<String> lineList = new ArrayList<>();
+    boolean first = true;
 
-      if (!spot.equals(lastSpotIsaw)) {
-        lineMap.put(spot, sb);
-        sb = new StringBuilder();
-        sb.append(l.getSegmentId());
-        sb.append("|");
-        lastSpotIsaw = spot;
-      }
-
-      Integer f = l.getFieldPosition();
-      Integer pipes = StringUtils.countMatches(sb.toString(), "|");
-      if (pipes < f) {
-        for (int piper = 0 ; piper < f - pipes; piper++) {
-          sb.append("|");
+    //This is so much simpler if these things are in order... use a tree set!
+    for (Hl7Location l : new TreeSet<>(locationValueMap.keySet())) {
+      if (l.getLine() != prevLoc.getLine()) {
+        //make a new line!
+        if (!first) {
+          lineList.add(line.toString());
         }
+        first = false;
+        line.setLength(0);
+        line.append(l.getSegmentId());
+      } else if (line.length() == 0) {
+        line.append(l.getSegmentId());
       }
 
-      String value = this.locationValueMap.get(l);
-      sb.append(value);
-//      List<Integer> i = segmentIndexes.get(l.getSegmentId());
-//      Integer x = i.get(l.getSegmentSequence() - 1);
+      if (l.getFieldPosition() != 0 && !("MSH".equals(l.getSegmentId()) && l.getFieldPosition() == 1)) {
+        line.append(getPadding(prevLoc, l));
+        line.append(locationValueMap.get(l));
+      }
+      prevLoc = l;
     }
-    lineMap.put(lastSpotIsaw, sb);
+    //Catch the last line...  and put it in the array.  I think that just means putting it there.
+    lineList.add(line.toString());
 
     StringBuilder all = new StringBuilder();
-    for (StringBuilder s : lineMap.values()) {
-      all.append(s.toString());
-      all.append("\r");
+    boolean firstLine = true;
+    for (String s : lineList) {
+      if (!firstLine) {
+        all.append("\r");
+      }
+      firstLine = false;
+      all.append(s);
     }
     return all.toString();
+  }
+
+  protected String getPadding(Hl7Location prevLoc, Hl7Location l) {
+    StringBuilder padding = new StringBuilder();
+    int fields = 0;
+    int repetitions = 0;
+    int components = 0;
+    int subComponents = 0;
+
+    if (l.getLine() != prevLoc.getLine()) {
+      //only have to pad for the current loc.
+      fields = l.getFieldPosition();
+      repetitions = l.getFieldRepetition();
+      components = l.getComponentNumber();
+      subComponents = l.getSubComponentNumber();
+    } else {
+      //bad between locations.
+      fields = l.getFieldPosition() - prevLoc.getFieldPosition();
+      if (fields != 0) {
+        repetitions = l.getFieldRepetition() - 1;
+        components = l.getComponentNumber() - 1;
+        subComponents = l.getSubComponentNumber() - 1;
+      } else {
+        repetitions = l.getFieldRepetition() - prevLoc.getFieldRepetition();
+        components = l.getComponentNumber() - prevLoc.getComponentNumber();
+        subComponents = l.getSubComponentNumber() - prevLoc.getSubComponentNumber();
+      }
+    }
+
+    padding.append(getPadding("|", fields));
+    padding.append(getPadding("~", repetitions));
+    padding.append(getPadding("^", components));
+    padding.append(getPadding("&", subComponents));
+
+    return padding.toString();
+  }
+
+  protected String getPadding(String separator, int numberOfSeparators) {
+    return StringUtils.rightPad("", numberOfSeparators, separator);
+  }
+
+  protected StringBuilder padSeparators(StringBuilder start, char separator, int valuePosition) {
+    StringBuilder sb = new StringBuilder(start);
+    Integer separators = StringUtils.countMatches(start, String.valueOf(separator));
+
+    //you always need one less than the value position.
+
+    if (separators < valuePosition) {
+      for (int piper = 0 ; piper < valuePosition - separators; piper++) {
+        sb.append(separator);
+      }
+    }
+    return sb;
   }
 
   /**
@@ -236,9 +295,28 @@ public class HL7MessageMap {
    * @param value
    */
   public void put(Hl7Location loc, String value) {
+    loc = getLocWithLine(loc);
     indexTheLineSegment(loc);
     indexTheFieldRep(loc);
     locationValueMap.put(loc, value);
+  }
+
+  /**
+   * This solves the issue where we want to send in a location
+   * either to PUT or GET a value from the value map, but
+   * the location does not have a line number.
+   * Programatically we don't know the line number, when requesting a value.
+   * this helps fill that in.
+   * @param loc
+   * @return
+   */
+  public Hl7Location getLocWithLine(Hl7Location loc) {
+    Hl7Location newLoc = new Hl7Location(loc);
+    if (newLoc.getLine() == 0) {
+      int line = this.getLineFromSequence(newLoc.getSegmentId(), newLoc.getSegmentSequence());
+      newLoc.setLine(line);
+    }
+    return newLoc;
   }
 
   private void indexTheFieldRep(Hl7Location loc) {
@@ -252,7 +330,7 @@ public class HL7MessageMap {
   private void indexTheLineSegment(String segId, int segIdx) {
     List<Integer> segList = segmentIndexes.get(segId);
     if (segList == null) {
-      segList = new TreeList<Integer>();
+      segList = new TreeList<>();
       segmentIndexes.put(segId, segList);
     }
     LOGGER.trace("SEG IDX: " + segIdx + " for " + segId);
@@ -362,12 +440,14 @@ public class HL7MessageMap {
   }
 
   /**
-   * This returns a zero based index for the start of the next immunization record.
+   * This returns the last line before the next immunization, or if there are no more,
+   * it returns the last line.
    *
    * @param line
    * @return
    */
-  public int getNextImmunizationAfterLine(int line) {
+  public int getImmunizationBoundaryEnd(int line) {
+
     List<String> segList = this.getMessageSegments();
     int startLine = line + 1;
     boolean orcCameFirst = false;
@@ -376,19 +456,19 @@ public class HL7MessageMap {
       startLine = 1;
     }
 
-    if (segList == null || segList.size() == 0 || segList.size() < startLine) {
+    if (segList == null || segList.size() < startLine) {
       return -1;
     }
 
     // See what the starting point is that was sent in.
     String startingSegmentId = segList.get(startLine-1);
 
-    LOGGER.trace("getNextImmunizationAfterLine - startingSegmentId: " + startingSegmentId);
+    LOGGER.trace("getImmunizationBoundaryEnd - startingSegmentId: " + startingSegmentId);
     if ("ORC".equals(startingSegmentId)) {
       orcCameFirst = true;
     }
 
-    LOGGER.trace("getNextImmunizationAfterLine - orcCameFirst = " + orcCameFirst);
+    LOGGER.trace("getImmunizationBoundaryEnd - orcCameFirst = " + orcCameFirst);
     // Loop through the segments. Every time you find a new ORC or RXA,
     // that's a new shot boundary.
 
@@ -396,14 +476,14 @@ public class HL7MessageMap {
 
     for (int thisLine = startLine + 1; thisLine < segList.size(); thisLine++) {
       String segName = segList.get(thisLine - 1);
-      LOGGER.trace("getNextImmunizationAfterLine - Evaluating " + segName);
+      LOGGER.trace("getImmunizationBoundaryEnd - Evaluating " + segName);
       if ("ORC".equals(segName)) {
-        return thisLine;
+        return thisLine - 1;//Return the line before it.
       } else if ("RXA".equals(segName)) {
         // The ORC segment should come first. If it's missing,
         // the RXA will have to serve as the boundary instead of ORC.
         if (!orcCameFirst || foundRxa) {
-          return thisLine;
+          return thisLine - 1;
         }
         // Finding a second rxa before an ORC would indicate a new vaccine.
         foundRxa = true;

@@ -10,13 +10,13 @@ import org.joda.time.DateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class PersonGenerator {
-
+public enum PersonGenerator {
+  INSTANCE;
   private static final Logger logger = LoggerFactory.getLogger(PersonGenerator.class);
-  private NameGenerator nameGenerator = new NameGenerator();
+  private NameGenerator nameGenerator = NameGenerator.INSTANCE;
   private PlaceGenerator placeGenerator = new PlaceGenerator();
   private DateUtility datr = DateUtility.INSTANCE;
-  public MqePatient getUniquePatient() {
+  public MqePatient generateTestPatient() {
     //need a month for the birth that's in the past.  and one for the immunization in the present.
     //lets just say birth is three months ago.
     DateTime dt = DateTime.now();

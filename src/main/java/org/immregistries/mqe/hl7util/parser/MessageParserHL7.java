@@ -107,7 +107,6 @@ public class MessageParserHL7 implements MessageParser {
       loc.setSegmentSequence(messagePart.getSegmentSeq());
       loc.setLine(messagePart.getSegmentIndex());
       loc.setFieldRepetition(messagePart.getFieldRepetition());
-
       map.put(loc, messagePart.getValue());
     }
     return map;
@@ -254,6 +253,8 @@ public class MessageParserHL7 implements MessageParser {
     List<HL7MessagePart> dataList = new ArrayList<HL7MessagePart>();
     //Don't need to map it if it's an empty value.  Either null or empty string.
     if (StringUtils.isBlank(parentLoc.getValue())) {
+//      parentLoc.setValue(" ");
+      dataList.add(parentLoc);
       return dataList;
     }
 

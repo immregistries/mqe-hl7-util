@@ -5,6 +5,7 @@ import static org.junit.Assert.assertNotNull;
 
 import java.util.ArrayList;
 import java.util.List;
+import org.immregistries.mqe.core.TestMessageGenerator;
 import org.immregistries.mqe.hl7util.parser.HL7MessageMap;
 import org.immregistries.mqe.hl7util.parser.MessageParserHL7;
 import org.immregistries.mqe.vxu.MqeVaccination;
@@ -15,8 +16,7 @@ import org.junit.Test;
 public class HL7VaccineParserTester {
 	private MessageParserHL7 rootParser = new MessageParserHL7();
 	private HL7VaccinationParser vParser = HL7VaccinationParser.INSTANCE;
-	
-	private static final String IMMUNITY_MSG = 
+	private static final String IMMUNITY_MSG =
 	/* 1*/		 "MSH|^~\\&|||||20160413161526-0400||VXU^V04^VXU_V04|2bK5-B.07.14.1Nx|P|2.5.1|\r"
 	/* 2*/		+"PID|||2bK5-B.07.14^^^AIRA-TEST^MR||Powell^Diarmid^T^^^^L||20030415|M||2106-3^White^HL70005|215 Armstrong Cir^^Brethren^MI^49619^USA^P||^PRN^PH^^^231^4238012|||||||||2186-5^not Hispanic or Latino^HL70005|\r"
 	/* 3*/		+"ORC|RE||N54R81.2^AIRA|\r"
@@ -45,10 +45,28 @@ public class HL7VaccineParserTester {
            +"RXA|0|1|20170217||20^DTaP^CVX|999|||01^Historical^NIP001|||||||||||CP|A\r"
            +"ORC|RE||BU37X24.3^AIRA|||||||I-23432^Burden^Donna^A^^^^^NIST-AA-1^L^^^PRN||57422^RADON^NICHOLAS^^^^^^NIST-AA-1^L|||||NISTEHRFAC^NISTEHRFacility^HL70362\r"
            +"RXA|0|1|20170427||49^Hib^CVX|0.5|mL^milliliters^UCUM||00^Administered^NIP001||||||U5086LL||MSD^Merck and Co^MVX|||CP|A\r";
-	
-	private HL7MessageMap map = rootParser.getMessagePartMap(IMMUNITY_MSG);
-	
 
+	private HL7MessageMap map = rootParser.getMessagePartMap(IMMUNITY_MSG);
+
+	//This was for a message that was not parsing correctly.
+	@Test
+	public void testBrokenMessage() {
+		HL7MessageMap map = rootParser.getMessagePartMap(TestMessageGenerator.LAST_SEG_RXA);
+
+		//First assert that the map is right...
+		assertEquals("Should have something in the first RXA-5-1 ",
+				"21", map.getValue("RXA-5.1")
+		);
+		assertEquals("Should have something in the Second RXA-5-1 ",
+				"66019-0302-10", map.getValue("RXA[2]-5.1")
+		);
+
+		List<MqeVaccination> vaccList = vParser.getVaccinationList(map);
+		assertNotNull(vaccList);
+		assertEquals("should have two vaccines", 2, vaccList.size());
+		assertEquals("First one should be 998", "21", vaccList.get(0).getAdminCvxCode());
+		assertEquals("Second one should be NDC 66019-0302-10", "66019-0302-10", vaccList.get(1).getAdminNdc());
+	}
 	@Test
 	public void test4() {
 		List<MqeVaccination> vaccList = vParser.getVaccinationList(map);

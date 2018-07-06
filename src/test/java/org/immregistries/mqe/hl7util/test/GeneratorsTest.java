@@ -5,26 +5,33 @@ import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
-import java.util.ArrayList;
-import java.util.List;
-import org.immregistries.mqe.hl7util.Reportable;
-import org.immregistries.mqe.hl7util.ReportableSource;
-import org.immregistries.mqe.hl7util.SeverityLevel;
-import org.immregistries.mqe.hl7util.builder.AckBuilder;
-import org.immregistries.mqe.hl7util.builder.AckData;
-import org.immregistries.mqe.hl7util.model.CodedWithExceptions;
 import org.immregistries.mqe.hl7util.model.Hl7Location;
+import org.immregistries.mqe.vxu.MqeMessageReceived;
 import org.immregistries.mqe.vxu.MqePatient;
+import org.immregistries.mqe.vxu.parse.HL7MessageParser;
 import org.junit.Test;
 
 public class GeneratorsTest {
 
-  PersonGenerator pg = new PersonGenerator();
+  private final PersonGenerator pg = PersonGenerator.INSTANCE;
+  private final MessageGenerator mg = MessageGenerator.INSTANCE;
+  private final HL7MessageParser mp = HL7MessageParser.INSTANCE;
+  @Test
+  public void printFromMessageText() {
+//      1. get a message:
+    String message = mg.getUniqueMessage();
+    MqeMessageReceived mr = mp.extractMessageFromText(message);
+    System.out.println("-------THIS IS THE MODEL----------");
+    System.out.println(mr);
+    System.out.println("-------    END MODEL    ----------");
+
+
+  }
 
   @Test
   public void testPersonGen() {
-      MqePatient p1 = pg.getUniquePatient();
-      MqePatient p2 = pg.getUniquePatient();
+      MqePatient p1 = pg.generateTestPatient();
+      MqePatient p2 = pg.generateTestPatient();
     System.out.println("-------------------------------------------------------------");
     System.out.println(p1);
     System.out.println("-------------------------------------------------------------");

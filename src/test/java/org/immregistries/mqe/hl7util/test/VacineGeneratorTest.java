@@ -20,7 +20,7 @@ public class VacineGeneratorTest {
     System.out.println(id2);
     System.out.println("-------------------------------------------------------------");
     assertNotEquals("Shouldn't be the same id", id1, id2);
-    assertEquals("should be 8 digits", 8, id1.length());
+    assertEquals("should be 8 digits", 12, id1.length());
   }
 
 }

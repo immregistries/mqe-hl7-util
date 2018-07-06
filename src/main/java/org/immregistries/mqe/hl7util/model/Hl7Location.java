@@ -7,7 +7,7 @@ import org.apache.commons.lang3.StringUtils;
 
 public class Hl7Location implements Comparable<Hl7Location> {
 
-  private int line = 0;
+  private int line = 0; //-1;
   private String segmentId = "";
   private int segmentSequence = 0;
   private int fieldPosition = 0;
@@ -39,6 +39,16 @@ public class Hl7Location implements Comparable<Hl7Location> {
     return segmentId + "-" + fieldPosition
         + (componentNumber > 0 ? "." + componentNumber
         + (subComponentNumber > 0 ? "." + subComponentNumber : ""): "");
+  }
+
+  public Hl7Location(Hl7Location that) {
+    this.line = that.line;
+    this.segmentId = that.segmentId;
+    this.segmentSequence = that.segmentSequence;
+    this.fieldPosition = that.fieldPosition;
+    this.fieldRepetition = that.fieldRepetition;
+    this.componentNumber = that.componentNumber;
+    this.subComponentNumber = that.subComponentNumber;
   }
 
   public String getAbbreviated() {
@@ -118,7 +128,6 @@ public class Hl7Location implements Comparable<Hl7Location> {
   public Hl7Location() {
     // default
   }
-
 
   /**
    * this regex can be seen and tested at
@@ -224,15 +233,16 @@ public class Hl7Location implements Comparable<Hl7Location> {
       return 1;
     }
 
+    if ((this.line != o.line)) {
+      return Integer.compare(this.line, o.line);
+    }
+
     if (!this.segmentId.equals(o.segmentId)) {
       return this.segmentId.compareTo(o.segmentId);
     }
 
-//    if (this.line != o.line) {
-//      return Integer.compare(this.line, o.line);
-//    }
-
     if (this.segmentSequence != o.segmentSequence) {
+//      if (this.segmentId.equals(o.segmentId) && this.segmentSequence != o.segmentSequence) {
       return Integer.compare(this.segmentSequence, o.segmentSequence);
     }
 

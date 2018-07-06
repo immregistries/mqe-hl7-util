@@ -12,8 +12,8 @@ import org.immregistries.mqe.vxu.VxuField;
 import org.junit.Test;
 
 public class HL7MessageParserTester {
-  private MessageParserHL7 rootParser = new MessageParserHL7();
-  private HL7MessageParser mParser = HL7MessageParser.INSTANCE;
+  private MessageParserHL7 hl7Parser = new MessageParserHL7();
+  private HL7MessageParser messageParser = HL7MessageParser.INSTANCE;
 
   private static final String IMMUNITY_MSG =
       "MSH|^~\\&|Test EHR Application|X68||NIST Test Iz Reg|20120701082240-0500||VXU^V04^VXU_V04|NIST-IZ-001.00|P|2.5.1|||ER|AL|||||Z22^CDCPHINVS\r"
@@ -46,11 +46,11 @@ public class HL7MessageParserTester {
           + "OBX|3|TS|29768-9^Date vaccine information statement published^LN|2|20120702||||||F\r"
           + "OBX|4|TS|29769-7^Date vaccine information statement presented^LN|2|20120814||||||F\r";
 
-  private HL7MessageMap map = rootParser.getMessagePartMap(IMMUNITY_MSG);
+  private HL7MessageMap map = hl7Parser.getMessagePartMap(IMMUNITY_MSG);
 
   @Test
   public void testMeta() {
-    MqeMessageReceived mr = mParser.extractFromMessage(map);
+    MqeMessageReceived mr = messageParser.extractFromMessage(map);
     MqePatient patient = mr.getPatient();
 
     assertEquals("Snow", patient.getMetaFieldInfo(VxuField.PATIENT_NAME_LAST).getValue());
@@ -64,7 +64,7 @@ public class HL7MessageParserTester {
 
   @Test
   public void testPatient() {
-    MqeMessageReceived mr = mParser.extractFromMessage(map);
+    MqeMessageReceived mr = messageParser.extractFromMessage(map);
     MqePatient patient = mr.getPatient();
     assertEquals(3, patient.getPatientAddressList().size());
 
@@ -128,7 +128,7 @@ public class HL7MessageParserTester {
 
   @Test
   public void testVaccination() {
-    MqeMessageReceived mr = mParser.extractFromMessage(map);
+    MqeMessageReceived mr = messageParser.extractFromMessage(map);
     assertEquals(4, mr.getVaccinations().size());
     {
       MqeVaccination v1 = mr.getVaccinations().get(0);
