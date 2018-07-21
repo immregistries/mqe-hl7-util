@@ -6,7 +6,7 @@
 
   <groupId>org.immregistries</groupId>
   <artifactId>mqe-hl7-utility</artifactId>
-  <version>2018.6-BETA</version>
+  <version>2018.8-BETA</version>
   <packaging>jar</packaging>
 
   <name>HL7 Utility Package for MQE</name>
