@@ -6,7 +6,7 @@
 
   <groupId>org.immregistries</groupId>
   <artifactId>dqa-hl7-utility</artifactId>
-  <version>2018.5-BETA</version>
+  <version>2018.7-BETA</version>
   <packaging>jar</packaging>
 
   <name>HL7 Utility Package for DQA</name>
