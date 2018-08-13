@@ -5,7 +5,7 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>org.immregistries</groupId>
-  <artifactId>dqa-hl7-utility</artifactId>
+  <artifactId>mqe-hl7-utility</artifactId>
   <version>2018.8-BETA</version>
   <packaging>jar</packaging>
 
