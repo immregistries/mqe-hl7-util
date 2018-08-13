@@ -1,5 +1,7 @@
 package org.immregistries.mqe.vxu;
 
+import static org.immregistries.mqe.vxu.VxuField.VACCINATION_FUNDING_SOURCE_CODE;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -171,11 +173,6 @@ public void setVaccineGroupsDerived(List<String> vaccineGroupsDerived) {
 
   public void setFundingSourceCode(String fundingSourceCode) {
     this.fundingSource = fundingSourceCode;
-  }
-
-
-  public String getFundingSource() {
-    return fundingSource;
   }
 
   public String getAction() {
@@ -866,6 +863,9 @@ public void setVaccineGroupsDerived(List<String> vaccineGroupsDerived) {
           break;
         case VACCINATION_NDC_CODE:
           adminNdc = value;
+          break;
+        case VACCINATION_FUNDING_SOURCE_CODE:
+          fundingSource = value;
           break;
         default:
           break;

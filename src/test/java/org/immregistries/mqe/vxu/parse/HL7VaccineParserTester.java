@@ -40,11 +40,7 @@ public class HL7VaccineParserTester {
            +"OBX|1|CE|30963-3^Vaccine Funding Source^LN|1|PHC70^Private^CDCPHINVS||||||F|||20150624\r"
            +"OBX|2|CE|64994-7^Vaccine Funding Program Eligibility^LN|2|V01^Not VFC Eligible^HL70064||||||F|||20150624|||VXC40^per immunization^CDCPHINVS\r"
            +"OBX|3|CE|69764-9^Document Type^LN|3|253088698300028811150224^Tetanus/Diphtheria (Td) VIS^cdcgs1vis||||||F|||20150624\r"
-           +"OBX|4|DT|29769-7^Date Vis Presented^LN|3|20150624||||||F|||20150624\r"
-           +"ORC|RE||BU37X24.2^AIRA|||||||7824^Jackson^Lily^Suzanne^^^^^NIST-PI-1^L^^^PRN|||||||NISTEHRFAC^NISTEHRFacility^HL70362\r"
-           +"RXA|0|1|20170217||20^DTaP^CVX|999|||01^Historical^NIP001|||||||||||CP|A\r"
-           +"ORC|RE||BU37X24.3^AIRA|||||||I-23432^Burden^Donna^A^^^^^NIST-AA-1^L^^^PRN||57422^RADON^NICHOLAS^^^^^^NIST-AA-1^L|||||NISTEHRFAC^NISTEHRFacility^HL70362\r"
-           +"RXA|0|1|20170427||49^Hib^CVX|0.5|mL^milliliters^UCUM||00^Administered^NIP001||||||U5086LL||MSD^Merck and Co^MVX|||CP|A\r";
+           +"OBX|4|DT|29769-7^Date Vis Presented^LN|3|20150624||||||F|||20150624\r";
 
 	private HL7MessageMap map = rootParser.getMessagePartMap(IMMUNITY_MSG);
 
@@ -76,6 +72,17 @@ public class HL7VaccineParserTester {
 		assertEquals("should have two vaccines", 2, vaccList.size());
 		assertEquals("Second one should be 83", "83", vaccList.get(1).getAdminCvxCode());
 		assertEquals("First one should be 998", "998", vaccList.get(0).getAdminCvxCode());
+	}
+	
+	@Test
+	public void testVFCFundingSource() {
+		HL7MessageMap vfc_map = rootParser.getMessagePartMap(VFC_BREAKER);
+		List<MqeVaccination> vaccList = vParser.getVaccinationList(vfc_map);
+		assertNotNull(vaccList);
+		//it should have one vaccine for the 998 vacc. 
+		//and then one for the 
+		assertEquals("should have one vaccines", 1, vaccList.size());
+		assertEquals("Eligibility Code", "PHC70", vaccList.get(0).getFundingSourceCode());
 	}
 	
 	@Test

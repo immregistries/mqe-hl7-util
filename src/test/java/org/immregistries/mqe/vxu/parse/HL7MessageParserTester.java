@@ -148,7 +148,7 @@ public class HL7MessageParserTester {
       assertEquals("X68", v1.getFacilityIdNumber());
       assertEquals("X68", v1.getFacilityName());
       assertEquals("", v1.getFacilityType());
-      assertEquals("", v1.getFundingSource());
+      assertEquals("", v1.getFundingSourceCode());
       assertEquals("", v1.getGivenByNameFirst());
       assertEquals("", v1.getGivenByNameLast());
       assertEquals("7832-1", v1.getGivenByNumber());
