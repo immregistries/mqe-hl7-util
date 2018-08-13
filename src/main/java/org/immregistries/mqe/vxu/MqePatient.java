@@ -27,7 +27,7 @@ public class MqePatient extends MetaFieldInfoHolder {
   private String birthOrderNumber = "";// new String(CodesetType.BIRTH_ORDER);
   private String birthPlace = "";
   private String birthCounty = "";
-
+  private String systemEntryDateString = "";
   private Date deathDate = null;
   private String deathDateString;
 
@@ -61,6 +61,7 @@ public class MqePatient extends MetaFieldInfoHolder {
   private String sex = "";// new String(CodesetType.PATIENT_SEX);
   private boolean isUnderAged = false;
   private boolean skipped = false;
+  private String registryStatusUniversal;
   // private List<PhoneNumber> patientPhoneList = new ArrayList<PhoneNumber>();
   private List<PatientImmunity> patientImmunityList = new ArrayList<PatientImmunity>();
 
@@ -77,8 +78,18 @@ public class MqePatient extends MetaFieldInfoHolder {
   public void setEmail(String email) {
     this.email = email;
   }
+  
+  
 
-  public List<PatientImmunity> getPatientImmunityList() {
+  public String getRegistryStatusUniversal() {
+	return registryStatusUniversal;
+}
+
+public void setRegistryStatusUniversal(String registryStatusUniversal) {
+	this.registryStatusUniversal = registryStatusUniversal;
+}
+
+public List<PatientImmunity> getPatientImmunityList() {
     return patientImmunityList;
   }
 
@@ -90,7 +101,16 @@ public class MqePatient extends MetaFieldInfoHolder {
     return getAddress(1);
   }
 
-  public Name getAlias() {
+  
+  public String getSystemEntryDateString() {
+	return systemEntryDateString;
+}
+
+public void setSystemEntryDateString(String systemEntryDateString) {
+	this.systemEntryDateString = systemEntryDateString;
+}
+
+public Name getAlias() {
     return alias;
   }
 

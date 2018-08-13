@@ -72,8 +72,21 @@ public class MqeVaccination extends MetaFieldInfoHolder {
   private VaccinationVIS vaccinationVis = null;
   private String tradeName = "";// new CodedEntity(CodesetType.VACCINATION_TRADE_NAME);
   private String vaccineValidity = "";// new CodedEntity(CodesetType.VACCINATION_VALIDITY);
+  private String ID;
+  
+  
+  
+  public MqeVaccination(String iD) {
+	super();
+	ID = iD;
+  }
+  
+  public MqeVaccination() {
+	super();
+		
+  }
 
-  private List<String> vaccineGroupsDerived = new ArrayList<String>();
+private List<String> vaccineGroupsDerived = new ArrayList<String>();
 
   public String getCvxDerived() {
     return cvxDerived;
@@ -87,7 +100,16 @@ public class MqeVaccination extends MetaFieldInfoHolder {
     return vaccineGroupsDerived;
   }
 
-  public void setVaccineGroupsDerived(List<String> vaccineGroupsDerived) {
+  
+  public String getID() {
+	return ID;
+  }
+
+	public void setID(String iD) {
+		ID = iD;
+	}
+
+public void setVaccineGroupsDerived(List<String> vaccineGroupsDerived) {
     this.vaccineGroupsDerived = vaccineGroupsDerived;
   }
 
