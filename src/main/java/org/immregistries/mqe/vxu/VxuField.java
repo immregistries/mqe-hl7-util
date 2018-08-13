@@ -89,6 +89,7 @@ public enum VxuField {
 
   //patient
   ,
+  PATIENT_LEVEL(PATIENT, "patient", null, "PID"),
   PATIENT_ADDRESS(PATIENT, "address", null, "PID-11"),
   PATIENT_ADDRESS_CITY(PATIENT, "address city", null, "PID-11.3"),
   PATIENT_ADDRESS_COUNTRY(PATIENT, "address country", null, "PID-11.6"),
