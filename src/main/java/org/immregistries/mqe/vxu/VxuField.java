@@ -196,6 +196,8 @@ public enum VxuField {
   VACCINATION_FILLER_ORDER_NUMBER(VACCINATION, "filler order number", null, "ORC-3"),
   VACCINATION_FINANCIAL_ELIGIBILITY_CODE(VACCINATION, "financial eligibility code",
       CodesetType.FINANCIAL_STATUS_CODE, "OBX-5"),
+  VACCINATION_FUNDING_SOURCE_CODE(VACCINATION, "funding source code",
+	      CodesetType.VACCINATION_FUNDING_SOURCE, "OBX-5"),
   VACCINATION_GIVEN_BY(VACCINATION, "given by", null, "RXA-10"),
   VACCINATION_ID(VACCINATION, "id", null, "ORC-3"),
   VACCINATION_ID_OF_RECEIVER(VACCINATION, "id of receiver", null, "ORC-2"),
