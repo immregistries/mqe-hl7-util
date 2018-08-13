@@ -28,6 +28,7 @@ public class MqePatient extends MetaFieldInfoHolder {
   private String birthPlace = "";
   private String birthCounty = "";
   private String systemEntryDateString = "";
+  private Date systemEntryDate = null;
   private Date deathDate = null;
   private String deathDateString;
 
@@ -888,4 +889,12 @@ public Name getAlias() {
         "\n, email='" + email + '\'' +
         "------------------------------------------------------------------------------------}" + '\n';
   }
+
+public Date getSystemEntryDate() {
+	return systemEntryDate;
+}
+
+public void setSystemEntryDate(Date systemEntryDate) {
+	this.systemEntryDate = systemEntryDate;
+}
 }

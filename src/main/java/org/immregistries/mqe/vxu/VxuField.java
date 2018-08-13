@@ -136,6 +136,7 @@ public enum VxuField {
       CodesetType.TELECOMMUNICATION_EQUIPMENT, "NK1-5.3"),
   PATIENT_GUARDIAN_PRIMARY_LANGUAGE(PATIENT, "primary language", CodesetType.PERSON_LANGUAGE, "NK1-20"),
   PATIENT_GUARDIAN_RELATIONSHIP(PATIENT, "guardian relationship", null, "NK1-3"),
+  PATIENT_SYSTEM_ENTRY_TIME(PATIENT, "system entry time", null, null),
 
   PATIENT_IMMUNITY_CODE(PATIENT, "immunity code", CodesetType.EVIDENCE_OF_IMMUNITY, null),
   PATIENT_IMMUNIZATION_REGISTRY_STATUS(PATIENT, "immunization registry status", null, "PD1-16"),
