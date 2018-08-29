@@ -22,6 +22,7 @@ import static org.immregistries.mqe.vxu.VxuField.VACCINATION_FACILITY_ID;
 import static org.immregistries.mqe.vxu.VxuField.VACCINATION_FACILITY_NAME;
 import static org.immregistries.mqe.vxu.VxuField.VACCINATION_FILLER_ORDER_NUMBER;
 import static org.immregistries.mqe.vxu.VxuField.VACCINATION_FINANCIAL_ELIGIBILITY_CODE;
+import static org.immregistries.mqe.vxu.VxuField.VACCINATION_FUNDING_SOURCE_CODE;
 import static org.immregistries.mqe.vxu.VxuField.VACCINATION_GIVEN_BY;
 import static org.immregistries.mqe.vxu.VxuField.VACCINATION_INFORMATION_SOURCE;
 import static org.immregistries.mqe.vxu.VxuField.VACCINATION_LOT_EXPIRATION_DATE;
@@ -165,6 +166,9 @@ public enum HL7VaccinationParser {
       String value = mp.getValue(hl7Location);
       if (value != null && value.equals("64994-7")) {
         shot.setFields(mp.mapValues(i, VACCINATION_FINANCIAL_ELIGIBILITY_CODE));
+      }
+      else if (value != null && value.equals("30963-3")) {
+    	  shot.setFields(mp.mapValues(i, VACCINATION_FUNDING_SOURCE_CODE));
       }
     }
 

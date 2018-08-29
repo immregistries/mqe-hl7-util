@@ -89,6 +89,7 @@ public enum VxuField {
 
   //patient
   ,
+  PATIENT_LEVEL(PATIENT, "patient", null, "PID"),
   PATIENT_ADDRESS(PATIENT, "address", null, "PID-11"),
   PATIENT_ADDRESS_CITY(PATIENT, "address city", null, "PID-11.3"),
   PATIENT_ADDRESS_COUNTRY(PATIENT, "address country", null, "PID-11.6"),
@@ -135,6 +136,7 @@ public enum VxuField {
       CodesetType.TELECOMMUNICATION_EQUIPMENT, "NK1-5.3"),
   PATIENT_GUARDIAN_PRIMARY_LANGUAGE(PATIENT, "primary language", CodesetType.PERSON_LANGUAGE, "NK1-20"),
   PATIENT_GUARDIAN_RELATIONSHIP(PATIENT, "guardian relationship", null, "NK1-3"),
+  PATIENT_SYSTEM_ENTRY_TIME(PATIENT, "system entry time", null, null),
 
   PATIENT_IMMUNITY_CODE(PATIENT, "immunity code", CodesetType.EVIDENCE_OF_IMMUNITY, null),
   PATIENT_IMMUNIZATION_REGISTRY_STATUS(PATIENT, "immunization registry status", null, "PD1-16"),
@@ -194,6 +196,8 @@ public enum VxuField {
   VACCINATION_FILLER_ORDER_NUMBER(VACCINATION, "filler order number", null, "ORC-3"),
   VACCINATION_FINANCIAL_ELIGIBILITY_CODE(VACCINATION, "financial eligibility code",
       CodesetType.FINANCIAL_STATUS_CODE, "OBX-5"),
+  VACCINATION_FUNDING_SOURCE_CODE(VACCINATION, "funding source code",
+	      CodesetType.VACCINATION_FUNDING_SOURCE, "OBX-5"),
   VACCINATION_GIVEN_BY(VACCINATION, "given by", null, "RXA-10"),
   VACCINATION_ID(VACCINATION, "id", null, "ORC-3"),
   VACCINATION_ID_OF_RECEIVER(VACCINATION, "id of receiver", null, "ORC-2"),

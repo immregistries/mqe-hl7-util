@@ -1,5 +1,7 @@
 package org.immregistries.mqe.vxu;
 
+import static org.immregistries.mqe.vxu.VxuField.VACCINATION_FUNDING_SOURCE_CODE;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -72,8 +74,21 @@ public class MqeVaccination extends MetaFieldInfoHolder {
   private VaccinationVIS vaccinationVis = null;
   private String tradeName = "";// new CodedEntity(CodesetType.VACCINATION_TRADE_NAME);
   private String vaccineValidity = "";// new CodedEntity(CodesetType.VACCINATION_VALIDITY);
+  private String ID;
+  
+  
+  
+  public MqeVaccination(String iD) {
+	super();
+	ID = iD;
+  }
+  
+  public MqeVaccination() {
+	super();
+		
+  }
 
-  private List<String> vaccineGroupsDerived = new ArrayList<String>();
+private List<String> vaccineGroupsDerived = new ArrayList<String>();
 
   public String getCvxDerived() {
     return cvxDerived;
@@ -87,7 +102,16 @@ public class MqeVaccination extends MetaFieldInfoHolder {
     return vaccineGroupsDerived;
   }
 
-  public void setVaccineGroupsDerived(List<String> vaccineGroupsDerived) {
+  
+  public String getID() {
+	return ID;
+  }
+
+	public void setID(String iD) {
+		ID = iD;
+	}
+
+public void setVaccineGroupsDerived(List<String> vaccineGroupsDerived) {
     this.vaccineGroupsDerived = vaccineGroupsDerived;
   }
 
@@ -149,11 +173,6 @@ public class MqeVaccination extends MetaFieldInfoHolder {
 
   public void setFundingSourceCode(String fundingSourceCode) {
     this.fundingSource = fundingSourceCode;
-  }
-
-
-  public String getFundingSource() {
-    return fundingSource;
   }
 
   public String getAction() {
@@ -844,6 +863,9 @@ public class MqeVaccination extends MetaFieldInfoHolder {
           break;
         case VACCINATION_NDC_CODE:
           adminNdc = value;
+          break;
+        case VACCINATION_FUNDING_SOURCE_CODE:
+          fundingSource = value;
           break;
         default:
           break;
