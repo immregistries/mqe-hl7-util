@@ -127,4 +127,12 @@ public class DateUtilityTest {
 		assertNotNull("shouldn't be null - d1z", d1z);
 		assertNotNull("shouldn't be null - d2z", d2z);
 	}
+
+	@Test
+	public void mcirFormat() {
+		System.out.println("expected format: " + datr.toString(new DateTime()));
+		String fullDateWithTimezone = "20180903131228-0500";
+		DateTime d1z = datr.parseDateTime(fullDateWithTimezone);
+		assertNotNull("shouldn't be null - d1z", d1z);
+	}
 }
