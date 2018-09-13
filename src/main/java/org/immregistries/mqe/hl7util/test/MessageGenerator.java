@@ -60,7 +60,7 @@ public enum MessageGenerator {
     //need a month for the birth that's in the past.  and one for the immunization in the present.
     //lets just say birth is three months ago.
     DateTime dt = DateTime.now();
-    dt = dt.minusMonths(3);
+    dt = dt.minusMonths(16);
     int birthMonth = dt.getMonthOfYear();
     int birthYear = dt.getYear();
 

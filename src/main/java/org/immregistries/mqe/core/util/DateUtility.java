@@ -14,8 +14,8 @@ public enum DateUtility {
   INSTANCE;
   private static final Logger logger = org.slf4j.LoggerFactory.getLogger(DateUtility.class);
   //example complete date time: 20150624073733.994-0500
-  private final DateTimeFormatter tz1 = DateTimeFormat.forPattern("yyyyMMddHHmmss.SSSZ");
-  private final DateTimeFormatter tz2 = DateTimeFormat.forPattern("yyyyMMddHHmmssZ");
+  private final DateTimeFormatter tz1  = DateTimeFormat.forPattern("yyyyMMddHHmmss.SSSZ");
+  private final DateTimeFormatter tz2  = DateTimeFormat.forPattern("yyyyMMddHHmmssZ");
   private final DateTimeFormatter dtf0 = DateTimeFormat.forPattern("yyyyMMddHHmmss");
   private final DateTimeFormatter dtf1 = DateTimeFormat.forPattern("yyyyMMddHHmm");
   private final DateTimeFormatter dtf2 = DateTimeFormat.forPattern("yyyyMMdd");
@@ -84,7 +84,7 @@ public enum DateUtility {
 
   //	This puts a dateTime object to the MQE's expected String format.
   public String toString(DateTime input) {
-    return input.toString(dtf1);
+    return input.toString(tz2);
   }
 
   public String toDateString(DateTime input) {
