@@ -35,7 +35,7 @@ public enum SeverityLevel {
     this.severityDescription = actionDesc;
   }
 
-  public SeverityLevel findByCode(String code) {
+  public static SeverityLevel findByCode(String code) {
     for (SeverityLevel s : SeverityLevel.values()) {
       if (s.getCode() == code) {
         return s;
