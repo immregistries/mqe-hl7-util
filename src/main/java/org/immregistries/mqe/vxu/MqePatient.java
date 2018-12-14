@@ -94,7 +94,7 @@ public List<PatientImmunity> getPatientImmunityList() {
     return patientImmunityList;
   }
 
-  public List<MqeAddress> getPatientAddressList() {
+public List<MqeAddress> getPatientAddressList() {
     return patientAddressList;
   }
 

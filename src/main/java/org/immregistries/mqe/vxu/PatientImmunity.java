@@ -2,27 +2,21 @@ package org.immregistries.mqe.vxu;
 
 public class PatientImmunity {
 
-  private int immunityId = 0;
-  private String immunity = "";//new CodedEntity(CodesetType.EVIDENCE_OF_IMMUNITY);
+  private String code = "";
+  private String type = "";
+//new CodedEntity(CodesetType.EVIDENCE_OF_IMMUNITY);
 
-  public String getImmunityCode() {
-    return immunity;
+  public String getCode() {
+	  return code;
   }
-
-  public void setImmunityCode(String immunityCode) {
-    immunity = immunityCode;
+  public void setCode(String code) {
+	  this.code = code;
   }
-
-  public String getImmunity() {
-    return immunity;
+  public String getType() {
+	  return type;
   }
-
-  public int getImmunityId() {
-    return immunityId;
-  }
-
-  public void setImmunityId(int immunityId) {
-    this.immunityId = immunityId;
+  public void setType(String type) {
+	  this.type = type;
   }
 
 }
