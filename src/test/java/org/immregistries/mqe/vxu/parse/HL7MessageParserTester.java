@@ -105,11 +105,11 @@ public class HL7MessageParserTester {
 //    assertEquals("Primary Facility", patient.getFacility().getName());
     // private String financialEligibility = "";// new String(CodesetType.FINANCIAL_STATUS_CODE);
 //    assertEquals("", patient.getFinancialEligibility());
-//    assertEquals("", patient.getIdMedicaid().getNumber());
-//    assertEquals("", patient.getIdRegistry().getNumber());
-//    assertEquals("", patient.getIdSsn().getNumber());
+//    assertEquals("", patient.getIdMedicaid().getFormattedNumber());
+//    assertEquals("", patient.getIdRegistry().getFormattedNumber());
+//    assertEquals("", patient.getIdSsn().getFormattedNumber());
     assertEquals("D26376273", patient.getIdSubmitter().getNumber());
-//    assertEquals("", patient.getIdWic().getNumber());
+//    assertEquals("", patient.getIdWic().getFormattedNumber());
     assertEquals("Lam", patient.getMotherMaidenName());
     assertEquals("Snow", patient.getNameLast());
     assertEquals("Madelynn", patient.getNameFirst());

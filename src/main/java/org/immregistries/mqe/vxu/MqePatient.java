@@ -277,7 +277,7 @@ public Name getAlias() {
   }
 
   public String getPhoneNumber() {
-    return phone.getNumber();
+    return phone.getFormattedNumber();
   }
 
   public Id getPhysician() {
@@ -470,17 +470,6 @@ public Name getAlias() {
 
   public void setPatientId(long patientId) {
     this.patientId = patientId;
-  }
-
-  public void setPhoneNumber(String phoneNumber) {
-    // LOGGER.info("setting phone number!");
-    if (phoneNumber.length() > 250) {
-      LOGGER.info("Trimming phone number!");
-      phone.setNumber(phoneNumber.substring(0, 250));
-    } else {
-      phone.setNumber(phoneNumber);
-    }
-
   }
 
   public void setPhone(MqePhoneNumber phoneIn) {
@@ -734,7 +723,9 @@ public Name getAlias() {
         name.setTypeCode(value);
         break;
       case PATIENT_PHONE:
-        phone.setNumber(value);
+        phone.setSingleFieldinput(value);
+//        phone.setAreaCode(phone.getAreaCodeFrom(value));
+//        phone.setLocalNumber(phone.getLocalNumberFrom(value));
         break;
       case PATIENT_PHONE_TEL_EQUIP_CODE:
         phone.setTelEquipCode(value);

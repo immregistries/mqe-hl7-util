@@ -8,6 +8,7 @@ import org.immregistries.mqe.hl7util.parser.HL7MessageMap;
 import org.immregistries.mqe.hl7util.parser.MessageParserHL7;
 import org.immregistries.mqe.vxu.MqePatient;
 import org.immregistries.mqe.vxu.MqeAddress;
+import org.immregistries.mqe.vxu.MqePhoneNumber;
 import org.immregistries.mqe.vxu.VxuField;
 import org.junit.Test;
 
@@ -40,6 +41,20 @@ public class HL7PatientParserTester {
     int i = map.findFieldRepWithValue("BDL", "PID-11-7", 1);
     assertEquals("should be in second field rep", 3, i);
 
+  }
+
+  private static final String FUNNY_PHONE_MSG =
+      /* 0 */ "MSH|^~\\&|||||20160413161526-0400||VXU^V04^VXU_V04|2bK5-B.07.14.1Nx|P|2.5.1|\r"
+      /* 1 */ + "PID|||2bK5-B.07.14^^^AIRA-TEST^MR||Powell^Diarmid^T^^^^L||20030415|M||2106-3^White^HL70005|215 Armstrong Cir^^Brethren^MI^49619^USA^P~216 Armstrong Cir^^Brethren^MI^49619^USA^P~^^^^^^BDL^^123||^PRN^PH^^^231^423-8013|||||||||2186-5^not Hispanic or Latino^HL70005|\r"
+      /* 2 */ + "NK1|0|Lam^Morgan^^^^^L|MTH^Mother^HL70063|32 Prescott Street Ave^^Warwick^MA^02452^USA^L|^PRN^PH^^^657^555-8563\r"
+      /* 2 */ + "NK1|1|Lam^xxxxx^^^^^L|FTH^Father^HL70063|99 Prescott Street Ave^^Warwicks^MI^48864^USA^L|^PRN^PH^^^657^555-8563\r";
+
+  @Test
+  public void testPhoneParse() {
+    HL7MessageMap phonemap = rootParser.getMessagePartMap(FUNNY_PHONE_MSG);
+    MqePatient patient = pParser.getPatient(phonemap);
+    MqePhoneNumber p = patient.getPhone();
+    assertEquals("(231)423-8013", p.getFormattedNumber());
   }
 
   @Test
