@@ -348,6 +348,6 @@ public class HL7Reader {
   }
 
   public void resetPostion() {
-    segmentPosition = 0;
+    segmentPosition = -1;
   }
 }
