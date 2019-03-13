@@ -88,7 +88,10 @@ public class MqePhoneNumber {
   public String getLocalNumberFrom(String numberText) {
     if (StringUtils.isNotBlank(numberText)) {
       String onlyDigits = onlyDigits(numberText);
-      if (onlyDigits.length() == 7 || onlyDigits.length() == 10) {
+      if (onlyDigits.length() == 7) {
+        return onlyDigits;
+      } 
+      if (onlyDigits.length() == 10) {
         return onlyDigits.substring(3, 10);
       }
     }
