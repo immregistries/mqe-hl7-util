@@ -177,6 +177,17 @@ public enum DateUtility {
 
     return thisDt.isBefore(boundaryDt);
   }
+  
+  public boolean isNotSameDate(Date isThis, Date equalThis) {
+    if (isThis == null || equalThis == null) {
+        return false;
+      }
+
+      LocalDate thisDt = new LocalDate(isThis);
+      LocalDate boundaryDt = new LocalDate(equalThis);
+
+      return !thisDt.isEqual(boundaryDt);	  
+  }
 
   public int getYearsBetween(Date start, Date end) {
     if (start == null || end == null) {

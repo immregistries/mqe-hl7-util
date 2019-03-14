@@ -1,13 +1,14 @@
 package org.immregistries.mqe.vxu;
 
+import org.apache.commons.lang3.StringUtils;
+
 /**
  * This class represents a phone number, and includes a type
  *
  * @author Josh
  */
 public class MqePhoneNumber {
-
-  private String number = "";
+  private String singleFieldinput;
   private String telUse = "";// new CodedEntity(CodesetType.TELECOMMUNICATION_USE);
   //HL7-defined Table 0201 - Telecommunication use code
   private String telEquip = "";// new CodedEntity(CodesetType.TELECOMMUNICATION_EQUIPMENT);
@@ -22,59 +23,89 @@ public class MqePhoneNumber {
     // default
   }
 
+  public MqePhoneNumber(MqePhoneNumber toCopy) {
+    this.singleFieldinput = toCopy.singleFieldinput;
+    this.telUse           = toCopy.telUse;
+    this.telEquip         = toCopy.telEquip;
+    this.email            = toCopy.email;
+    this.countryCode      = toCopy.countryCode;
+    this.areaCode         = toCopy.areaCode;
+    this.localNumber      = toCopy.localNumber;
+    this.extension        = toCopy.extension;
+  }
+
+  public String getSingleFieldinput() {
+    return singleFieldinput;
+  }
+
+  public void setSingleFieldinput(String singleFieldinput) {
+    this.singleFieldinput = singleFieldinput;
+  }
+
   public MqePhoneNumber(String phoneNumberString) {
-    setNumber(phoneNumberString);
+    this.singleFieldinput = phoneNumberString;
+    this.areaCode = getAreaCodeFrom(phoneNumberString);
+    this.localNumber = getLocalNumberFrom(phoneNumberString);
   }
 
   public MqePhoneNumber(String areaCode, String localNumber) {
-    setAreaCode(areaCode);
-    setLocalNumber(localNumber);
+    this.areaCode = areaCode;
+    this.localNumber = localNumber;
   }
 
-  public String getNumber() {
-    if (number == null || number.equals("")) {
-      if (localNumber != null && !localNumber.equals("")) {
-        StringBuilder sb = new StringBuilder();
-        if (areaCode != null && !areaCode.equals("")) {
-          sb.append("(");
-          sb.append(areaCode);
-          sb.append(")");
-        }
-        if (localNumber != null && !localNumber.equals("")) {
-          if (localNumber.length() == 7) {
-            sb.append(localNumber.substring(0, 3));
-            sb.append("-");
-            sb.append(localNumber.substring(3, 7));
-          } else {
-            sb.append(localNumber);
-          }
-        }
-        return sb.toString();
+  public String getFormattedNumber() {
+    if (StringUtils.isNotBlank(localNumber)) {
+      StringBuilder sb = new StringBuilder();
+      if (StringUtils.isNotBlank(areaCode)) {
+        sb.append("(");
+        sb.append(areaCode);
+        sb.append(")");
       }
-      return "";
+      if (localNumber.length() == 7) {
+        sb.append(localNumber, 0, 3);
+        sb.append("-");
+        sb.append(localNumber, 3, 7);
+      } else {
+        sb.append(localNumber);
+      }
+      return sb.toString();
     }
-    return number;
+    return "";
   }
 
-  public void setNumber(String number) {
-    this.number = number;
-    if ((number != null && !number.equals(""))
-        && (localNumber == null || localNumber.equals(""))) {
-      if (areaCode == null || areaCode.equals("")) {
-        StringBuilder justDigits = new StringBuilder();
-        for (char c : number.toCharArray()) {
-          if (c >= '0' && c <= '9') {
-            justDigits.append(c);
-          }
-        }
-        if (justDigits.length() == 7) {
-          this.localNumber = justDigits.toString();
-        } else if (justDigits.length() == 10) {
-          this.areaCode = justDigits.toString().substring(0, 3);
-          this.localNumber = justDigits.toString().substring(3, 10);
-        }
+  public String onlyDigits(String text) {
+    //FYI - tried this first, but it's about 9x slower.
+    //return text.replaceAll("[^0-9]", "");
+    StringBuilder onlyDigits = new StringBuilder();
+    for (char c : text.toCharArray()) {
+      if (c >= '0' && c <= '9') {
+        onlyDigits.append(c);
       }
     }
+    return onlyDigits.toString();
+  }
+
+  public String getLocalNumberFrom(String numberText) {
+    if (StringUtils.isNotBlank(numberText)) {
+      String onlyDigits = onlyDigits(numberText);
+      if (onlyDigits.length() == 7) {
+        return onlyDigits;
+      } 
+      if (onlyDigits.length() == 10) {
+        return onlyDigits.substring(3, 10);
+      }
+    }
+    return "";
+  }
+
+  public String getAreaCodeFrom(String numberText) {
+    if (StringUtils.isNotBlank(numberText)) {
+        String onlyDigits = onlyDigits(numberText);
+        if (onlyDigits.length() == 10) {
+          return onlyDigits.substring(0, 3);
+        }
+    }
+    return "";
   }
 
   public String getTelUse() {
@@ -144,7 +175,7 @@ public class MqePhoneNumber {
   @Override
   public String toString() {
     return "MqePhoneNumber{" +
-        "number='" + number + '\'' +
+        ", getFormattedNumber='" + this.getFormattedNumber() + '\'' +
         ", telUse='" + telUse + '\'' +
         ", telEquip='" + telEquip + '\'' +
         ", email='" + email + '\'' +

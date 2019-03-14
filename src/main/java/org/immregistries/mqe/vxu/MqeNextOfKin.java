@@ -19,16 +19,13 @@ public class MqeNextOfKin extends MetaFieldInfoHolder {
     return email;
   }
 
-
   public void setEmail(String email) {
     this.email = email;
   }
 
-
   public MqeAddress getAddress() {
     return address;
   }
-
 
   public void setAddress(MqeAddress a) {
     this.address = a;
@@ -71,7 +68,7 @@ public class MqeNextOfKin extends MetaFieldInfoHolder {
   }
 
   public String getPhoneNumber() {
-    return phone.getNumber();
+    return phone.getFormattedNumber();
   }
 
   public String getRelationship() {
@@ -114,8 +111,8 @@ public class MqeNextOfKin extends MetaFieldInfoHolder {
     this.nextOfKinId = nextOfKinId;
   }
 
-  public void setPhoneNumber(String phoneNumber) {
-    phone.setNumber(phoneNumber);
+  public void setPhoneNumber(MqePhoneNumber phoneNumber) {
+    this.phone = phoneNumber;
   }
 
   public void setPhone(MqePhoneNumber phoneIn) {
@@ -231,7 +228,9 @@ public class MqeNextOfKin extends MetaFieldInfoHolder {
         break;
       case NEXT_OF_KIN_PHONE:
       case PATIENT_GUARDIAN_PHONE:
-        phone.setNumber(value);
+        phone.setSingleFieldinput(value);
+//        phone.setLocalNumber(phone.getLocalNumberFrom(value));
+//        phone.setAreaCode(phone.getAreaCodeFrom(value));
         break;
       case NEXT_OF_KIN_PHONE_LOCAL_NUMBER:
       case PATIENT_GUARDIAN_PHONE_LOCAL_NUMBER:

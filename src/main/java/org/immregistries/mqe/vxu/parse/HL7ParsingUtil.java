@@ -61,7 +61,8 @@ public enum HL7ParsingUtil {
     } else {
       //This is what was originally happening.
       String phone = map.getValue(fieldLocator, line, 1);
-      ph.setNumber(phone);
+      ph.setAreaCode(ph.getAreaCodeFrom(phone));
+      ph.setLocalNumber(ph.getLocalNumberFrom(phone));
     }
 
     return ph;

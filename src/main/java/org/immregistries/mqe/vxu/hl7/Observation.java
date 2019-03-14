@@ -89,7 +89,7 @@ public class Observation extends MetaFieldInfoHolder {
         this.observationDateString = value;
         break;
       case OBSERVATION_VALUE_TYPE:
-        this.observationValue = value;
+        this.valueType = value;
         break;
       case OBSERVATION_VALUE_DESC:
         this.observationValueDesc = value;
