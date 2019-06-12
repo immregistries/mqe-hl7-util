@@ -3,6 +3,7 @@ package org.immregistries.mqe.core.util;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import java.util.Date;
@@ -134,5 +135,133 @@ public class DateUtilityTest {
 		String fullDateWithTimezone = "20180903131228-0500";
 		DateTime d1z = datr.parseDateTime(fullDateWithTimezone);
 		assertNotNull("shouldn't be null - d1z", d1z);
+	}
+
+
+	@Test
+	public void wierdFormat() {
+		System.out.println("expected format: " + datr.toString(new DateTime()));
+		String fullDateWithTimezoneShort = "20180903131228-500";
+		//expected format: YYYYMMDDHHMMSS+/-ZZZZ
+		//notice there are four zeros. the test string has three.  it should fail.
+		//this is consistent with CDC implementation guide:
+		//Format: YYYY[MM[DD[HH[MM[SS[.S[S[S[S]]]]]]]]][+/-ZZZZ]
+		DateTime d1z = datr.parseDateTime(fullDateWithTimezoneShort);
+		assertNull("should be null - the timezone is an unkonwn format", d1z);
+	}
+
+
+	@Test
+	public void subseconds1() {
+		System.out.println("expected format: " + datr.toString(new DateTime()));
+		String subsecondTime = "20180903131228.1-0500";
+		//expected format: YYYYMMDDHHMMSS+/-ZZZZ
+		//notice there are four zeros. the test string has three.  it should fail.
+		//this is consistent with CDC implementation guide:
+		//Format: YYYY[MM[DD[HH[MM[SS[.S[S[S[S]]]]]]]]][+/-ZZZZ]
+		DateTime d1z = datr.parseDateTime(subsecondTime);
+		assertNotNull("should NOT be null - should accept a tenth of a second", d1z);
+	}
+
+
+	@Test
+	public void subseconds2() {
+		System.out.println("expected format: " + datr.toString(new DateTime()));
+		String subsecondTime = "20180903131228.12-0500";
+		//expected format: YYYYMMDDHHMMSS+/-ZZZZ
+		//notice there are four zeros. the test string has three.  it should fail.
+		//this is consistent with CDC implementation guide:
+		//Format: YYYY[MM[DD[HH[MM[SS[.S[S[S[S]]]]]]]]][+/-ZZZZ]
+		DateTime d1z = datr.parseDateTime(subsecondTime);
+		assertNotNull("should NOT be null - should accept a hundredth of a second", d1z);
+	}
+
+
+	@Test
+	public void subseconds3() {
+		System.out.println("expected format: " + datr.toString(new DateTime()));
+		String subsecondTime = "20180903131228.123-0500";
+		//expected format: YYYYMMDDHHMMSS+/-ZZZZ
+		//notice there are four zeros. the test string has three.  it should fail.
+		//this is consistent with CDC implementation guide:
+		//Format: YYYY[MM[DD[HH[MM[SS[.S[S[S[S]]]]]]]]][+/-ZZZZ]
+		DateTime d1z = datr.parseDateTime(subsecondTime);
+		assertNotNull("should NOT be null - should accept a thousanth of a second", d1z);
+	}
+
+
+	@Test
+	public void subseconds4() {
+		System.out.println("expected format: " + datr.toString(new DateTime()));
+		String subsecondTime = "20180903131228.1234-0500";
+		//expected format: YYYYMMDDHHMMSS+/-ZZZZ
+		//notice there are four zeros. the test string has three.  it should fail.
+		//this is consistent with CDC implementation guide:
+		//Format: YYYY[MM[DD[HH[MM[SS[.S[S[S[S]]]]]]]]][+/-ZZZZ]
+		DateTime d1z = datr.parseDateTime(subsecondTime);
+		assertNotNull("should NOT be null - should accept a ten thousanth of a second", d1z);
+	}
+
+	@Test
+	public void subseconds1noTZ() {
+		System.out.println("expected format: " + datr.toString(new DateTime()));
+		String subsecondTime = "20180903131228.1";
+		//expected format: YYYYMMDDHHMMSS+/-ZZZZ
+		//notice there are four zeros. the test string has three.  it should fail.
+		//this is consistent with CDC implementation guide:
+		//Format: YYYY[MM[DD[HH[MM[SS[.S[S[S[S]]]]]]]]][+/-ZZZZ]
+		DateTime d1z = datr.parseDateTime(subsecondTime);
+		assertNotNull("should NOT be null - should accept a tenth of a second", d1z);
+	}
+
+
+	@Test
+	public void subseconds2noTZ() {
+		System.out.println("expected format: " + datr.toString(new DateTime()));
+		String subsecondTime = "20180903131228.12";
+		//expected format: YYYYMMDDHHMMSS+/-ZZZZ
+		//notice there are four zeros. the test string has three.  it should fail.
+		//this is consistent with CDC implementation guide:
+		//Format: YYYY[MM[DD[HH[MM[SS[.S[S[S[S]]]]]]]]][+/-ZZZZ]
+		DateTime d1z = datr.parseDateTime(subsecondTime);
+		assertNotNull("should NOT be null - should accept a hundredth of a second", d1z);
+	}
+
+
+	@Test
+	public void subseconds3noTZ() {
+		System.out.println("expected format: " + datr.toString(new DateTime()));
+		String subsecondTime = "20180903131228.123";
+		//expected format: YYYYMMDDHHMMSS+/-ZZZZ
+		//notice there are four zeros. the test string has three.  it should fail.
+		//this is consistent with CDC implementation guide:
+		//Format: YYYY[MM[DD[HH[MM[SS[.S[S[S[S]]]]]]]]][+/-ZZZZ]
+		DateTime d1z = datr.parseDateTime(subsecondTime);
+		assertNotNull("should NOT be null - should accept a thousanth of a second", d1z);
+	}
+
+
+	@Test
+	public void subseconds4noTZ() {
+		System.out.println("expected format: " + datr.toString(new DateTime()));
+		String subsecondTime = "20180903131228.1234";
+		//expected format: YYYYMMDDHHMMSS+/-ZZZZ
+		//notice there are four zeros. the test string has three.  it should fail.
+		//this is consistent with CDC implementation guide:
+		//Format: YYYY[MM[DD[HH[MM[SS[.S[S[S[S]]]]]]]]][+/-ZZZZ]
+		DateTime d1z = datr.parseDateTime(subsecondTime);
+		assertNotNull("should NOT be null - should accept a ten thousanth of a second", d1z);
+	}
+
+	@Test
+	public void nosubseconds() {
+		System.out.println("expected format: " + datr.toString(new DateTime()));
+		String subsecondTime = "20180903131228";
+		//expected format: YYYYMMDDHHMMSS+/-ZZZZ
+		//notice there are four zeros. the test string has three.  it should fail.
+		//this is consistent with CDC implementation guide:
+		//Format: YYYY[MM[DD[HH[MM[SS[.S[S[S[S]]]]]]]]][+/-ZZZZ]
+		DateTime d1z = datr.parseDateTime(subsecondTime);
+		assertNotNull("should NOT be null - should accept a ten thousanth of a second", d1z);
 	}
 }

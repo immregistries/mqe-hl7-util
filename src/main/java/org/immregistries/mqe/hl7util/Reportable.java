@@ -10,7 +10,6 @@ import org.immregistries.mqe.hl7util.model.Hl7Location;
  * @author Josh Hull
  */
 public interface Reportable {
-
   SeverityLevel getSeverity();//expects I/W/E/A according to the IssueLevel.java class.
 
   CodedWithExceptions getHl7ErrorCode();//This is 0 for success, and there's a whole table for errors. General code

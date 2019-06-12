@@ -1,17 +1,17 @@
 package org.immregistries.mqe.vxu;
 
-import static org.immregistries.mqe.vxu.VxuField.VACCINATION_FUNDING_SOURCE_CODE;
-
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 import org.immregistries.mqe.hl7util.model.MetaFieldInfo;
+import org.immregistries.mqe.util.validation.MqeValidatedObject;
 import org.immregistries.mqe.vxu.hl7.Id;
 import org.immregistries.mqe.vxu.hl7.Observation;
 import org.immregistries.mqe.vxu.hl7.OrganizationName;
 
-public class MqeVaccination extends MetaFieldInfoHolder {
+public class MqeVaccination extends MetaFieldInfoHolder implements MqeValidatedObject {
+
 
   public static final String ACTION_CODE_ADD = "A";
   public static final String ACTION_CODE_DELETE = "D";
