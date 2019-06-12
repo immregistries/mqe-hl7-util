@@ -2,6 +2,7 @@ package org.immregistries.mqe.vxu;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 public class MqeMessageReceived {
@@ -18,6 +19,7 @@ public class MqeMessageReceived {
   private MqePatient patient = new MqePatient();
   private List<MqeNextOfKin> nextOfKins = new ArrayList<MqeNextOfKin>();
   private List<MqeVaccination> vaccinations = new ArrayList<MqeVaccination>();
+  private HashMap<String, String> detectionsOverride = new HashMap<String, String>();
 
   @Override
   public String toString() {
@@ -65,5 +67,13 @@ public class MqeMessageReceived {
   public void setMessageHeader(MqeMessageHeader messageHeader) {
     this.messageHeader = messageHeader;
   }
+
+public HashMap<String, String> getDetectionsOverride() {
+	return detectionsOverride;
+}
+
+public void setDetectionsOverride(HashMap<String, String> detectionsOverride) {
+	this.detectionsOverride = detectionsOverride;
+}
 
 }

@@ -43,6 +43,15 @@ public enum SeverityLevel {
     }
     return null;
   }
+  
+  public static SeverityLevel findByLabel(String label) {
+	    for (SeverityLevel s : SeverityLevel.values()) {
+	      if (s.getLabel().equalsIgnoreCase(label)) {
+	        return s;
+	      }
+	    }
+	    return null;
+	  }
 
   public String getLabel() {
     return this.severityLabel;
