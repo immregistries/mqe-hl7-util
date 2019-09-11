@@ -4,7 +4,9 @@ import java.util.Date;
 import org.immregistries.mqe.hl7util.model.MetaFieldInfo;
 import org.immregistries.mqe.util.validation.MqeValidatedObject;
 
-public class MqeMessageHeader extends MetaFieldInfoHolder implements MqeValidatedObject {
+public class MqeMessageHeader extends MetaFieldInfoHolder {
+  @Override
+  public TargetType getTargetType() { return TargetType.MessageHeader;}
 
   private int headerId = 0;
   private String ackTypeAccept = "";// new CodedEntity(CodesetType.ACKNOWLEDGEMENT_TYPE);

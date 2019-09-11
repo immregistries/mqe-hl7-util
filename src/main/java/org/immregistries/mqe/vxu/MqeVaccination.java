@@ -10,7 +10,9 @@ import org.immregistries.mqe.vxu.hl7.Id;
 import org.immregistries.mqe.vxu.hl7.Observation;
 import org.immregistries.mqe.vxu.hl7.OrganizationName;
 
-public class MqeVaccination extends MetaFieldInfoHolder implements MqeValidatedObject {
+public class MqeVaccination extends MetaFieldInfoHolder {
+  @Override
+  public TargetType getTargetType() { return TargetType.Vaccination;}
 
 
   public static final String ACTION_CODE_ADD = "A";
@@ -101,15 +103,6 @@ private List<String> vaccineGroupsDerived = new ArrayList<String>();
   public List<String> getVaccineGroupsDerived() {
     return vaccineGroupsDerived;
   }
-
-  
-  public String getID() {
-	return ID;
-  }
-
-	public void setID(String iD) {
-		ID = iD;
-	}
 
 public void setVaccineGroupsDerived(List<String> vaccineGroupsDerived) {
     this.vaccineGroupsDerived = vaccineGroupsDerived;
