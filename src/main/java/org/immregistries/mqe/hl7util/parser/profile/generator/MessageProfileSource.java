@@ -123,7 +123,6 @@ public class MessageProfileSource implements MessageProfile {
         }
 
       } catch (Exception e) {
-        // TODO Auto-generated catch block
         e.printStackTrace();
       }
     }
@@ -181,7 +180,6 @@ public class MessageProfileSource implements MessageProfile {
           }
         }
       } catch (Exception e) {
-        // TODO Auto-generated catch block
         e.printStackTrace();
       }
     }
