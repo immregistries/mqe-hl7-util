@@ -6,7 +6,7 @@ import java.util.Map;
 import org.immregistries.mqe.hl7util.model.MetaFieldInfo;
 import org.immregistries.mqe.util.validation.MqeValidatedObject;
 
-public abstract class MetaFieldInfoHolder implements MetaFieldInfoData, MqeValidatedObject {
+public abstract class MetaFieldInfoHolder implements MetaFieldInfoData {
   private Map<VxuField, MetaFieldInfo> metaFieldInfoMap = new HashMap<>();
   private int positionId = 0;
   public abstract TargetType getTargetType();

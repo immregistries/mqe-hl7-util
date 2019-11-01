@@ -140,9 +140,9 @@ public class MessageParserHL7 implements MessageParser {
 //		LOGGER.info("Number Of Fields in segment " + segName + " is " + fields.length);
     for (String field : fields) {
       HL7MessagePart fieldLoc = this.getChildLocator(seg, fldNum++);
-
-      //Becuase MSH-2 has a repetition separator in it, we
+      //Because MSH-2 has a repetition separator in it, we
       //need to actively avoid splitting the field on that separator.
+      field = field != null ? field.trim() : "";
       fieldLoc.setValue(field);
       fieldLoc.setFieldRepetition(1);
 

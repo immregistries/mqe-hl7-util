@@ -42,6 +42,18 @@ public class HL7VaccineParserTester {
            +"OBX|3|CE|69764-9^Document Type^LN|3|253088698300028811150224^Tetanus/Diphtheria (Td) VIS^cdcgs1vis||||||F|||20150624\r"
            +"OBX|4|DT|29769-7^Date Vis Presented^LN|3|20150624||||||F|||20150624\r";
 
+	private static String SPACES_IN_RXA =
+			"MSH|^~\\&|||||20170427122558-0600||VXU^V04^VXU_V04|2jCa-L.IZ-AD-2|D|2.5.1|||ER|AL|||||Z22^CDCPHINVS||\r"
+					+"PID|1||U37X24^^^AIRA-TEST^MR||Story^Archie^A^^^^L|Brennan^Rayna|20161019|M||2028-9^Asian^CDCREC|278 Shelby Cir^^Wyoming^MI^49418^USA^P||^PRN^PH^^^616^8248132~^NET^^Elise.Wong@isp.com|||||||||2186-5^Not Hispanic or Latino^CDCREC||N|1|||||N\r"
+					+"PD1|||||||||||02^Reminder/Recall - any method^HL70215|N|20150624|||A|20170427|20170427\r"
+					+"ORC|RE|AU37X24.1^NIST-AA-IZ-2|BU37X24.1^AIRA|||||||7824^Jackson^Lily^Suzanne^^^^^NIST-PI-1^L^^^PRN||654^Thomas^Wilma^Elizabeth^^^^^NIST-PI-1^L^^^MD|||||NISTEHRFAC^NISTEHRFacility^HL70362\r"
+					+"RXA|0|1|20170217||20^DTaP^CVX |999|mL^mL^UCUM||01^Historical^NIP001|7824^Jackson^Lily^Suzanne^^^^^NIST-PI-1^L^^^PRN|^^^NIST-Clinic-1||||315841|20151216|PMC^Sanofi Pasteur^MVX|||CP|A\r"
+					+"RXR|OTH^Intramuscular^NCIT|RD^Right Deltoid^HL70163\r"
+					+"OBX|1|CE|30963-3^Vaccine Funding Source^LN|1|PHC70^Private^CDCPHINVS||||||F|||20150624\r"
+					+"OBX|2|CE|64994-7^Vaccine Funding Program Eligibility^LN|2|V01^Not VFC Eligible^HL70064||||||F|||20150624|||VXC40^per immunization^CDCPHINVS\r"
+					+"OBX|3|CE|69764-9^Document Type^LN|3|253088698300028811150224^Tetanus/Diphtheria (Td) VIS^cdcgs1vis||||||F|||20150624\r"
+					+"OBX|4|DT|29769-7^Date Vis Presented^LN|3|20150624||||||F|||20150624\r";
+
 	private HL7MessageMap map = rootParser.getMessagePartMap(IMMUNITY_MSG);
 
 	//This was for a message that was not parsing correctly.
@@ -102,6 +114,15 @@ public class HL7VaccineParserTester {
 	}
 
 	MetaParser mp = new MetaParser(map);
+
+	@Test
+	public void testRxaWithSpace() {
+		HL7MessageMap spacesMessage = rootParser.getMessagePartMap(SPACES_IN_RXA);
+		List<MqeVaccination> vaccList = vParser.getVaccinationList(spacesMessage);
+		for (MqeVaccination v : vaccList) {
+			assertEquals("Should get an admin CVX of  20", "20", v.getAdminCvxCode());
+		}
+	}
 
 	@Test 
 	public void testObservationGetter() {
