@@ -125,9 +125,4 @@ public class Observation extends MqeValidatedObject {
         ", observationMethodCode='" + observationMethodCode + '\'' +
         '}';
   }
-
-  @Override
-  public TargetType getTargetType() {
-    return TargetType.Observation;
-  }
 }
