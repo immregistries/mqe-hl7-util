@@ -2,6 +2,7 @@ package org.immregistries.mqe.vxu.hl7;
 
 import org.immregistries.mqe.hl7util.model.MetaFieldInfo;
 import org.immregistries.mqe.vxu.MetaFieldInfoHolder;
+import org.immregistries.mqe.vxu.TargetType;
 
 public class Observation extends MetaFieldInfoHolder {
 
@@ -79,6 +80,11 @@ public class Observation extends MetaFieldInfoHolder {
   public void setObservationIdentifierDescription(
       String observationIdentifierDescription) {
     this.observationIdentifierDescription = observationIdentifierDescription;
+  }
+
+  @Override
+  public TargetType getTargetType() {
+    return TargetType.Observation;
   }
 
   @Override

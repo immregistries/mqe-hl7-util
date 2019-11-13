@@ -1,7 +1,7 @@
 package org.immregistries.mqe.vxu;
 
 public enum TargetType {
-	Patient, Vaccination, NextOfKin,
+	Observation, Patient, Vaccination, NextOfKin,
 	MessageHeader;
 }
 
