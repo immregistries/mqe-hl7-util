@@ -49,7 +49,6 @@ public enum HL7VaccinationParser {
 
   private static final Logger logger = LoggerFactory.getLogger(HL7VaccinationParser.class);
 
-
   /**
    * This builds a list of Vaccinations from the message map.
    */

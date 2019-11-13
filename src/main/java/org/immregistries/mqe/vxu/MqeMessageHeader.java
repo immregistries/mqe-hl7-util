@@ -4,7 +4,7 @@ import java.util.Date;
 import org.immregistries.mqe.hl7util.model.MetaFieldInfo;
 import org.immregistries.mqe.util.validation.MqeValidatedObject;
 
-public class MqeMessageHeader extends MetaFieldInfoHolder {
+public class MqeMessageHeader extends MqeValidatedObject {
   @Override
   public TargetType getTargetType() { return TargetType.MessageHeader;}
 

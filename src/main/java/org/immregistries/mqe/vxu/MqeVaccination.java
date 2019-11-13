@@ -10,7 +10,7 @@ import org.immregistries.mqe.vxu.hl7.Id;
 import org.immregistries.mqe.vxu.hl7.Observation;
 import org.immregistries.mqe.vxu.hl7.OrganizationName;
 
-public class MqeVaccination extends MetaFieldInfoHolder {
+public class MqeVaccination extends MqeValidatedObject {
   @Override
   public TargetType getTargetType() { return TargetType.Vaccination;}
 

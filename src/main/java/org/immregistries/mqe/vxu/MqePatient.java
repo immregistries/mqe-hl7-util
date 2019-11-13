@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import org.immregistries.mqe.hl7util.model.MetaFieldInfo;
+import org.immregistries.mqe.util.validation.MqeValidatedObject;
 import org.immregistries.mqe.vxu.hl7.Id;
 import org.immregistries.mqe.vxu.hl7.Name;
 import org.immregistries.mqe.vxu.hl7.OrganizationName;
@@ -12,7 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 
-public class MqePatient extends MetaFieldInfoHolder {
+public class MqePatient extends MqeValidatedObject {
   @Override
   public TargetType getTargetType() { return TargetType.Patient;}
 

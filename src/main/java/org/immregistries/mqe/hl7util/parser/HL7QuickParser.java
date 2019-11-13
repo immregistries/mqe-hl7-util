@@ -27,7 +27,7 @@ public enum HL7QuickParser {
     return getFirstMatch(msh4, message);
   }
 
-  String getFirstMatch(Pattern p, String message) {
+  private String getFirstMatch(Pattern p, String message) {
     Matcher matcher = p.matcher(message);
     if (matcher.find()) {
       return matcher.group(1);

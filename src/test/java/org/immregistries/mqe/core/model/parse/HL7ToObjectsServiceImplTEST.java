@@ -42,7 +42,8 @@ public class HL7ToObjectsServiceImplTEST {
 		assertEquals("message identifier", "61731", msh.getMessageControl());
 		assertEquals("pin", "1337-44-01", msh.getSendingFacility());
 	}
-	
+
+
 	@Test
 	public void pidHasExpectedParts() {
 		MqePatient pid = this.mr.getPatient();
