@@ -85,11 +85,6 @@ public class Observation extends MqeValidatedObject {
   }
 
   @Override
-  public TargetType getTargetType() {
-    return TargetType.Observation;
-  }
-
-  @Override
   protected void setFieldFromMetaFieldInfo(MetaFieldInfo metaFieldInfo) {
     String value = metaFieldInfo.getValue();
     switch (metaFieldInfo.getVxuField()) {
