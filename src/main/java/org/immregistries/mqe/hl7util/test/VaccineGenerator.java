@@ -15,7 +15,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public enum VaccineGenerator {
-  INSTANCE;
+                              INSTANCE;
 
   CodeMap cb = CodeMapBuilder.INSTANCE.getDefaultCodeMap();
 
@@ -42,7 +42,6 @@ public enum VaccineGenerator {
     int random = (int) (Math.random() * 5); //(probably want at most five vaccines);
     List<Code> rc = new ArrayList<>();
     for (Code c : codes) {
-      UseAge a = c.getUseAge();
 
       if (c.getUseDate() != null) {
         DateTime notBeforeDate = datr.parseDateTime(c.getUseDate().getNotBefore());
@@ -55,12 +54,14 @@ public enum VaccineGenerator {
         }
       }
 
-      int afterMonth = a.getNotBeforeMonth();
-      int beforeMonth = a.getNotAfterMonth();
-      if (months > afterMonth && months < beforeMonth
-          && !"998".equalsIgnoreCase(c.getValue())
-          && !"999".equalsIgnoreCase(c.getValue())) {
-        rc.add(c);
+      UseAge a = c.getUseAge();
+      if (a != null) {
+        int afterMonth = a.getNotBeforeMonth();
+        int beforeMonth = a.getNotAfterMonth();
+        if (months > afterMonth && months < beforeMonth && !"998".equalsIgnoreCase(c.getValue())
+            && !"999".equalsIgnoreCase(c.getValue())) {
+          rc.add(c);
+        }
       }
     }
     //if there's no matches, just use a random one.
@@ -82,7 +83,7 @@ public enum VaccineGenerator {
     }
     String msText = String.valueOf(new DateTime().getMillis());
     return "TEST" + msText.substring(msText.length() - 8, msText.length());
-//    last 10 digits =
-//    return msText.substring(0,msText.length() - 10);
+    //    last 10 digits =
+    //    return msText.substring(0,msText.length() - 10);
   }
 }
