@@ -30,7 +30,10 @@ public class HL7MessageMapTest {
   private static final String RXA4 = "RXA|0||20140616|20140616|83^Spacey CVX^CVX ||||00^New immunization record^NIP001|Luginbill, David|1337-44-01^Sparrow Pediatrics (Lansing)||||J005080||MSD^Merck &Co.^MVX||||A|20140614\r";
   private static final String RXA5 = "RXA|0||20140616|20140616|58160-811-52^Spacey NDC^NDC ||||00^New immunization record^NIP001|Luginbill, David|1337-44-01^Sparrow Pediatrics (Lansing)||||J005080||MSD^Merck &Co.^MVX||||A|20140614\r";
   private static final String RXR = "RXR|IM^Intramuscular^HL70162|RT^Right Thigh^HL70163\r";
-  private static final String OBX = "OBX|2|CE|64994-7^Vaccine funding program eligibility category^LN||V02^VFC Eligible - Medicaid/Medicare^HL70064||||||F|||20140614\r";
+  private static final String OBX1 = "OBX|1|CE|64994-7^Vaccine funding program eligibility category^LN||V02^VFC Eligible - Medicaid/Medicare^HL70064||||||F|||20140614\r";
+  private static final String OBX2 = "OBX|2|CE|30956-7^vaccine type^LN|2|88^Influenza, unspecified formulation^CVX||||||F\r";
+  private static final String OBX3 = "OBX|3|TS|29768-9^Date vaccine information statement published^LN|2|20120702||||||F\r";
+  private static final String OBX4 = "OBX|4|TS|29769-7^Date vaccine information statement presented^LN|2|20120814||||||F\r";
 
   private static final String EXAMPLE_VXU;
 
@@ -44,19 +47,22 @@ public class HL7MessageMapTest {
     SEG_MAP.put("NK1-1", NK1); //3
     SEG_MAP.put("ORC-1", ORC); //4
     SEG_MAP.put("RXA-1", RXA); //5
-    SEG_MAP.put("OBX-1", OBX); //6
+    SEG_MAP.put("OBX-1", OBX1); //6
     SEG_MAP.put("ORC-2", ORC); //7
     SEG_MAP.put("RXA-2", RXA2);//8
-    SEG_MAP.put("OBX-2", OBX); //9
+    SEG_MAP.put("OBX-2", OBX1); //9
     SEG_MAP.put("RXR-1", RXR); //10
     SEG_MAP.put("RXA-3", RXA3);//11
-    SEG_MAP.put("OBX-3", OBX); //12
+    SEG_MAP.put("OBX-3", OBX1); //12
 
-    SEG_MAP.put("RXA-4", RXA4);//11
-    SEG_MAP.put("OBX-4", OBX); //12
+    SEG_MAP.put("RXA-4", RXA4);//13
+    SEG_MAP.put("OBX-4", OBX1); //14
 
-    SEG_MAP.put("RXA-5", RXA5);//11
-    SEG_MAP.put("OBX-5", OBX); //12
+    SEG_MAP.put("RXA-5", RXA5);//15
+    SEG_MAP.put("OBX-5", OBX1); //16
+    SEG_MAP.put("OBX-6", OBX2); //17
+    SEG_MAP.put("OBX-7", OBX3); //18
+    SEG_MAP.put("OBX-8", OBX4); //19
 
     StringBuffer sb = new StringBuffer();
     for (String seg : SEG_MAP.values()) {
@@ -105,6 +111,61 @@ public class HL7MessageMapTest {
   @Before
   public void setup() {
 
+  }
+
+
+  @Test
+  public void testAartFieldReference() {
+    HL7MessageMap map = mpp.getMessagePartMap(EXAMPLE_VXU);
+    String aartReference = "RXA#5:OBX#2-5";
+    Hl7Location loc = map.getHl7LocationForAartLoc(aartReference);
+    assertEquals("Location for " + aartReference + " should be ", "OBX[6]-5[1].1.1", loc.toString());
+    assertEquals("Line for " + aartReference + " should be ", 17, loc.getLine());
+    assertEquals("Sequence for " + aartReference + " should be ", 6, loc.getSegmentSequence());
+
+    String value = map.getValue(loc);
+    assertEquals("value at " + aartReference + " should be... ", "88", value);
+
+    aartReference = "RXA#5:OBX#2-5.2";
+    loc = map.getHl7LocationForAartLoc(aartReference);
+    assertEquals("Location for " + aartReference + " should be ", "OBX[6]-5[1].2.1", loc.toString());
+    assertEquals("Line for " + aartReference + " should be ", 17, loc.getLine());
+    assertEquals("Sequence for " + aartReference + " should be ", 6, loc.getSegmentSequence());
+
+    value = map.getValue(loc);
+    assertEquals("value at " + aartReference + " should be... ", "Influenza, unspecified formulation", value);
+
+    //Some boundary conditions:
+
+    //1. This location will not exist. the RXA will, but not the OBX.
+    aartReference = "RXA#4:OBX#6-5.2";
+    loc = map.getHl7LocationForAartLoc(aartReference);
+    assertEquals("Location for " + aartReference + " should be ", "[0]-0[1].0.0", loc.toString());
+    assertEquals("Line for " + aartReference + " should be ", 0, loc.getLine());
+    assertEquals("Sequence for " + aartReference + " should be ", 0, loc.getSegmentSequence());
+
+    //2. This location will not exist. the RXA will not!
+    aartReference = "RXA#7:OBX#1-5.2";
+    loc = map.getHl7LocationForAartLoc(aartReference);
+    assertEquals("Location for " + aartReference + " should be ", "[0]-0[1].0.0", loc.toString());
+    assertEquals("Line for " + aartReference + " should be ", 0, loc.getLine());
+    assertEquals("Sequence for " + aartReference + " should be ", 0, loc.getSegmentSequence());
+
+  }
+
+
+
+  @Test
+  public void testAartFieldReferencePUT() {
+    HL7MessageMap map = mpp.getMessagePartMap(EXAMPLE_VXU);
+    String aartReference = "RXA#5:OBX#2-5=52";
+    Hl7Location loc = map.getHl7LocationForAartLoc(aartReference);
+    String newValue = "UNITTESTVALUE";
+    map.put(loc, newValue);
+    String newMessage = map.reassemble();
+    HL7MessageMap map2 = mpp.getMessagePartMap(newMessage);
+    String retrieved = map2.getValue(loc);
+    assertEquals("value at " + aartReference + " in new map should be... ", newValue, retrieved);
   }
 
   @Test

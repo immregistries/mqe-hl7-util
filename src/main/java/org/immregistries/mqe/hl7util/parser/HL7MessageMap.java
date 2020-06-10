@@ -302,6 +302,72 @@ public class HL7MessageMap {
   }
 
   /**
+   * Uses a more complicated dialect for location, which was authored for AART
+   * @param locationText
+   * @return
+   */
+  public Hl7Location getHl7LocationForAartLoc(String locationText) {
+    if (StringUtils.isBlank(locationText)) {
+      return new Hl7Location();
+    }
+
+    /* What we're looking for: Complicated things like this:
+        RXA#2:OBX#2-5
+    */
+    if (locationText.contains(":")) {
+      /* It's a relative location such as this:
+       *  RXA#2:OBX#2-5
+       *  which means the second OBX after the second RXA.
+       */
+      String[] parts = locationText.split(":");
+      if (parts.length == 2) {
+        String anchor = parts[0];
+        String part = parts[1];
+        //1... we need to know the anchor's line number.
+        Hl7Location anchorLoc = this.getLocWithLine(new Hl7Location(anchor));
+        int startLine = anchorLoc.getLine();
+        String anchorSegment = anchorLoc.getSegmentId();
+
+        //2 get the "part" we're looking for, and which relative number...
+        //  in our example above, that's 2!  from OBX#2
+        Hl7Location partLoc = new Hl7Location(part);
+        int partNumber = partLoc.getSegmentSequence();//this is the "Nth"... the number after # or in []
+        String partSegment = partLoc.getSegmentId();
+
+        //then iterate down the numbers to get the Nth line.
+        List<String> segments = this.getMessageSegments();
+        int total = segments.size();
+        int nthPart = 0;
+        for (int x = startLine; x < total; x++) {
+          String segment = segments.get(x);
+          if (anchorSegment.equals(segment)) {
+            return new Hl7Location();
+            //Once you've gotten to the next instance of the anchoring segment
+            //then we've gone past, and have not found what they were looking for.
+            //We have not found the specific segment in the map. it's just not there.
+            //Therefore we will return an empty location to signify that we haven't found it.
+          }
+          if (partSegment.equals(segment)) {
+            nthPart++;
+            if (nthPart == partNumber) {
+              partLoc.setLine(x+1);
+              int seq = this.getSequenceFromLine(partLoc.getLine());
+              partLoc.setSegmentSequence(seq);
+              return partLoc;
+            }
+          }
+        }
+        //At this point we've gone through all of the segments
+        //and haven't found the one specified.
+        //In that case, we return an empty location to signify we haven't found that location.
+        return new Hl7Location();
+      }
+    }
+    return new Hl7Location(locationText);
+  }
+
+
+  /**
    * This solves the issue where we want to send in a location
    * either to PUT or GET a value from the value map, but
    * the location does not have a line number.
