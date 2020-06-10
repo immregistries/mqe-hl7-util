@@ -14,13 +14,13 @@ public enum DateUtility {
   INSTANCE;
   private static final Logger logger = org.slf4j.LoggerFactory.getLogger(DateUtility.class);
   //example complete date time: 20150624073733.994-0500
-  private final DateTimeFormatter tz1  = DateTimeFormat.forPattern("yyyyMMddHHmmss.SSSZ");
+  private final DateTimeFormatter tz1  = DateTimeFormat.forPattern("yyyyMMddHHmmss.SSSSZ");
   private final DateTimeFormatter tz2  = DateTimeFormat.forPattern("yyyyMMddHHmmssZ");
   private final DateTimeFormatter dtf0 = DateTimeFormat.forPattern("yyyyMMddHHmmss");
   private final DateTimeFormatter dtf1 = DateTimeFormat.forPattern("yyyyMMddHHmm");
   private final DateTimeFormatter dtf2 = DateTimeFormat.forPattern("yyyyMMdd");
-
-  private final DateTimeFormatter[] DATE_FORMATS = {tz2, tz1, dtf0, dtf1, dtf2};
+  private final DateTimeFormatter dtf4 = DateTimeFormat.forPattern("yyyyMMddHHmmss.SSSS");
+  private final DateTimeFormatter[] DATE_FORMATS = {tz2, tz1, dtf0, dtf1, dtf2, dtf4};
 
   public Date parseDate(String dateString) {
 
@@ -31,15 +31,6 @@ public enum DateUtility {
     }
 
     return null;
-  }
-
-  public boolean isExpectedDateFormat(String dateString, DateTimeFormatter expected) {
-    try {
-      DateTime.parse(dateString, expected);
-      return true;
-    } catch (IllegalArgumentException iae) {
-      return false;
-    }
   }
 
   public boolean hasTimezone(String dateString) {

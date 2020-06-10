@@ -27,6 +27,8 @@ public class HL7MessageMapTest {
   private static final String RXA = "RXA|0||20140614|20140614|83^Hepatitis A ped/adol^CVX^90633^Hepatitis A ped/adol^CPT||||00^New immunization record^NIP001|Luginbill, David|1337-44-01^Sparrow Pediatrics (Lansing)||||J005080||MSD^Merck &Co.^MVX||||A|20140614\r";
   private static final String RXA2 = "RXA|0|X|20140615|20140615|83^Awesome Immunization^CVX^90633^Hepatitis A ped/adol^CPT||||00^New immunization record^NIP001|Luginbill, David|1337-44-01^Sparrow Pediatrics (Lansing)||||J005080||MSD^Merck &Co.^MVX||||A|20140614\r";
   private static final String RXA3 = "RXA|0||20140616|20140616|83^IMPORTANT Immunization^CVX^90633^Hepatitis A ped/adol^CPT||||00^New immunization record^NIP001|Luginbill, David|1337-44-01^Sparrow Pediatrics (Lansing)||||J005080||MSD^Merck &Co.^MVX||||A|20140614\r";
+  private static final String RXA4 = "RXA|0||20140616|20140616|83^Spacey CVX^CVX ||||00^New immunization record^NIP001|Luginbill, David|1337-44-01^Sparrow Pediatrics (Lansing)||||J005080||MSD^Merck &Co.^MVX||||A|20140614\r";
+  private static final String RXA5 = "RXA|0||20140616|20140616|58160-811-52^Spacey NDC^NDC ||||00^New immunization record^NIP001|Luginbill, David|1337-44-01^Sparrow Pediatrics (Lansing)||||J005080||MSD^Merck &Co.^MVX||||A|20140614\r";
   private static final String RXR = "RXR|IM^Intramuscular^HL70162|RT^Right Thigh^HL70163\r";
   private static final String OBX = "OBX|2|CE|64994-7^Vaccine funding program eligibility category^LN||V02^VFC Eligible - Medicaid/Medicare^HL70064||||||F|||20140614\r";
 
@@ -49,6 +51,12 @@ public class HL7MessageMapTest {
     SEG_MAP.put("RXR-1", RXR); //10
     SEG_MAP.put("RXA-3", RXA3);//11
     SEG_MAP.put("OBX-3", OBX); //12
+
+    SEG_MAP.put("RXA-4", RXA4);//11
+    SEG_MAP.put("OBX-4", OBX); //12
+
+    SEG_MAP.put("RXA-5", RXA5);//11
+    SEG_MAP.put("OBX-5", OBX); //12
 
     StringBuffer sb = new StringBuffer();
     for (String seg : SEG_MAP.values()) {
@@ -153,7 +161,7 @@ public class HL7MessageMapTest {
 
 //		I also need to know how many segments there are...
     int rxaCnt = map.getSegmentCount("RXA");
-    assertEquals("Should be three RXA's", 3, rxaCnt);
+    assertEquals("Should be five RXA's", 5, rxaCnt);
 
 //		I want to know that so I can iterate over the segments properly...
 //		So the root desire is to get a specific segment...  So I can get the specific RXA's stuff. 
@@ -168,6 +176,46 @@ public class HL7MessageMapTest {
     System.out.println(map.toString());
   }
 
+  @Test
+  public void testRxaRetrieval() {
+    HL7MessageMap map = mpp.getMessagePartMap(EXAMPLE_VXU);
+
+    String loc = "RXA-5.2";
+    String value = map.getValue(loc);
+    assertEquals(loc, "Hepatitis A ped/adol", value);
+
+    loc = "RXA[2]-5.2";
+    value = map.getValue(loc);
+    assertEquals(loc, "Awesome Immunization", value);
+
+    loc = "RXA[3]-5.2";
+    value = map.getValue(loc);
+    assertEquals(loc, "IMPORTANT Immunization", value);
+
+    loc = "RXA[4]-5.2";
+    value = map.getValue(loc);
+    assertEquals(loc, "Spacey CVX", value);
+
+    loc = "RXA[5]-5.2";
+    value = map.getValue(loc);
+    assertEquals(loc, "Spacey NDC", value);
+
+    loc = "RXA[4]-5.1";
+    value = map.getValue(loc);
+    assertEquals(loc, "83", value);
+
+    loc = "RXA[5]-5.1";
+    value = map.getValue(loc);
+    assertEquals(loc, "58160-811-52", value);
+
+    loc = "RXA[4]-5.3";
+    value = map.getValue(loc);
+    assertEquals(loc, "CVX", value);
+
+    loc = "RXA[5]-5.3";
+    value = map.getValue(loc);
+    assertEquals(loc, "NDC", value);
+  }
 
   @Test
   public void testGettingValues() {
@@ -180,15 +228,6 @@ public class HL7MessageMapTest {
 
     String msh1x = map.getValue("MSH", 1, 1);
     assertEquals("MSH", msh, msh1x);
-
-    String rxa52 = map.getValue("RXA-5.2");
-    assertEquals("RXA-5.2", "Hepatitis A ped/adol", rxa52);
-
-    String rxa_2_52 = map.getValue("RXA[2]-5.2");
-    assertEquals("RXA[2]-5.2", "Awesome Immunization", rxa_2_52);
-
-    String rxa_2_52x = map.getValue("RXA-5.2", 8, 1);
-    assertEquals("rxa_2_52x", rxa_2_52x, rxa_2_52);
 
     String pid5_2_2 = map.getValue("PID-5[2]-2");
     assertEquals("PID-5[2]-2", "AWESOMENAME2", pid5_2_2);

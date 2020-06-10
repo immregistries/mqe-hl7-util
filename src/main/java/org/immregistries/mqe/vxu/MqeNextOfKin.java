@@ -1,10 +1,13 @@
 package org.immregistries.mqe.vxu;
 
 import org.immregistries.mqe.hl7util.model.MetaFieldInfo;
+import org.immregistries.mqe.util.validation.MqeValidatedObject;
 import org.immregistries.mqe.vxu.code.NokRelationship;
 import org.immregistries.mqe.vxu.hl7.Name;
 
-public class MqeNextOfKin extends MetaFieldInfoHolder {
+public class MqeNextOfKin extends MqeValidatedObject {
+  @Override
+  public TargetType getTargetType() { return TargetType.NextOfKin;}
 
   private MqeAddress address = new MqeAddress();
   private Name name = new Name();

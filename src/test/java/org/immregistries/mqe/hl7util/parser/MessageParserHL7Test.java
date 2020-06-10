@@ -24,7 +24,7 @@ public class MessageParserHL7Test {
 	private static final String PID =  "PID|||23456^^^^MR||FIRSTNAME^LASTNAME^^^^X~COOLNAME^AWESOMENAME2||20120604|M|||100 Main^^Lansing^MI^48912 1330^^||5175555555\r";
 	private static final String NK1 =  "NK1||NKLast^NKFirst|^3^HL70063\r";
 	private static final String ORC =  "ORC\r";
-	private static final String RXA =  "RXA|0||20140614|20140614|83^Hepatitis A ped/adol^CVX^90633^Hepatitis A ped/adol^CPT||||00^New immunization record^NIP001|Luginbill, David|1337-44-01^Sparrow Pediatrics (Lansing)||||J005080||MSD^Merck &Co.^MVX||||A|20140614\r";
+	private static final String RXA =  "RXA|0||20140614|20140614|83^Hepatitis A ped/adol^CVX ^90633^Hepatitis A ped/adol^CPT ||||00^New immunization record^NIP001|Luginbill, David|1337-44-01^Sparrow Pediatrics (Lansing)||||J005080||MSD^Merck &Co.^MVX||||A|20140614\r";
 	private static final String RXR =  "RXR|IM^Intramuscular^HL70162|RT^Right Thigh^HL70163\r";
 	private static final String OBX =  "OBX|2|CE|64994-7^Vaccine funding program eligibility category^LN||V02^VFC Eligible - Medicaid/Medicare^HL70064||||||F|||20140614\r";
 
@@ -222,7 +222,7 @@ public class MessageParserHL7Test {
 		assertEquals("RXA-2", "", fieldArray[2]);
 		assertEquals("RXA-3", "20140614", fieldArray[3]);
 		assertEquals("RXA-4", "20140614", fieldArray[4]);
-		assertEquals("RXA-5", "83^Hepatitis A ped/adol^CVX^90633^Hepatitis A ped/adol^CPT", fieldArray[5]);
+		assertEquals("RXA-5", "83^Hepatitis A ped/adol^CVX ^90633^Hepatitis A ped/adol^CPT ", fieldArray[5]);
 		assertEquals("RXA-6", "", fieldArray[6]);
 		assertEquals("RXA-7", "", fieldArray[7]);
 		assertEquals("RXA-8", "", fieldArray[8]);

@@ -92,8 +92,21 @@ public class MessageParserHL7 implements MessageParser {
    * with the part list.
    */
   public HL7MessageMap getMessagePartMap(String message) {
+    if (message == null || !message.startsWith("MSH")) {
+      return generateBlankMap(message);
+    }
     List<HL7MessagePart> partList = getMessagePartList(message);
     return getMessageMapFromPartList(partList);
+  }
+
+  private HL7MessageMap generateBlankMap(String message) {
+    HL7MessageMap hmm = new HL7MessageMap();
+//    Hl7Location loc = new Hl7Location("MSH-10");
+//    String fakeControlId = message != null ? message.substring(0, (message.length() > 3) ? 3 : message.length()) : "---";
+//    hmm.put(loc, fakeControlId);
+//    loc = new Hl7Location("PID-6-1");
+//    hmm.put(loc, "unreadable message");
+    return hmm;
   }
 
   /**
@@ -127,9 +140,9 @@ public class MessageParserHL7 implements MessageParser {
 //		LOGGER.info("Number Of Fields in segment " + segName + " is " + fields.length);
     for (String field : fields) {
       HL7MessagePart fieldLoc = this.getChildLocator(seg, fldNum++);
-
-      //Becuase MSH-2 has a repetition separator in it, we
+      //Because MSH-2 has a repetition separator in it, we
       //need to actively avoid splitting the field on that separator.
+      field = field != null ? field.trim() : "";
       fieldLoc.setValue(field);
       fieldLoc.setFieldRepetition(1);
 
@@ -366,8 +379,14 @@ public class MessageParserHL7 implements MessageParser {
   }
 
   protected String[] splitRepetitions(String field) {
-    String[] repetitions = field.split("\\" + this.repetitionSeparator);
-    return repetitions;
+    String splitter = "\\" + this.repetitionSeparator;
+    try {
+      String[] repetitions = field.split(splitter);
+      return repetitions;
+    } catch (Exception e) {
+      LOGGER.error("Error Parsing message part: " + field + " with separator ["+splitter+"]", e);
+      return new String[] {field};
+    }
   }
 
   protected String[] splitFields(String segment) {

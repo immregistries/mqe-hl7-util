@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import org.immregistries.mqe.hl7util.model.MetaFieldInfo;
+import org.immregistries.mqe.util.validation.MqeValidatedObject;
 import org.immregistries.mqe.vxu.hl7.Id;
 import org.immregistries.mqe.vxu.hl7.Name;
 import org.immregistries.mqe.vxu.hl7.OrganizationName;
@@ -12,17 +13,16 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 
-public class MqePatient extends MetaFieldInfoHolder {
+public class MqePatient extends MqeValidatedObject {
+  @Override
+  public TargetType getTargetType() { return TargetType.Patient;}
 
   private static final Logger LOGGER = LoggerFactory.getLogger(MqePatient.class);
-
   private List<MqeAddress> patientAddressList = new ArrayList<MqeAddress>();
-
   private Name alias = new Name();
 
   private Date birthDate = null;
   private String birthDateString = "";
-
   private String birthMultipleInd = "";
   private String birthOrderNumber = "";// new String(CodesetType.BIRTH_ORDER);
   private String birthPlace = "";

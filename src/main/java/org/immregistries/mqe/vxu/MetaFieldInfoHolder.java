@@ -1,27 +1,20 @@
 package org.immregistries.mqe.vxu;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.immregistries.mqe.hl7util.model.MetaFieldInfo;
+import org.immregistries.mqe.util.validation.MqeValidatedObject;
 
 public abstract class MetaFieldInfoHolder implements MetaFieldInfoData {
-
   private Map<VxuField, MetaFieldInfo> metaFieldInfoMap = new HashMap<>();
-  private List<DetectionInfo> detectionList = new ArrayList<>();
   private int positionId = 0;
-
+  public abstract TargetType getTargetType();
   public final int getPositionId() {
     return this.positionId;
   }
-
   public final void setPositionId(int positionId) {
     this.positionId = positionId;
-  }
-
-  public List<DetectionInfo> getDetectionList() {
-    return detectionList;
   }
 
   public Map<VxuField, MetaFieldInfo> getMetaFieldInfoMap() {

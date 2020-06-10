@@ -1,12 +1,12 @@
 package org.immregistries.mqe.vxu;
 
-import java.io.Serializable;
 import java.util.Date;
 import org.immregistries.mqe.hl7util.model.MetaFieldInfo;
+import org.immregistries.mqe.util.validation.MqeValidatedObject;
 
-public class MqeMessageHeader extends MetaFieldInfoHolder implements Serializable {
-
-  private static final long serialVersionUID = 1l;
+public class MqeMessageHeader extends MqeValidatedObject {
+  @Override
+  public TargetType getTargetType() { return TargetType.MessageHeader;}
 
   private int headerId = 0;
   private String ackTypeAccept = "";// new CodedEntity(CodesetType.ACKNOWLEDGEMENT_TYPE);
@@ -301,5 +301,4 @@ public String getSendingRespOrg() {
 public void setSendingRespOrg(String sendingRespOrg) {
 	this.sendingRespOrg = sendingRespOrg;
 }
-
 }
