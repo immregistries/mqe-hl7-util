@@ -16796,6 +16796,7 @@
                 <link-to codeset="VACCINATION_TRADE_NAME">Janssen (J&amp;J) COVID-19 Vaccine</link-to>
                 <link-to codeset="VACCINATION_NDC_CODE_UNIT_OF_USE">59676-0580-05</link-to>
                 <link-to codeset="VACCINATION_NDC_CODE_UNIT_OF_SALE">59676-0580-15</link-to>
+                <link-to codeset="VACCINATION_CPT_CODE">91303</link-to>
             </reference>
             <use-date>
                 <not-before>20210126</not-before>
@@ -25317,6 +25318,9 @@
             <code-status>
                 <status>Valid</status>
             </code-status>
+            <reference>
+                <link-to codeset="VACCINATION_CVX_CODE">212</link-to>
+            </reference>
         </code>
         <code>
             <value>91302</value>
