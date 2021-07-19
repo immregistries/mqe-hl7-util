@@ -159,16 +159,22 @@ public enum HL7VaccinationParser {
         + "] RXR[" + rxrLine + "] OBX{" + obxLineList + "}");
 
     for (Integer i : obxLineList) {
-      Hl7Location hl7Location = new Hl7Location("OBX-3");
-      hl7Location.setLine(i);
+      Hl7Location hl7Location;
+      hl7Location = mp.getLocationfor("OBX-3", i);
+      
 //      TODO: This isn't taking into account the segment sequence...  I'm not sure if thats going to work.
       String value = mp.getValue(hl7Location);
+      
+      
+      System.out.println("--> hl7Location = " + hl7Location + " : " + value + "");
       if (value != null && value.equals("64994-7")) {
+        
         shot.setFields(mp.mapValues(i, VACCINATION_FINANCIAL_ELIGIBILITY_CODE));
       }
-      else if (value != null && value.equals("30963-3")) {
+      else if (value != null && value.equals("30963-3")) { // 30963-3
     	  shot.setFields(mp.mapValues(i, VACCINATION_FUNDING_SOURCE_CODE));
       }
+      
     }
 
     List<Observation> observations = getObservations(mp, obxLineList);

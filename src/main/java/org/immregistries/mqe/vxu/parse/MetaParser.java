@@ -26,7 +26,7 @@ public class MetaParser {
     }
     return mfiList;
   }
-
+  
   private MetaFieldInfo mapValue(int line, VxuField vxuField) {
     if (line < 0 || StringUtils.isBlank(vxuField.getHl7Locator())) {
       return new MetaFieldInfo(null, vxuField, -1, line);
@@ -98,11 +98,11 @@ public class MetaParser {
     return map.getValue(hl7Location);
   }
 
-  private Hl7Location getLocationfor(VxuField vxuField, int line) {
+  public Hl7Location getLocationfor(VxuField vxuField, int line) {
     return getLocationfor(vxuField.getHl7Locator(), line);
   }
 
-  private Hl7Location getLocationfor(String vxuFieldRef, int line) {
+  public Hl7Location getLocationfor(String vxuFieldRef, int line) {
     int segmentSequence = map.getSequenceFromLine(line);
     return new Hl7Location(vxuFieldRef, line, segmentSequence);
   }
