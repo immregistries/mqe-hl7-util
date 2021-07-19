@@ -134,8 +134,22 @@ public class Hl7Location implements Comparable<Hl7Location> {
      https://regex101.com/r/i8Jujl/7
    *
    */
-  private static final String regex = "(\\w\\w\\w)\\[?(\\d*)]?-?(\\d*)[\\[~]?(\\d*)]?[.-]?(\\d*)[.-]?(\\d*)";
-  private static final Pattern pattern = Pattern.compile(regex);
+//  private static final String regex = "(\\w\\w\\w)\\[?(\\d*)]?-?(\\d*)[\\[~]?(\\d*)]?[.-]?(\\d*)[.-]?(\\d*)";
+
+  /**
+   * this regex can be seen and tested at
+   https://regex101.com/r/i8Jujl/8
+
+   it works with any of these formats:
+   RXA[2]-5[2].5.5
+   RXA#2-5[2].5.5
+   RXA[2]-5#2.5.5
+   RXA#2-5#2.5.5
+   *
+   */
+  private final static String REGEX = "(\\w\\w\\w)\\[?#?(\\d*)]?-?(\\d*)[\\[~#]?(\\d*)]?[.-]?(\\d*)[.-]?(\\d*)";
+
+  private static final Pattern pattern = Pattern.compile(REGEX);
   /**
    * Expected format: segment[sequence]-field[fieldrep].component.subcomponent
    * @param hl7Reference

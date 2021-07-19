@@ -14,13 +14,14 @@ public enum DateUtility {
   INSTANCE;
   private static final Logger logger = org.slf4j.LoggerFactory.getLogger(DateUtility.class);
   //example complete date time: 20150624073733.994-0500
-  private final DateTimeFormatter tz1  = DateTimeFormat.forPattern("yyyyMMddHHmmss.SSSSZ");
-  private final DateTimeFormatter tz2  = DateTimeFormat.forPattern("yyyyMMddHHmmssZ");
-  private final DateTimeFormatter dtf0 = DateTimeFormat.forPattern("yyyyMMddHHmmss");
-  private final DateTimeFormatter dtf1 = DateTimeFormat.forPattern("yyyyMMddHHmm");
-  private final DateTimeFormatter dtf2 = DateTimeFormat.forPattern("yyyyMMdd");
-  private final DateTimeFormatter dtf4 = DateTimeFormat.forPattern("yyyyMMddHHmmss.SSSS");
-  private final DateTimeFormatter[] DATE_FORMATS = {tz2, tz1, dtf0, dtf1, dtf2, dtf4};
+  private final DateTimeFormatter timeZoneFormat1 = DateTimeFormat.forPattern("yyyyMMddHHmmss.SSSSZ");
+  private final DateTimeFormatter timeZoneFormat2 = DateTimeFormat.forPattern("yyyyMMddHHmmssZ");
+  private final DateTimeFormatter dateTimeFormat1 = DateTimeFormat.forPattern("yyyyMMddHHmmss");
+  private final DateTimeFormatter dateTimeFormat2 = DateTimeFormat.forPattern("yyyyMMddHHmm");
+  private final DateTimeFormatter dateOnlyFormat = DateTimeFormat.forPattern("yyyyMMdd");
+  private final DateTimeFormatter dateTimeFormatSeconds = DateTimeFormat.forPattern("yyyyMMddHHmmss.SSSS");
+  private final DateTimeFormatter[] DATE_FORMATS = {timeZoneFormat2, timeZoneFormat1,
+      dateTimeFormat1, dateTimeFormat2, dateOnlyFormat, dateTimeFormatSeconds};
 
   public Date parseDate(String dateString) {
 
@@ -33,13 +34,33 @@ public enum DateUtility {
     return null;
   }
 
+  /**
+   * This assumes a date format beginning with yyyyMMdd
+   *
+   * @param dateTimeStringOne a string with a date in it
+   * @param dateTimeStringTwo another string with a date in it
+   * @return
+   */
+  public boolean isDateOneBeforeTwoIgnoringTimeAndZone(String dateTimeStringOne, String dateTimeStringTwo) {
+      try {
+        String dateOnlyStringOne = dateTimeStringOne.substring(0,8);
+        DateTime one = DateTime.parse(dateOnlyStringOne, dateOnlyFormat);
+        String dateOnlyStringTwo = dateTimeStringTwo.substring(0,8);
+        DateTime two = DateTime.parse(dateOnlyStringTwo, dateOnlyFormat);
+        return two.isAfter(one);
+      } catch (IndexOutOfBoundsException | IllegalArgumentException e) {
+        logger.info("these strings aren't eligible for a date compare: " + dateTimeStringOne + " vs " + dateTimeStringTwo);
+      }
+      return false;
+  }
+
   public boolean hasTimezone(String dateString) {
     try {
-      DateTime dt = DateTime.parse(dateString, tz1);
+      DateTime dt = DateTime.parse(dateString, timeZoneFormat1);
       return true;
     } catch (IllegalArgumentException iae) {
       try {
-        DateTime dt = DateTime.parse(dateString, tz2);
+        DateTime dt = DateTime.parse(dateString, timeZoneFormat2);
         return true;
       } catch (IllegalArgumentException iae2) {
         return false;
@@ -53,11 +74,10 @@ public enum DateUtility {
       return null;
     }
 
-    //This makes the class more flexible.
+    //This makes the class more flexible. It starts with the most likely format, and ends with the least.
     for (DateTimeFormatter dateFormatter : DATE_FORMATS) {
       try {
-        DateTime dt = DateTime.parse(dateString, dateFormatter);
-        return dt;
+        return parseDateTime(dateString, dateFormatter);
       } catch (IllegalArgumentException iae) {
         continue;//try the next format.
       }
@@ -66,28 +86,32 @@ public enum DateUtility {
     return null;
   }
 
+  private DateTime parseDateTime(String dateString, DateTimeFormatter dtf) {
+    return DateTime.parse(dateString, dtf);
+  }
+
   /**
    * this is for testing to know what the string ought to look like.
    */
   protected String toFullNistString(DateTime in) {
-    return in.toString(tz1);
+    return in.toString(timeZoneFormat1);
   }
 
   //	This puts a dateTime object to the MQE's expected String format.
   public String toString(DateTime input) {
-    return input.toString(tz2);
+    return input.toString(timeZoneFormat2);
   }
 
   public String toDateString(DateTime input) {
-    return input.toString(dtf2);
+    return input.toString(dateOnlyFormat);
   }
   //	This puts a dateTime object to the MQE's expected String format.
   public String toTzString(DateTime input) {
-    return input.toString(tz2);
+    return input.toString(timeZoneFormat2);
   }
 
   public String toString(Date input) {
-    return new DateTime(input).toString(dtf1);
+    return new DateTime(input).toString(dateTimeFormat2);
   }
 
   public boolean isDate(String dateString) {
