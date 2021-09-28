@@ -230,6 +230,14 @@ public enum VxuField {
   VACCINATION_TRADE_NAME_AND_MANUFACTURER(VACCINATION, "trade name and manufacturer", null, null),
   VACCINATION_VALIDITY_CODE(VACCINATION, "validity code", null, null),
 
+  // Vaccine Evaluation  
+  VACCINE_EVALUATION_AT_15_MONTHS(GENERAL, "vaccine evaluation at 15 months", null, null),
+  VACCINE_EVALUATION_AT_18_MONTHS(GENERAL, "vaccine evaluation at 18 months", null, null),
+  VACCINE_EVALUATION_AT_24_MONTHS(GENERAL, "vaccine evaluation at 24 months", null, null),
+  
+  // Vaccine Coverage
+  VACCINE_COVERAGE_AT_24_MONTHS(GENERAL, "vaccine coverage at 24 months", null, null),
+  VACCINE_COVERAGE_AT_36_MONTHS(GENERAL, "vaccine coverage at 36 months", null, null),
   ;
 
   private final String fieldDescription;
