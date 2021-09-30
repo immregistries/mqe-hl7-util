@@ -15,8 +15,7 @@ public enum NameGenerator {
   public String getRandomName() {
     String name = "Aysla";
     int randomNumber = (int) (Math.random() * 14006);/*thats how many lines are in the file. */
-    InputStream is = Thread.currentThread().getContextClassLoader()
-        .getResourceAsStream("nameList.txt");
+    InputStream is = NameGenerator.class.getResourceAsStream(nameFile);
 
     try {
       BufferedReader br = new BufferedReader(new InputStreamReader(is));
