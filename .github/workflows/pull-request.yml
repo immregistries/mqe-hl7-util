@@ -17,5 +17,5 @@ jobs:
         server-id: github # Value of the distributionManagement/repository/id field of the pom.xml
         settings-path: ${{ github.workspace }} # location for the settings.xml file
 
-    - name: Test with Maven
-      run: mvn -B test --file pom.xml
+    - name: Build with Maven
+      run: mvn -B validate -Dmaven.test.skip=true
