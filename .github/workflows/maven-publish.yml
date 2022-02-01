@@ -1,0 +1,28 @@
+name: maven-publish
+
+on:
+  push:
+    tags: [ '*' ]
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up JDK 11
+      uses: actions/setup-java@v2
+      with:
+        distribution: zulu
+        java-version: '11'
+        server-id: ossrh
+        server-username: OSSRH_USERNAME
+        server-password: OSSRH_TOKEN
+        gpg-private-key: ${{ secrets.GPG_PRIVATE_KEY }}
+        gpg-passphrase: MAVEN_GPG_PASSPHRASE
+
+    - name: Publish to Apache Maven Central
+      run: mvn deploy -Dmaven.test.skip
+      env:
+        OSSRH_USERNAME: ${{ secrets.OSSRH_USERNAME }}
+        OSSRH_TOKEN: ${{ secrets.OSSRH_TOKEN }}
+        MAVEN_GPG_PASSPHRASE: ${{ secrets.MAVEN_GPG_PASSPHRASE }}
