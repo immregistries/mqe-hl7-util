@@ -14,31 +14,31 @@ import org.junit.Test;
 public class GeneratorsTest {
 
   private final PersonGenerator pg = PersonGenerator.INSTANCE;
-  private final MessageGenerator mg = MessageGenerator.INSTANCE;
+//  private final MessageGenerator mg = MessageGenerator.INSTANCE;
   private final HL7MessageParser mp = HL7MessageParser.INSTANCE;
-  @Test
-  public void printFromMessageText() {
-//      1. get a message:
-    String message = mg.getUniqueMessage();
-    MqeMessageReceived mr = mp.extractMessageFromText(message);
-    System.out.println("-------THIS IS THE MODEL----------");
-    System.out.println(mr);
-    System.out.println("-------    END MODEL    ----------");
+//  @Test
+//  public void printFromMessageText() {
+////      1. get a message:
+//    String message = mg.getUniqueMessage();
+//    MqeMessageReceived mr = mp.extractMessageFromText(message);
+//    System.out.println("-------THIS IS THE MODEL----------");
+//    System.out.println(mr);
+//    System.out.println("-------    END MODEL    ----------");
+//
+//
+//  }
 
-
-  }
-
-  @Test
-  public void testPersonGen() {
-      MqePatient p1 = pg.generateTestPatient();
-      MqePatient p2 = pg.generateTestPatient();
-    System.out.println("-------------------------------------------------------------");
-    System.out.println(p1);
-    System.out.println("-------------------------------------------------------------");
-    System.out.println(p2);
-    System.out.println("-------------------------------------------------------------");
-    assertNotEquals("Shouldn't be the same person", p1.getName(), p2);
-  }
+//  @Test
+//  public void testPersonGen() {
+//      MqePatient p1 = pg.generateTestPatient();
+//      MqePatient p2 = pg.generateTestPatient();
+//    System.out.println("-------------------------------------------------------------");
+//    System.out.println(p1);
+//    System.out.println("-------------------------------------------------------------");
+//    System.out.println(p2);
+//    System.out.println("-------------------------------------------------------------");
+//    assertNotEquals("Shouldn't be the same person", p1.getName(), p2);
+//  }
 
   @Test
   public void testCity() {
