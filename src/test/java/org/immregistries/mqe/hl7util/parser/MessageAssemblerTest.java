@@ -14,18 +14,18 @@ public class MessageAssemblerTest {
 
   //	@Autowired
   private MessageParser mpp = new MessageParserHL7();
-  private MessageGenerator mg = MessageGenerator.INSTANCE;
+  //private MessageGenerator mg = MessageGenerator.INSTANCE;
   public HL7MessageMap map;
 
-  @Test
-  public void testNameChanges() {
-    String message = mg.getUniqueMessage();
-    //let's map it...
-    HL7MessageMap map = mpp.getMessagePartMap(message);
-    map.put(new Hl7Location("PID-5-1"), "bob");
-    String newName = map.getValue("PID-5-1");
-    assertEquals("Should be bob", "bob", newName);
-  }
+//  @Test
+//  public void testNameChanges() {
+//    String message = mg.getUniqueMessage();
+//    //let's map it...
+//    HL7MessageMap map = mpp.getMessagePartMap(message);
+//    map.put(new Hl7Location("PID-5-1"), "bob");
+//    String newName = map.getValue("PID-5-1");
+//    assertEquals("Should be bob", "bob", newName);
+//  }
 
 
   @Test
@@ -47,18 +47,18 @@ public class MessageAssemblerTest {
     assertEquals("should be... short", "PID|||||richard", hl7);
   }
 
-  @Test
-  public void fullReassembly() {
-    String message = mg.getUniqueMessage();
+//  @Test
+//  public void fullReassembly() {
+//    String message = mg.getUniqueMessage();
 //    System.out.println("Starting:");
 //    System.out.println(message);
     //let's map it...
-    HL7MessageMap map = mpp.getMessagePartMap(message);
-    String hl7 = map.reassemble();
+//    HL7MessageMap map = mpp.getMessagePartMap(message);
+//    String hl7 = map.reassemble();
 //    System.out.println("ENDING: ");
 //    System.out.println(hl7);
-    assertEquals("no modifications.  should be equal", message, hl7);
-  }
+//    assertEquals("no modifications.  should be equal", message, hl7);
+//  }
 
   @Test
   public void padSeparatorsTest() {

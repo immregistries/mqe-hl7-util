@@ -18,4 +18,4 @@ jobs:
         settings-path: ${{ github.workspace }} # location for the settings.xml file
 
     - name: Build with Maven
-      run: mvn -B validate -Dmaven.test.skip=true
+      run: mvn -B test --file pom.xml
