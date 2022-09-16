@@ -231,6 +231,7 @@ public enum VxuField {
   VACCINATION_VALIDITY_CODE(VACCINATION, "validity code", null, null),
 
   // Vaccine Evaluation  
+  VACCINE_EVALUATION(GENERAL, "vaccine evaluation", null, null),
   VACCINE_EVALUATION_AT_15_MONTHS(GENERAL, "vaccine evaluation at 15 months", null, null),
   VACCINE_EVALUATION_AT_18_MONTHS(GENERAL, "vaccine evaluation at 18 months", null, null),
   VACCINE_EVALUATION_AT_24_MONTHS(GENERAL, "vaccine evaluation at 24 months", null, null),
