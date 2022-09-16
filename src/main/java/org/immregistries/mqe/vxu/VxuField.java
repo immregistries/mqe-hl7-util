@@ -239,6 +239,9 @@ public enum VxuField {
   // Vaccine Coverage
   VACCINE_COVERAGE_AT_24_MONTHS(GENERAL, "vaccine coverage at 24 months", null, null),
   VACCINE_COVERAGE_AT_36_MONTHS(GENERAL, "vaccine coverage at 36 months", null, null),
+  
+  // Vaccine Forecast
+  VACCINE_FORECAST_AT_24_MONTHS(GENERAL, "vaccine forecast at 24 months", null, null),
   ;
 
   private final String fieldDescription;
