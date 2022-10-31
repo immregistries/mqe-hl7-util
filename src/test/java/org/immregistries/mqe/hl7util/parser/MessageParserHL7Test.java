@@ -475,4 +475,121 @@ public class MessageParserHL7Test {
 		assertEquals("Expected seg idx for: " + p, line, p.getSegmentIndex());
 		assertEquals("Expected seg seq for: " + p, seq, p.getSegmentSeq());
 	}
+
+	private final String SsnStaticPositionTest1 = "MSH|^~\\&|MCIR|1255-60-20|WIR||20221031151747-0400||VXU^V04^VXU_V04|SSN-Tests-Tests-Dual-SSN-In-Message-20221031151747-0400|T|2.5.1|||ER|AL|||||Z22^CDCPHINVS\r" +
+			"PID|1||TEST-26572294^^^MIA^MR||Munro^Anne^Heather^^^^L|Nez Perce^Palila|20180527|M|||5498 Aitan Ave^null^Long Lake^MI^48743^USA^P||^^^^^517^231-1234||||||111-11-1111||||||||||||||20221006\r" +
+			"PD1|||||||||||01^No reminder/recall^HL70215|||||A|20200227\r" +
+			"NK1|1|Munro^Palila^^^^^L|SEL^Self^HL70063|5498 Aitan Ave^null^Long Lake^MI^48743^^H|^PRN^^^^517^231-1234||||||||||||||||||||||||||||||||123-45-6789\r" +
+			"RXA|0|1|20221030|20221018143800|21^varicella^CVX|0.5|mL^Milliliters^UCUM||00^New immunization record^NIP001|^Pollitz^Brittany^^^^^^^PRSNL|CD:273958525^^^1589-44-01||||s025610|20210818|MSD^Merck \\T\\ Company Inc^MVX|||CP|A|20200227144425";
+
+	private final String SsnStaticPositionExpectedTest1 = "MSH|^~\\&|MCIR|1255-60-20|WIR||20221031151747-0400||VXU^V04^VXU_V04|SSN-Tests-Tests-Dual-SSN-In-Message-20221031151747-0400|T|2.5.1|||ER|AL|||||Z22^CDCPHINVS\r" +
+			"PID|1||TEST-26572294^^^MIA^MR||Munro^Anne^Heather^^^^L|Nez Perce^Palila|20180527|M|||5498 Aitan Ave^null^Long Lake^MI^48743^USA^P||^^^^^517^231-1234||||||nnn-nn-nnnn||||||||||||||20221006\r" +
+			"PD1|||||||||||01^No reminder/recall^HL70215|||||A|20200227\r" +
+			"NK1|1|Munro^Palila^^^^^L|SEL^Self^HL70063|5498 Aitan Ave^null^Long Lake^MI^48743^^H|^PRN^^^^517^231-1234||||||||||||||||||||||||||||||||nnn-nn-nnnn\r" +
+			"RXA|0|1|20221030|20221018143800|21^varicella^CVX|0.5|mL^Milliliters^UCUM||00^New immunization record^NIP001|^Pollitz^Brittany^^^^^^^PRSNL|CD:273958525^^^1589-44-01||||s025610|20210818|MSD^Merck \\T\\ Company Inc^MVX|||CP|A|20200227144425";
+
+	private final String SsnStaticPositionTest2 = "MSH|^~\\&|MCIR|1255-60-20|WIR||20221031151747-0400||VXU^V04^VXU_V04|SSN-Tests-Tests-Dual-SSN-In-Message-20221031151747-0400|T|2.5.1|||ER|AL|||||Z22^CDCPHINVS\r" +
+			"PID|1||TEST-26572294^^^MIA^MR||Munro^Anne^Heather^^^^L|Nez Perce^Palila|20180527|M|||5498 Aitan Ave^null^Long Lake^MI^48743^USA^P||^^^^^517^231-1234||||||111-11-1111||||||||||||||20221006\r" +
+			"PD1|||||||||||01^No reminder/recall^HL70215|||||A|20200227\r" +
+			"NK1|1|Munro^Palila^^^^^L|SEL^Self^HL70063|5498 Aitan Ave^null^Long Lake^MI^48743^^H|^PRN^^^^517^231-1234||||||||||||||||||||||||||||||||\r" +
+			"RXA|0|1|20221030|20221018143800|21^varicella^CVX|0.5|mL^Milliliters^UCUM||00^New immunization record^NIP001|^Pollitz^Brittany^^^^^^^PRSNL|CD:273958525^^^1589-44-01||||s025610|20210818|MSD^Merck \\T\\ Company Inc^MVX|||CP|A|20200227144425";
+
+	private final String SsnStaticPositionExpectedTest2 = "MSH|^~\\&|MCIR|1255-60-20|WIR||20221031151747-0400||VXU^V04^VXU_V04|SSN-Tests-Tests-Dual-SSN-In-Message-20221031151747-0400|T|2.5.1|||ER|AL|||||Z22^CDCPHINVS\r" +
+			"PID|1||TEST-26572294^^^MIA^MR||Munro^Anne^Heather^^^^L|Nez Perce^Palila|20180527|M|||5498 Aitan Ave^null^Long Lake^MI^48743^USA^P||^^^^^517^231-1234||||||nnn-nn-nnnn||||||||||||||20221006\r" +
+			"PD1|||||||||||01^No reminder/recall^HL70215|||||A|20200227\r" +
+			"NK1|1|Munro^Palila^^^^^L|SEL^Self^HL70063|5498 Aitan Ave^null^Long Lake^MI^48743^^H|^PRN^^^^517^231-1234\r" +
+			"RXA|0|1|20221030|20221018143800|21^varicella^CVX|0.5|mL^Milliliters^UCUM||00^New immunization record^NIP001|^Pollitz^Brittany^^^^^^^PRSNL|CD:273958525^^^1589-44-01||||s025610|20210818|MSD^Merck \\T\\ Company Inc^MVX|||CP|A|20200227144425";
+
+	private final String SsnStaticPositionTest3 = "MSH|^~\\&|MCIR|1255-60-20|WIR||20221031151747-0400||VXU^V04^VXU_V04|SSN-Tests-Tests-Dual-SSN-In-Message-20221031151747-0400|T|2.5.1|||ER|AL|||||Z22^CDCPHINVS\r" +
+			"PID|1||TEST-26572294^^^MIA^MR||Munro^Anne^Heather^^^^L|Nez Perce^Palila|20180527|M|||5498 Aitan Ave^null^Long Lake^MI^48743^USA^P||^^^^^517^231-1234||||||||||||||||||||20221006\r" +
+			"PD1|||||||||||01^No reminder/recall^HL70215|||||A|20200227\r" +
+			"NK1|1|Munro^Palila^^^^^L|SEL^Self^HL70063|5498 Aitan Ave^null^Long Lake^MI^48743^^H|^PRN^^^^517^231-1234||||||||||||||||||||||||||||||||123-45-6789\r" +
+			"RXA|0|1|20221030|20221018143800|21^varicella^CVX|0.5|mL^Milliliters^UCUM||00^New immunization record^NIP001|^Pollitz^Brittany^^^^^^^PRSNL|CD:273958525^^^1589-44-01||||s025610|20210818|MSD^Merck \\T\\ Company Inc^MVX|||CP|A|20200227144425";
+
+	private final String SsnStaticPositionExpectedTest3 = "MSH|^~\\&|MCIR|1255-60-20|WIR||20221031151747-0400||VXU^V04^VXU_V04|SSN-Tests-Tests-Dual-SSN-In-Message-20221031151747-0400|T|2.5.1|||ER|AL|||||Z22^CDCPHINVS\r" +
+			"PID|1||TEST-26572294^^^MIA^MR||Munro^Anne^Heather^^^^L|Nez Perce^Palila|20180527|M|||5498 Aitan Ave^null^Long Lake^MI^48743^USA^P||^^^^^517^231-1234||||||||||||||||||||20221006\r" +
+			"PD1|||||||||||01^No reminder/recall^HL70215|||||A|20200227\r" +
+			"NK1|1|Munro^Palila^^^^^L|SEL^Self^HL70063|5498 Aitan Ave^null^Long Lake^MI^48743^^H|^PRN^^^^517^231-1234||||||||||||||||||||||||||||||||nnn-nn-nnnn\r" +
+			"RXA|0|1|20221030|20221018143800|21^varicella^CVX|0.5|mL^Milliliters^UCUM||00^New immunization record^NIP001|^Pollitz^Brittany^^^^^^^PRSNL|CD:273958525^^^1589-44-01||||s025610|20210818|MSD^Merck \\T\\ Company Inc^MVX|||CP|A|20200227144425";
+
+
+	private final String SsnConditionalPositionTest1 = "MSH|^~\\&|MCIR|1255-60-20|WIR||20221031152312-0400||VXU^V04^VXU_V04|SSN-Tests-Testing-PID-3-SSN-Mask-20221031152312-0400|T|2.5.1|||ER|AL|||||Z22^CDCPHINVS\r" +
+			"PID|1||111-11-1111^^^KATIE-TEST^SS||Munro^Anne^Heather^^L|Nez Perce^Palila^^^M|20180527|M||2106-3^White^CDCREC|5498 Aitan Ave^null^Long Lake^MI^48743||^PRN^PH^^212^517^231-1234|||||||||2186-5^not Hispanic or Latino^CDCREC\r" +
+			"PD1|||||||||||01^No reminder/recall^HL70215|||||A|20200227\r" +
+			"NK1|1|Munro^Palila|GRD^Guardian^HL70063|5498 Aitan Ave^null^Long Lake^MI^48743|^PRN^PH^^^517^231-1234\r" +
+			"RXA|0|1|20221030|20221018143800|21^varicella^CVX|0.5|mL^Milliliters^UCUM||00^New immunization record^NIP001|^Pollitz^Brittany^^^^^^^PRSNL|CD:273958525^^^1589-44-01||||s025610|20210818|MSD^Merck \\T\\ Company Inc^MVX|||CP|A|20200227144425\r" +
+			"RXR|SC^SubCutaneous^NCIT|RT^Thigh, Right^HL70163\r" +
+			"OBX|1|CE|64994-7^Vaccine funding program eligibility category^LN|1|V02^Medicaid^HL70064||||||F|||20200227144425|||VXC40^Eligibility captured at the Immunization level^CDCPHINVS\r" +
+			"OBX|2|CE|30956-7^Vaccine Type^LN|1|||||||F|||20200227144425\r" +
+			"OBX|3|TS|29768-9^Date vaccine information sheet published^LN|1|20190815||||||F|||20200227144425\r" +
+			"OBX|4|TS|29769-7^Date Vaccine Information sheet Presented^LN|1|20200227||||||F|||20200227144425";
+
+	private final String SsnConditionalPositionExpectedTest1 = "MSH|^~\\&|MCIR|1255-60-20|WIR||20221031152312-0400||VXU^V04^VXU_V04|SSN-Tests-Testing-PID-3-SSN-Mask-20221031152312-0400|T|2.5.1|||ER|AL|||||Z22^CDCPHINVS\r" +
+			"PID|1||nnn-nn-nnnn^^^KATIE-TEST^SS||Munro^Anne^Heather^^L|Nez Perce^Palila^^^M|20180527|M||2106-3^White^CDCREC|5498 Aitan Ave^null^Long Lake^MI^48743||^PRN^PH^^212^517^231-1234|||||||||2186-5^not Hispanic or Latino^CDCREC\r" +
+			"PD1|||||||||||01^No reminder/recall^HL70215|||||A|20200227\r" +
+			"NK1|1|Munro^Palila|GRD^Guardian^HL70063|5498 Aitan Ave^null^Long Lake^MI^48743|^PRN^PH^^^517^231-1234\r" +
+			"RXA|0|1|20221030|20221018143800|21^varicella^CVX|0.5|mL^Milliliters^UCUM||00^New immunization record^NIP001|^Pollitz^Brittany^^^^^^^PRSNL|CD:273958525^^^1589-44-01||||s025610|20210818|MSD^Merck \\T\\ Company Inc^MVX|||CP|A|20200227144425\r" +
+			"RXR|SC^SubCutaneous^NCIT|RT^Thigh, Right^HL70163\r" +
+			"OBX|1|CE|64994-7^Vaccine funding program eligibility category^LN|1|V02^Medicaid^HL70064||||||F|||20200227144425|||VXC40^Eligibility captured at the Immunization level^CDCPHINVS\r" +
+			"OBX|2|CE|30956-7^Vaccine Type^LN|1|||||||F|||20200227144425\r" +
+			"OBX|3|TS|29768-9^Date vaccine information sheet published^LN|1|20190815||||||F|||20200227144425\r" +
+			"OBX|4|TS|29769-7^Date Vaccine Information sheet Presented^LN|1|20200227||||||F|||20200227144425";
+	
+	private final String SsnConditionalPositionTest2 = "MSH|^~\\&|MCIR|1255-60-20|WIR||20221031152513-0400||VXU^V04^VXU_V04|SSN-Tests-Second-format-of-SSN-for-NK1-33-20221031152513-0400|T|2.5.1|||ER|AL|||||Z22^CDCPHINVS\r" +
+			"PID|1||TEST-26572294^^^MIA^MR||Munro^Anne^Heather^^^^L|Nez Perce^Palila|20180527|M|||5498 Aitan Ave^null^Long Lake^MI^48743^USA^P||^^^^^517^231-1234||||||||||||||||||||20221006\r" +
+			"PD1|||||||||||01^No reminder/recall^HL70215|||||A|20200227\r" +
+			"NK1|1|Munro^Palila^^^^^L|FTH^Father^HL70063|5498 Aitan Ave^null^Long Lake^MI^48743^^H|^PRN^^^^517^231-1234||||||||||||||||||||||||||||123456789^^^EPIC^SS\r" +
+			"RXA|0|1|20221030|20221018143800|21^varicella^CVX|0.5|mL^Milliliters^UCUM||00^New immunization record^NIP001|^Pollitz^Brittany^^^^^^^PRSNL|CD:273958525^^^1589-44-01||||s025610|20210818|MSD^Merck \\T\\ Company Inc^MVX|||CP|A|20200227144425";
+
+	private final String SsnConditionalPositionExpectedTest2 = "MSH|^~\\&|MCIR|1255-60-20|WIR||20221031152513-0400||VXU^V04^VXU_V04|SSN-Tests-Second-format-of-SSN-for-NK1-33-20221031152513-0400|T|2.5.1|||ER|AL|||||Z22^CDCPHINVS\r" +
+			"PID|1||TEST-26572294^^^MIA^MR||Munro^Anne^Heather^^^^L|Nez Perce^Palila|20180527|M|||5498 Aitan Ave^null^Long Lake^MI^48743^USA^P||^^^^^517^231-1234||||||||||||||||||||20221006\r" +
+			"PD1|||||||||||01^No reminder/recall^HL70215|||||A|20200227\r" +
+			"NK1|1|Munro^Palila^^^^^L|FTH^Father^HL70063|5498 Aitan Ave^null^Long Lake^MI^48743^^H|^PRN^^^^517^231-1234||||||||||||||||||||||||||||nnn-nn-nnnn^^^EPIC^SS\r" +
+			"RXA|0|1|20221030|20221018143800|21^varicella^CVX|0.5|mL^Milliliters^UCUM||00^New immunization record^NIP001|^Pollitz^Brittany^^^^^^^PRSNL|CD:273958525^^^1589-44-01||||s025610|20210818|MSD^Merck \\T\\ Company Inc^MVX|||CP|A|20200227144425";
+
+	private final String SsnAllPositionTest1 = "MSH|^~\\&|MCIR|1255-60-20|WIR||20221031151747-0400||VXU^V04^VXU_V04|SSN-Tests-Tests-Dual-SSN-In-Message-20221031151747-0400|T|2.5.1|||ER|AL|||||Z22^CDCPHINVS\r" +
+			"PID|1||123-456-789^^^EPIC^SSN||Munro^Anne^Heather^^^^L|Nez Perce^Palila|20180527|M|||5498 Aitan Ave^null^Long Lake^MI^48743^USA^P||^^^^^517^231-1234||||||111-11-1111||||||||||||||20221006\r" +
+			"PD1|||||||||||01^No reminder/recall^HL70215|||||A|20200227\r" +
+			"NK1|1|Munro^Palila^^^^^L|SEL^Self^HL70063|5498 Aitan Ave^null^Long Lake^MI^48743^^H|^PRN^^^^517^231-1234||||||||||||||||||||||||||||123456789^^^EPIC^SS||||123-45-6789\r" +
+			"RXA|0|1|20221030|20221018143800|21^varicella^CVX|0.5|mL^Milliliters^UCUM||00^New immunization record^NIP001|^Pollitz^Brittany^^^^^^^PRSNL|CD:273958525^^^1589-44-01||||s025610|20210818|MSD^Merck \\T\\ Company Inc^MVX|||CP|A|20200227144425";
+
+	private final String SsnAllPositionExpectedTest1 = "MSH|^~\\&|MCIR|1255-60-20|WIR||20221031151747-0400||VXU^V04^VXU_V04|SSN-Tests-Tests-Dual-SSN-In-Message-20221031151747-0400|T|2.5.1|||ER|AL|||||Z22^CDCPHINVS\r" +
+			"PID|1||nnn-nn-nnnn^^^EPIC^SSN||Munro^Anne^Heather^^^^L|Nez Perce^Palila|20180527|M|||5498 Aitan Ave^null^Long Lake^MI^48743^USA^P||^^^^^517^231-1234||||||nnn-nn-nnnn||||||||||||||20221006\r" +
+			"PD1|||||||||||01^No reminder/recall^HL70215|||||A|20200227\r" +
+			"NK1|1|Munro^Palila^^^^^L|SEL^Self^HL70063|5498 Aitan Ave^null^Long Lake^MI^48743^^H|^PRN^^^^517^231-1234||||||||||||||||||||||||||||nnn-nn-nnnn^^^EPIC^SS||||nnn-nn-nnnn\r" +
+			"RXA|0|1|20221030|20221018143800|21^varicella^CVX|0.5|mL^Milliliters^UCUM||00^New immunization record^NIP001|^Pollitz^Brittany^^^^^^^PRSNL|CD:273958525^^^1589-44-01||||s025610|20210818|MSD^Merck \\T\\ Company Inc^MVX|||CP|A|20200227144425";
+
+	private final String SsnFieldRepeatPositionTest1 = "MSH|^~\\&|MCIR|1255-60-20|WIR||20221031152312-0400||VXU^V04^VXU_V04|SSN-Tests-Testing-PID-3-SSN-Mask-20221031152312-0400|T|2.5.1|||ER|AL|||||Z22^CDCPHINVS\r" +
+			"PID|1||TEST-26572294^^^MIA^MR~111-11-1111^^^KATIE-TEST^SS||Munro^Anne^Heather^^L|Nez Perce^Palila^^^M|20180527|M||2106-3^White^CDCREC|5498 Aitan Ave^null^Long Lake^MI^48743||^PRN^PH^^212^517^231-1234|||||||||2186-5^not Hispanic or Latino^CDCREC\r" +
+			"PD1|||||||||||01^No reminder/recall^HL70215|||||A|20200227\r" +
+			"NK1|1|Munro^Palila|GRD^Guardian^HL70063|5498 Aitan Ave^null^Long Lake^MI^48743|^PRN^PH^^^517^231-1234\r" +
+			"RXA|0|1|20221030|20221018143800|21^varicella^CVX|0.5|mL^Milliliters^UCUM||00^New immunization record^NIP001|^Pollitz^Brittany^^^^^^^PRSNL|CD:273958525^^^1589-44-01||||s025610|20210818|MSD^Merck \\T\\ Company Inc^MVX|||CP|A|20200227144425\r" +
+			"RXR|SC^SubCutaneous^NCIT|RT^Thigh, Right^HL70163\r" +
+			"OBX|1|CE|64994-7^Vaccine funding program eligibility category^LN|1|V02^Medicaid^HL70064||||||F|||20200227144425|||VXC40^Eligibility captured at the Immunization level^CDCPHINVS\r" +
+			"OBX|2|CE|30956-7^Vaccine Type^LN|1|||||||F|||20200227144425\r" +
+			"OBX|3|TS|29768-9^Date vaccine information sheet published^LN|1|20190815||||||F|||20200227144425\r" +
+			"OBX|4|TS|29769-7^Date Vaccine Information sheet Presented^LN|1|20200227||||||F|||20200227144425";
+
+	private final String SsnFieldRepeatPositionExpectedTest1 = "MSH|^~\\&|MCIR|1255-60-20|WIR||20221031152312-0400||VXU^V04^VXU_V04|SSN-Tests-Testing-PID-3-SSN-Mask-20221031152312-0400|T|2.5.1|||ER|AL|||||Z22^CDCPHINVS\r" +
+			"PID|1||TEST-26572294^^^MIA^MR~nnn-nn-nnnn^^^KATIE-TEST^SS||Munro^Anne^Heather^^L|Nez Perce^Palila^^^M|20180527|M||2106-3^White^CDCREC|5498 Aitan Ave^null^Long Lake^MI^48743||^PRN^PH^^212^517^231-1234|||||||||2186-5^not Hispanic or Latino^CDCREC\r" +
+			"PD1|||||||||||01^No reminder/recall^HL70215|||||A|20200227\r" +
+			"NK1|1|Munro^Palila|GRD^Guardian^HL70063|5498 Aitan Ave^null^Long Lake^MI^48743|^PRN^PH^^^517^231-1234\r" +
+			"RXA|0|1|20221030|20221018143800|21^varicella^CVX|0.5|mL^Milliliters^UCUM||00^New immunization record^NIP001|^Pollitz^Brittany^^^^^^^PRSNL|CD:273958525^^^1589-44-01||||s025610|20210818|MSD^Merck \\T\\ Company Inc^MVX|||CP|A|20200227144425\r" +
+			"RXR|SC^SubCutaneous^NCIT|RT^Thigh, Right^HL70163\r" +
+			"OBX|1|CE|64994-7^Vaccine funding program eligibility category^LN|1|V02^Medicaid^HL70064||||||F|||20200227144425|||VXC40^Eligibility captured at the Immunization level^CDCPHINVS\r" +
+			"OBX|2|CE|30956-7^Vaccine Type^LN|1|||||||F|||20200227144425\r" +
+			"OBX|3|TS|29768-9^Date vaccine information sheet published^LN|1|20190815||||||F|||20200227144425\r" +
+			"OBX|4|TS|29769-7^Date Vaccine Information sheet Presented^LN|1|20200227||||||F|||20200227144425";
+
+
+	@Test
+	public void testSsnMessageMask(){
+		assertEquals("SsnStaticPositionTest1", SsnStaticPositionExpectedTest1, mpp.maskSsnInMessage(SsnStaticPositionTest1));
+		assertEquals("SsnStaticPositionTest2", SsnStaticPositionExpectedTest2, mpp.maskSsnInMessage(SsnStaticPositionTest2));
+		assertEquals("SsnStaticPositionTest3", SsnStaticPositionExpectedTest3, mpp.maskSsnInMessage(SsnStaticPositionTest3));
+		assertEquals("SsnConditionalPositionTest1", SsnConditionalPositionExpectedTest1, mpp.maskSsnInMessage(SsnConditionalPositionTest1));
+		assertEquals("SsnConditionalPositionTest2", SsnConditionalPositionExpectedTest2, mpp.maskSsnInMessage(SsnConditionalPositionTest2));
+		assertEquals("SsnAllPositionTest1", SsnAllPositionExpectedTest1, mpp.maskSsnInMessage(SsnAllPositionTest1));
+		assertEquals("SsnFieldRepeatPositionTest1", SsnFieldRepeatPositionExpectedTest1, mpp.maskSsnInMessage(SsnFieldRepeatPositionTest1));
+	}
 }
