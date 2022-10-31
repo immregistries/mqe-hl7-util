@@ -416,31 +416,53 @@ public class MessageParserHL7 implements MessageParser {
 
     HL7MessageMap hl7XdmMap = getMessagePartMap(requestMessage);
 
-    maskConditionalSsn("PID-3-5", "PID-3-1", hl7XdmMap);
-    maskConditionalSsn("NK1-33-5", "NK1-33-1", hl7XdmMap);
-    maskSsnAtLocation("PID-19-1", hl7XdmMap);
+    boolean foundSsn =
+    maskConditionalSsn("PID-3-5", "PID-3-1", hl7XdmMap) |
+    maskConditionalSsn("NK1-33-5", "NK1-33-1", hl7XdmMap) |
+    maskSsnAtLocation("PID-19-1", hl7XdmMap) |
     maskSsnAtLocation("NK1-37-1", hl7XdmMap);
 
-    String maskedSsnMessage = hl7XdmMap.reassemble();
+    if (foundSsn) {
+      String maskedSsnMessage = hl7XdmMap.reassemble();
+      return maskedSsnMessage;
+    }
 
-    return maskedSsnMessage;
+    return requestMessage;
   }
 
-  protected void maskSsnAtLocation(String ssnLocation, HL7MessageMap hl7MessageMap) {
+  protected boolean maskSsnAtLocation(String ssnLocation, HL7MessageMap hl7MessageMap) {
+    return maskSsnAtLocation(new Hl7Location(ssnLocation), hl7MessageMap);
+  }
+
+  protected boolean maskSsnAtLocation(Hl7Location ssnLocation, HL7MessageMap hl7MessageMap) {
     String ssnMask = "nnn-nn-nnnn";
     if (StringUtils.isNotBlank(hl7MessageMap.getValue(ssnLocation))) {
       hl7MessageMap.put(new Hl7Location(ssnLocation), ssnMask);
       LOGGER.info("SSN found at: " + ssnLocation + " in HL7 Message.");
+      return true;
     }
+    return false;
   }
 
-  protected void maskConditionalSsn(String ssnConditional, String ssnLocation, HL7MessageMap hl7MessageMap) {
+    protected boolean maskConditionalSsn(String ssnConditional, String ssnLocation, HL7MessageMap hl7MessageMap) {
     String hl7OldTypeCode = "SSN";
     String hl7251TypeCode = "SS";
-    if (hl7251TypeCode.equals(hl7MessageMap.getValue(ssnConditional))
-     || hl7OldTypeCode.equals(hl7MessageMap.getValue(ssnConditional))) {
-      maskSsnAtLocation(ssnLocation, hl7MessageMap);
+    Hl7Location ssnHl7Location = new Hl7Location(ssnLocation);
+    Hl7Location ssnHl7ConditionalLocation = new Hl7Location(ssnConditional);
+
+    Integer fieldRepCount = hl7MessageMap.getFieldRepCountFor(ssnHl7Location);
+
+    for(int rep = 1; rep <= fieldRepCount; rep++) {
+
+      ssnHl7Location.setFieldRepetition(rep);
+      ssnHl7ConditionalLocation.setFieldRepetition(rep);
+
+      if (hl7251TypeCode.equals(hl7MessageMap.getValue(ssnHl7ConditionalLocation))
+       || hl7OldTypeCode.equals(hl7MessageMap.getValue(ssnHl7ConditionalLocation))) {
+        return maskSsnAtLocation(ssnHl7Location, hl7MessageMap);
+      }
     }
+    return false;
   }
 
 }

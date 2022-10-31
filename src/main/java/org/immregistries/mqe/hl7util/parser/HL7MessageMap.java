@@ -67,12 +67,19 @@ public class HL7MessageMap {
    * @return
    */
   public String getValue(String location) {
-    Hl7Location locH7 = new Hl7Location(location);
-    locH7 = getLocWithLine(locH7);
+    Hl7Location locH7 = getMessageLocationWithLine(location);
     return this.getValue(locH7);
   }
 
+  public Hl7Location getMessageLocationWithLine(String location) {
+    Hl7Location locH7 = new Hl7Location(location);
+    return getLocWithLine(locH7);
+  }
+
   public String getValue(Hl7Location hl7Location) {
+    if (hl7Location.getLine() == 0) {
+      hl7Location = getLocWithLine(hl7Location);
+    }
     String value = locationValueMap.get(hl7Location);
     LOGGER.trace("HL7MessageMap.get result: " + value);
     return value;
