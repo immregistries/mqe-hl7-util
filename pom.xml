@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.immregistries</groupId>
   <artifactId>mqe-hl7-utility</artifactId>
-  <version>2021.07.1</version>
+  <version>2022.9-BETA</version>
   <packaging>jar</packaging>
   <name>HL7 Utility Package for MQE</name>
   <description>Parses, Creates, etc.</description>
